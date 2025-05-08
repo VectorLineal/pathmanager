@@ -1,13 +1,18 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import sqlite3 from "sqlite3";
 //const sqlite3 = require('sqlite3').verbose()
-import { join } from "path";
+import { join, resolve, dirname } from "path";
+import { fileURLToPath } from 'url';
 
-const dirname = "";
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename);
+
 let db;
 
 ipcMain.handle("db-connect", (event, dbPath) => {
-  db = new sqlite3.Database(path.resolve(__dirname, dbPath));
+  const absolutePath = resolve(__dirname, dbPath);
+  db = new sqlite3.Database(absolutePath);
+  console.log("DB path:", absolutePath);
   return "Connected";
 });
 
@@ -21,13 +26,16 @@ ipcMain.handle("db-query", async (event, query, params) => {
 });
 
 const createWindow = () => {
+  const preload = join(__dirname, "../preload.js");
+  console.log("preload path", preload)
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: join(dirname, "../preload.js"),
+      preload,
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
+      nodeIntegration: false
     },
   });
 
@@ -35,13 +43,15 @@ const createWindow = () => {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
     win.webContents.openDevTools();
   } else {
-    win.loadFile(join(dirname, "../dist/index.html"));
+    const indexPath = join(__dirname, "../dist/index.html");
+    console.log("index path", indexPath);
+    win.loadFile(indexPath);
   }
 };
 
 app.whenReady().then(() => {
   createWindow();
-
+  console.log("created window");
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();

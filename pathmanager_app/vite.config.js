@@ -18,8 +18,13 @@ export default defineConfig({
     electron([
       {
         entry: 'electron/main.js',
+        onstart(options) {
+          options.startup()
+        }
       },
     ]),
-    renderer(),
+    renderer({
+      nodeIntegration: false,
+    }),
   ],
 });

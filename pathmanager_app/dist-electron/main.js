@@ -1,14 +1,15 @@
 import { ipcMain, app, BrowserWindow } from "electron";
-import require$$0, { join } from "path";
+import require$$0, { dirname, resolve, join } from "path";
 import require$$0$1 from "fs";
 import require$$2 from "events";
 import require$$0$2 from "util";
+import { fileURLToPath } from "url";
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
 var sqlite3$1 = { exports: {} };
-function commonjsRequire(path2) {
-  throw new Error('Could not dynamically require "' + path2 + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
+function commonjsRequire(path) {
+  throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 }
 var bindings = { exports: {} };
 var fileUriToPath_1;
@@ -25,20 +26,20 @@ function requireFileUriToPath() {
     var rest = decodeURI(uri.substring(7));
     var firstSlash = rest.indexOf("/");
     var host = rest.substring(0, firstSlash);
-    var path2 = rest.substring(firstSlash + 1);
+    var path = rest.substring(firstSlash + 1);
     if ("localhost" == host) host = "";
     if (host) {
       host = sep + sep + host;
     }
-    path2 = path2.replace(/^(.+)\|/, "$1:");
+    path = path.replace(/^(.+)\|/, "$1:");
     if (sep == "\\") {
-      path2 = path2.replace(/\//g, "\\");
+      path = path.replace(/\//g, "\\");
     }
-    if (/^.+\:/.test(path2)) ;
+    if (/^.+\:/.test(path)) ;
     else {
-      path2 = sep + path2;
+      path = sep + path;
     }
-    return host + path2;
+    return host + path;
   }
   return fileUriToPath_1;
 }
@@ -47,14 +48,14 @@ function requireBindings() {
   if (hasRequiredBindings) return bindings.exports;
   hasRequiredBindings = 1;
   (function(module, exports) {
-    var fs = require$$0$1, path2 = require$$0, fileURLToPath = requireFileUriToPath(), join2 = path2.join, dirname2 = path2.dirname, exists = fs.accessSync && function(path22) {
+    var fs = require$$0$1, path = require$$0, fileURLToPath2 = requireFileUriToPath(), join2 = path.join, dirname2 = path.dirname, exists = fs.accessSync && function(path2) {
       try {
-        fs.accessSync(path22);
+        fs.accessSync(path2);
       } catch (e) {
         return false;
       }
       return true;
-    } || fs.existsSync || path2.existsSync, defaults = {
+    } || fs.existsSync || path.existsSync, defaults = {
       arrow: process.env.NODE_BINDINGS_ARROW || " → ",
       compiled: process.env.NODE_BINDINGS_COMPILED_DIR || "compiled",
       platform: process.platform,
@@ -98,7 +99,7 @@ function requireBindings() {
       if (!opts.module_root) {
         opts.module_root = exports.getRoot(exports.getFileName());
       }
-      if (path2.extname(opts.bindings) != ".node") {
+      if (path.extname(opts.bindings) != ".node") {
         opts.bindings += ".node";
       }
       var requireFunc = typeof __webpack_require__ === "function" ? __non_webpack_require__ : commonjsRequire;
@@ -155,7 +156,7 @@ function requireBindings() {
       Error.stackTraceLimit = origSTL;
       var fileSchema = "file://";
       if (fileName.indexOf(fileSchema) === 0) {
-        fileName = fileURLToPath(fileName);
+        fileName = fileURLToPath2(fileName);
       }
       return fileName;
     };
@@ -232,7 +233,7 @@ function requireSqlite3() {
   if (hasRequiredSqlite3) return sqlite3$1.exports;
   hasRequiredSqlite3 = 1;
   (function(module, exports) {
-    const path2 = require$$0;
+    const path = require$$0;
     const sqlite32 = requireSqlite3Binding();
     const EventEmitter = require$$2.EventEmitter;
     module.exports = sqlite32;
@@ -262,7 +263,7 @@ function requireSqlite3() {
           return new Database(file, a, b);
         }
         let db2;
-        file = path2.resolve(file);
+        file = path.resolve(file);
         if (!sqlite32.cached.objects[file]) {
           db2 = sqlite32.cached.objects[file] = new Database(file, a, b);
         } else {
@@ -402,39 +403,48 @@ function requireSqlite3() {
 }
 var sqlite3Exports = requireSqlite3();
 const sqlite3 = /* @__PURE__ */ getDefaultExportFromCjs(sqlite3Exports);
-const dirname = "";
+const __filename$1 = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename$1);
 let db;
 ipcMain.handle("db-connect", (event, dbPath) => {
-  db = new sqlite3.Database(path.resolve(__dirname, dbPath));
+  const absolutePath = resolve(__dirname, dbPath);
+  db = new sqlite3.Database(absolutePath);
+  console.log("DB path:", absolutePath);
   return "Connected";
 });
 ipcMain.handle("db-query", async (event, query, params) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve2, reject) => {
     db.all(query, params, (err, rows) => {
       if (err) reject(err);
-      else resolve(rows);
+      else resolve2(rows);
     });
   });
 });
 const createWindow = () => {
+  const preload = join(__dirname, "../preload.js");
+  console.log("preload path", preload);
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: join(dirname, "../preload.js"),
+      preload,
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      nodeIntegration: false
     }
   });
   if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
     win.webContents.openDevTools();
   } else {
-    win.loadFile(join(dirname, "../dist/index.html"));
+    const indexPath = join(__dirname, "../dist/index.html");
+    console.log("index path", indexPath);
+    win.loadFile(indexPath);
   }
 };
 app.whenReady().then(() => {
   createWindow();
+  console.log("created window");
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
