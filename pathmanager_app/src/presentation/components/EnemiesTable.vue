@@ -21,7 +21,7 @@
     <template #customFilterIcon="{ filtered }">
       <search-outlined :style="{ color: filtered ? '#108ee9' : undefined }" />
     </template>
-    <template #bodyCell="{ text, column }">
+    <template #bodyCell="{ text, column, record }">
       <span v-if="state.searchText && state.searchedColumn === column.dataIndex">
         <template v-for="(fragment, i) in text.toString().split(new RegExp(`(?<=${state.searchText})|(?=${state.searchText})`,'i'))">
           <mark v-if="fragment.toLowerCase() === state.searchText.toLowerCase()" :key="i" class="highlight">
@@ -39,6 +39,15 @@
           <a>Borrar</a>
         </span>
       </template>
+      <template v-else-if="column.key === 'traits'">
+        <span>
+          <a-tag v-for="razgo in record.razgos" :key="razgo.id" color="green">
+            <a-popover placement="left" :title="razgo.nombre" :content="razgo.descripcion">
+              <a>{{ razgo.nombre.toUpperCase() }}</a>
+            </a-popover>
+          </a-tag>
+        </span>
+      </template>
     </template>
   </a-table>
 </template>
@@ -47,12 +56,22 @@ import { reactive, ref } from "vue";
 import { SearchOutlined } from "@ant-design/icons-vue";
 import SearchDropdown from "./SearchDropdown.vue";
 import { getAllEntities } from "../../logic/EntityOperations";
+import { getAllAlignments } from "../../logic/AlignmentOperations";
+import { getAllClasses } from "../../logic/ClassOperations";
+import { getAllRaces } from "../../logic/RaceOperations";
+import { getAllSizes } from "../../logic/SizeOperations";
+import { alignmentsStorage, sizesStorage, racesStorage, classesStorage } from "../../logic/Storage";
 const data = ref([]);
 
 try{
   const response = await getAllEntities();
   data.value = response;
   console.log("fetched entities", response);
+  //se cargan al storage varias listas de valores simples {id, nombre}
+  if(alignmentsStorage.isEmpty()) alignmentsStorage.fillData(await getAllAlignments());
+  if(sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
+  if(racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
+  if(classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
 }catch(error){
   console.error("error on enemies table", error);
 }
@@ -117,20 +136,7 @@ const columns = [
     title: "Alineación",
     dataIndex: "alineacion",
     key: "alignment",
-    filters: [
-      {
-        text: "Neutral Malvado",
-        value: "neutral malvado",
-      },
-      {
-        text: "Legal Malvado",
-        value: "legal malvado",
-      },
-      {
-        text: "Caótico Malvado",
-        value: "caótico malvado",
-      },
-    ],
+    filters: alignmentsStorage.dataFilter,
     sorter: (a, b) => a.alineacion.localeCompare(b.alineacion),
     onFilter: (value, record) =>
       record.alineacion.toString().toLowerCase().includes(value.toLowerCase()),
@@ -139,22 +145,17 @@ const columns = [
     title: "Tamaño",
     dataIndex: "tamano",
     key: "size",
+    filters: sizesStorage.dataFilter,
     sorter: (a, b) => a.tamano.localeCompare(b.tamano),
+    onFilter: (value, record) =>
+      record.tamano.toString().toLowerCase().includes(value.toLowerCase()),
+    
   },
   {
     title: "Raza",
     dataIndex: "raza",
     key: "race",
-    filters: [
-      {
-        text: "No-muerto",
-        value: "no-muerto",
-      },
-      {
-        text: "Enano",
-        value: "enano",
-      },
-    ],
+    filters: racesStorage.dataFilter,
     sorter: (a, b) => a.raza.localeCompare(b.raza),
     onFilter: (value, record) =>
       record.raza.toString().toLowerCase().includes(value.toLowerCase()),
@@ -163,7 +164,15 @@ const columns = [
     title: "Clase",
     dataIndex: "clase",
     key: "class",
+    filters: classesStorage.dataFilter,
     sorter: (a, b) => a.clase.localeCompare(b.clase),
+    onFilter: (value, record) =>
+      record.clase.toString().toLowerCase().includes(value.toLowerCase()),
+  },
+  {
+    title: "Razgos",
+    dataIndex: "razgos",
+    key: "traits",
   },
   {
     title: "Operaciones",

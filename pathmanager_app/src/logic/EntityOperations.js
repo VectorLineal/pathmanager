@@ -1,4 +1,5 @@
-import GlosaryDatabase from '../data/services/GlosaryDatabase';
+import glosaryDatabase from "../data/services/DBPool";
+import { getTraitByEntity } from "./TraitOperation";
 
 const entitiesQuery = `
 SELECT Entidad.id, Entidad.nombre, nivel, experiencia, Alineacion.nombre AS alineacion, Tamano.nombre AS tamano,
@@ -9,13 +10,16 @@ JOIN Tamano ON Entidad.tamanoId = Tamano.id
 JOIN Raza ON Entidad.razaId = Raza.id
 ORDER BY nivel, raza, experiencia, Tamano.id, clase, Entidad.nombre;
 `;
-const database = new GlosaryDatabase();
-await database.connect(import.meta.env.VITE_DB_PATH);
 
 export async function getAllEntities() {
-    try {
-      return await database.query(entitiesQuery);
-    } catch (err) {
-      console.error('error on load all entities:', err);
+  try {
+    const entities = await glosaryDatabase.query(entitiesQuery);
+    for(let i = 0; i < entities.length; i++){
+      const traits = await getTraitByEntity(entities[i].id);
+      entities[i].razgos = traits;
     }
+    return entities;
+  } catch (err) {
+    console.error("error on load all entities:", err);
   }
+}
