@@ -19,7 +19,7 @@ WHERE Razgo_Habilidad.habilidadId = ?
 ORDER BY Razgo.nombre;
 `;
 const traitsWeaponQuery = `
-SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
+SELECT Razgo.id, Razgo.nombre, Razgo.descripcion, Razgo_Arma.monto
 FROM Razgo_Arma JOIN Razgo ON Razgo.id = Razgo_Arma.razgoId
 WHERE Razgo_Arma.armaId = ?
 ORDER BY Razgo.nombre;
