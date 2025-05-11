@@ -99,7 +99,6 @@ CREATE TABLE Entidad(
 	fortaleza integer NOT NULL DEFAULT(0),
 	reflejos integer NOT NULL DEFAULT(0),
 	voluntad integer NOT NULL DEFAULT(0),
-	resistenciaHechizo integer NOT NULL DEFAULT(0),
 	ataqueBase integer NOT NULL DEFAULT(0),
 	fuerza integer NOT NULL DEFAULT(10),
 	destreza integer NOT NULL DEFAULT(10),
@@ -336,7 +335,6 @@ create TABLE Jugador(
 	fortaleza integer NOT NULL DEFAULT(0),
 	reflejos integer NOT NULL DEFAULT(0),
 	voluntad integer NOT NULL DEFAULT(0),
-	resistenciaHechizo integer NOT NULL DEFAULT(0),
 	ataqueBase integer NOT NULL DEFAULT(0),
 	fuerza integer NOT NULL DEFAULT(0),
 	destreza integer NOT NULL DEFAULT(0),
@@ -462,21 +460,21 @@ CREATE TABLE Hechizo_Jugador(
 CREATE TABLE Habilidad_Jugador(
  	jugadorId integer NOT NULL,
   	habilidadId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Entidad(id),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(habilidadId) REFERENCES HabilidadEspecial(id),
 	PRIMARY KEY(jugadorId, habilidadId)
 );
 CREATE TABLE Sentido_Jugador(
  	jugadorId integer NOT NULL,
   	sentidoId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Entidad(id),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(sentidoId) REFERENCES Sentido(id),
 	PRIMARY KEY(jugadorId, sentidoId)
 );
 CREATE TABLE Inmunidad_Jugador(
  	jugadorId integer NOT NULL,
   	estadoId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Entidad(id),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(estadoId) REFERENCES CambioEstado(id),
 	PRIMARY KEY(jugadorId, estadoId)
 );
@@ -484,7 +482,7 @@ CREATE TABLE Velocidad_Jugador(
  	jugadorId integer NOT NULL,
   	movimientoId integer NOT NULL,
 	cantidad integer NOT NULL default(5),
-	FOREIGN KEY(jugadorId) REFERENCES Entidad(id),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(movimientoId) REFERENCES Movimiento(id),
 	PRIMARY KEY(jugadorId, movimientoId)
 );
@@ -492,9 +490,62 @@ CREATE TABLE Resistencia_Jugador(
  	jugadorId integer NOT NULL,
   	danoId integer NOT NULL,
 	cantidad integer NOT NULL default(0),
-	FOREIGN KEY(jugadorId) REFERENCES Entidad(id),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(danoId) REFERENCES TipoDano(id),
 	PRIMARY KEY(jugadorId, danoId)
 );
 
-SELECT ArmaCompleta.id, ArmaCompleta.nombre, nivel, precio ,manos, tipo, grupo categoria, Razgo.nombre AS razgo, Razgo.descripcion AS razgoDesc FROM ArmaCompleta JOIN Razgo_Arma ON Razgo_Arma.armaId = ArmaCompleta.id JOIN Razgo ON Razgo_Arma.razgoId = Razgo.id;
+CREATE TABLE IF NOT EXISTS Ataque_Estandar (
+  armaId integer NOT NULL PRIMARY KEY,
+  monto varchar(64) NOT NULL DEFAULT('1d4'),
+  alcance integer DEFAULT(1),
+  efecto varchar(512),
+  demora integer NOT NULL DEFAULT(1),
+  bono integer NOT NULL DEFAULT(0),
+  danoId integer NOT NULL,
+  FOREIGN KEY (armaId) REFERENCES Arma(id),
+  FOREIGN KEY (danoId) REFERENCES TipoDano(id)
+);
+INSERT INTO Ataque_Estandar(armaId, danoId) VALUES(1, 2);
+INSERT INTO Ataque_Estandar(armaId, danoId) VALUES(2, 4);
+INSERT INTO Ataque_Estandar(armaId, monto, danoId) VALUES(3, '1d6', 4);
+INSERT INTO Ataque_Estandar(armaId, monto, alcance, danoId) VALUES(4, '1d6', 60, 3);
+INSERT INTO Ataque_Estandar(armaId, danoId) VALUES(5, 3);
+INSERT INTO Ataque_Estandar(armaId, monto, alcance, danoId) VALUES(6, '1d8', 10, 4);
+INSERT INTO Ataque_Estandar(armaId, monto, alcance, danoId) VALUES(7, '1d8', 60, 3);
+INSERT INTO Ataque_Estandar(armaId, alcance, danoId) VALUES(8, 30, 3);
+INSERT INTO Ataque_Estandar(armaId, monto, alcance, danoId) VALUES(9, '1d10', 10, 4);
+INSERT INTO Ataque_Estandar(armaId, monto, danoId) VALUES(10, '1d10', 2);
+INSERT INTO Ataque_Estandar(armaId, monto, alcance, danoId) VALUES(11, '1d8', 60, 3);
+INSERT INTO Ataque_Estandar(armaId, monto, danoId) VALUES(12, '1d6', 2);
+INSERT INTO Ataque_Estandar(armaId, monto, danoId) VALUES(13, '1d8 t(1d12)', 4);
+INSERT INTO Ataque_Estandar(armaId, danoId) VALUES(14, 3);
+INSERT INTO Ataque_Estandar(armaId, monto, danoId) VALUES(15, '1d6', 3);
+
+CREATE TABLE IF NOT EXISTS TipoItem (
+  id integer NOT NULL PRIMARY KEY,
+  nombre varchar(64) NOT NULL
+);
+INSERT INTO TipoItem(nombre) VALUES('arma');
+INSERT INTO TipoItem(nombre) VALUES('armadura');
+INSERT INTO TipoItem(nombre) VALUES('escudo');
+INSERT INTO TipoItem(nombre) VALUES('casco');
+INSERT INTO TipoItem(nombre) VALUES('calzado');
+INSERT INTO TipoItem(nombre) VALUES('guantes');
+INSERT INTO TipoItem(nombre) VALUES('anillo');
+INSERT INTO TipoItem(nombre) VALUES('collar');
+INSERT INTO TipoItem(nombre) VALUES('consumible');
+INSERT INTO TipoItem(nombre) VALUES('reliquia');
+INSERT INTO TipoItem(nombre) VALUES('miscelaneo');
+
+DROP TABLE Inventario;
+CREATE TABLE IF NOT EXISTS Inventario (
+  jugadorId integer NOT NULL,
+  itemId integer NOT NULL,
+  tipoItemId integer NOT NULL,
+  cantidad integer NOT NULL DEFAULT(1),
+  equipado integer NOT NULL DEFAULT(0) CHECK (equipado IN (0, 1)),
+  FOREIGN KEY (jugadorId) REFERENCES Jugador(id),
+  FOREIGN KEY (tipoItemId) REFERENCES TipoItem(id),
+  PRIMARY KEY(jugadorId, itemId, tipoItemId)
+);
