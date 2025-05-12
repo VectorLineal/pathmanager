@@ -31,30 +31,32 @@
         </template>
       </span>
       <template v-if="column.key === 'action'">
-        <span>
-          <a>Detalles</a>
-          <a-divider type="vertical" />
-          <a>Editar</a>
-          <a-divider type="vertical" />
-          <a>Borrar</a>
-        </span>
+        <CButtonGroup vertical role="group">
+          <a-tooltip placement="left" title="Detalles">
+            <RouterLink :to="'/enemigo/' + text.id">
+              <CButton color="info" size="sm"><EyeOutlined/></CButton>
+            </RouterLink >
+          </a-tooltip>
+          <a-tooltip placement="left" title="Borrar">
+            <RouterLink :to="'/enemigo/' + text.id">
+              <CButton color="danger" size="sm"><DeleteOutlined/></CButton>
+            </RouterLink>
+          </a-tooltip>
+        </CButtonGroup>
       </template>
       <template v-else-if="column.key === 'traits'">
-        <span>
-          <a-tag v-for="razgo in record.razgos" :key="razgo.id" color="green">
-            <a-popover placement="left" :title="razgo.nombre" :content="razgo.descripcion">
-              <a>{{ razgo.nombre.toUpperCase() }}</a>
-            </a-popover>
-          </a-tag>
-        </span>
+        <TraitTag v-for="razgo in record.razgos" :id="razgo.id" :name="razgo.nombre" :description="razgo.descripcion" />
       </template>
     </template>
   </a-table>
 </template>
 <script setup>
 import { reactive, ref } from "vue";
-import { SearchOutlined } from "@ant-design/icons-vue";
+import { SearchOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from "@ant-design/icons-vue";
+import { CButton, CButtonGroup } from "@coreui/vue";
+import { RouterLink } from "vue-router";
 import SearchDropdown from "./SearchDropdown.vue";
+import TraitTag from "./generic/TraitTag.vue";
 import { getAllEntities } from "../../logic/EntityOperations";
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";

@@ -21,10 +21,13 @@ ORDER BY nivel, raza, experiencia, Tamano.id, clase, Entidad.nombre;
 `;
 
 const entityQuery = `
-SELECT Entidad.nombre, nivel, experiencia, alineacionId, Alineacion.nombre AS alineacion, tamanoId, Tamano.nombre AS tamano, razaId, Raza.nombre AS raza, claseId, Clase.nombre AS clase,
-iniciativa, percepcion, armaduraNatural + armaduraItem + destreza + evasion as AC, armaduraNatural + armaduraItem as FFAC, salud, fortaleza, reflejos, voluntad, fuerza, destreza,
-constitucion, inteligencia, sabiduria, carisma, acrobacia, atletismo, fabricacion, engano, diplomacia, intimidacion, tradicion, medicina, naturaleza, ocultismo, actuacion, religion,
-sociedad, sigilo, supervivencia, robo, dinero, tesoro, descripcion
+SELECT Entidad.nombre, nivel, experiencia, alineacionId, Alineacion.nombre AS alineacion, tamanoId,
+Tamano.nombre AS tamano, razaId, Raza.nombre AS raza, claseId, Clase.nombre AS clase, iniciativa,
+percepcion, armaduraNatural + armaduraItem + destreza + evasion as AC,
+armaduraNatural + armaduraItem as FFAC, salud, fortaleza, reflejos, voluntad, fuerza, destreza,
+constitucion, inteligencia, sabiduria, carisma, acrobacia, atletismo, fabricacion, engano, diplomacia,
+intimidacion, tradicion, medicina, naturaleza, ocultismo, actuacion, religion, sociedad, sigilo,
+supervivencia, robo, dinero, tesoro, descripcion
 FROM Entidad JOIN Clase ON Entidad.claseId = Clase.id
 JOIN Alineacion ON Entidad.alineacionId = Alineacion.id
 JOIN Tamano ON Entidad.tamanoId = Tamano.id
@@ -47,7 +50,11 @@ export async function getAllEntities() {
 
 export async function getEntity(id) {
   try {
-    const entity = await glosaryDatabase.query(entityQuery, [id]);
+    console.log("input id:", id);
+    const eQuery = await glosaryDatabase.query(entityQuery, [id]);
+    console.log("query:", eQuery);
+    const entity = eQuery[0];
+    console.log("queried entity:", entity);
     //se añaden datos en forma de arreglos
     const traits = await getTraitByEntity(id);
     entity.razgos = traits;

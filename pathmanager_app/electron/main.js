@@ -1,6 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import sqlite3 from "sqlite3";
-//const sqlite3 = require('sqlite3').verbose()
 import { join, resolve, dirname } from "path";
 import { fileURLToPath } from 'url';
 
