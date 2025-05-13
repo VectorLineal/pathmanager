@@ -41,7 +41,7 @@
           ><LangTag
             v-for="lenguage in entity.lenguages"
             :name="lenguage.nombre"
-            :rarity="lenguage.rareza"
+            :rarity="lenguage.rarezaId"
           />, <b>movilidad: </b
           ><MovInfo
             v-for="velocidad in entity.velocidades"

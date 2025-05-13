@@ -1,13 +1,24 @@
 <template>
     <a-row>
-        <a-col >
+        <a-col :span="10">
             <CharacterCard :entity="entity"/>
+        </a-col>
+        <a-col :span="14">
+            <p><b>Inmunidades: </b><b v-for="inmunidad in entity.inmunidades">{{ inmunidad.nombre + ' ' }}</b></p>
+            <MappedWeakRes :resistances="entity.resistencias"/>
+            <MappedAttacks :attacks="entity.ataques"/>
+            <MappedAbilities :abilities="entity.habilidades"/>
+            <p v-if="hasLoot"><b>oro: </b>{{ money.gold }}, <b>plata: </b>{{ money.silver }}, <b>cobre: </b>{{ money.coopper }}, <template v-if="entity.tesoro != null"><b>tesoro: </b> {{ entity.tesoro }}</template></p>
+            <p>{{ entity.descripcion }}</p>
         </a-col>
     </a-row>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import CharacterCard from './CharacterCard.vue';
+import MappedWeakRes from './MappedWeakRes.vue';
+import MappedAttacks from './MappedAttacks.vue';
+import MappedAbilities from './MappedAbilities.vue';
 import { getEntity } from '../../logic/EntityOperations';
 
 const props = defineProps({
@@ -15,6 +26,21 @@ const props = defineProps({
 });
 
 const entity = ref();
+
+const hasLoot = computed(() => {
+    return entity.value.dinero > 0 || entity.value.tesoro != null
+});
+
+const money = computed(() => {
+    let curMoney = entity.value.dinero;
+    const coopper = curMoney % 100;
+    curMoney /= 100;
+    const silver = curMoney % 100;
+    curMoney /= 100;
+    const gold = curMoney;
+
+    return{gold, silver, coopper};
+});
 
 try{
     console.log("Character props:", props);
