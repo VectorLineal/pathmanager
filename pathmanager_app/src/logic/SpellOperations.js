@@ -7,7 +7,8 @@ SELECT Hechizo.id, Hechizo.nombre,
 CASE
   WHEN Hechizo_Entidad.aumento IS NULL THEN Hechizo.nivel
   ELSE Hechizo_Entidad.aumento
-END AS nivel_final, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos, Escuela.nombre AS escuela, Blanco.nombre AS blancos, Hechizo_Entidad.cantidad
+END AS nivel_final, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Hechizo_Entidad.cantidad
 FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
 JOIN Blanco ON Hechizo.blancoId = Blanco.id
 JOIN Hechizo_Entidad ON Hechizo_Entidad.hechizoId = Hechizo.id

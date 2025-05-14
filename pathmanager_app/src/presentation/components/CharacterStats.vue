@@ -8,6 +8,7 @@
             <MappedWeakRes :resistances="entity.resistencias"/>
             <MappedAttacks :attacks="entity.ataques"/>
             <MappedAbilities :abilities="entity.habilidades"/>
+            <SpellList v-if="entity.hechizos.length > 0" :spells="entity.hechizos"/>
             <p v-if="hasLoot"><b>oro: </b>{{ money.gold }}, <b>plata: </b>{{ money.silver }}, <b>cobre: </b>{{ money.coopper }}, <template v-if="entity.tesoro != null"><b>tesoro: </b> {{ entity.tesoro }}</template></p>
             <p>{{ entity.descripcion }}</p>
         </a-col>
@@ -19,6 +20,7 @@ import CharacterCard from './CharacterCard.vue';
 import MappedWeakRes from './MappedWeakRes.vue';
 import MappedAttacks from './MappedAttacks.vue';
 import MappedAbilities from './MappedAbilities.vue';
+import SpellList from './SpellList.vue';
 import { getEntity } from '../../logic/EntityOperations';
 
 const props = defineProps({

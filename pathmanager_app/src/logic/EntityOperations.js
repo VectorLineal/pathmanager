@@ -76,7 +76,7 @@ export async function getEntity(id) {
     const feats = await getFeatsByEntity(id);
     entity.proezas = feats;
     const spells = await getSpellsByEntity(id);
-    entity.hechizos = abilities;
+    entity.hechizos = spells;
 
     return entity;
   } catch (err) {
