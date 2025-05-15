@@ -1,12 +1,14 @@
 <template>
-  <a-card :title="entity.nombre">
+  <a-card>
     <template #cover>
       <img alt="Retrato" :src="image" />
     </template>
-    <template #extra>
+    <template #title>
+      <h5>{{entity.nombre}}</h5>
       <a-tag color="green">{{ entity.alineacion }}</a-tag>
       <a-tag color="cyan">{{ entity.raza }}</a-tag>
       <a-tag color="purple">{{ entity.tamano }}</a-tag>
+      <a-tag color="blue">{{ entity.clase }}</a-tag>
     </template>
     <template #actions>
       <TraitTag
@@ -100,14 +102,6 @@ const props = defineProps({
 
 const image = computed(() => {
   return "/retratos/" + props.entity.raza + "/" + props.entity.nombre + ".png";
-  /*if (import.meta.env.DEV) {
-    // Development - use Vite's asset handling
-    return new URL(`./assets/${imageName}`, import.meta.url).href;
-  } else {
-    // Production - use absolute path to resources
-    const path = window.require("path");
-    return `file://${path.join(__static, "images", imageName)}`;
-  }*/
 });
 </script>
 <style scoped>
