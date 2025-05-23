@@ -31,11 +31,11 @@ const completeEntity = () => {
 const steps = [
   {
     title: 'Raza',
-    content: 'Elegir Raza junto con tamaño, nivel, inmunidades, movimientos, sentidos y resistencias',
+    content: 'Elegir Raza junto con clase y nivel'
   },
   {
     title: 'Clase',
-    content: 'Elegir clase, lenguages',
+    content: 'Elegir tamaño, lenguages, inmunidades, movimientos, sentidos y resistencias'
   },
   {
     title: 'Atributos',
@@ -43,7 +43,7 @@ const steps = [
   },
   {
     title: 'Defensas',
-    content: 'Modificar AC, salud, percepción, inciativa, fortaleza, reflejos, voluntad',
+    content: 'Modificar AC, salud, percepción, fortaleza, reflejos, voluntad',
   },
   {
     title: 'Ataques',

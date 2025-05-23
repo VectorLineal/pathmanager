@@ -125,11 +125,6 @@ const columns = [
     sorter: (a, b) => a.AC - b.AC,
   },
   {
-    title: "Iniciativa",
-    dataIndex: "iniciativa",
-    key: "init",
-  },
-  {
     title: "Percepción",
     dataIndex: "percepcion",
     key: "per",

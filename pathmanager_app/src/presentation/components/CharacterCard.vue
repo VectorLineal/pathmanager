@@ -27,8 +27,7 @@
       </template>
       <template #description>
         <p>
-          <b>Percepción: </b><Modifier :amount="entity.percepcion"/>, <b>inciativa: </b>
-          <Modifier :amount="entity.iniciativa"/>, <b>Sentidos: </b
+          <b>Percepción: </b><Modifier :amount="entity.percepcion"/>, <b>Sentidos: </b
           ><template v-for="sentido in entity.sentidos"
             ><UExtraInfo
               :name="sentido.nombre"

@@ -28,5 +28,17 @@
     "vite": "^6.3.1",
     "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.6"
-  }
+  },
+    "win": {
+      "target": "nsis",
+      "icon": "public/icons/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/icons/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/icons/icon.png"
+    }
 }

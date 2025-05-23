@@ -6,10 +6,24 @@ FROM Sentido_Entidad JOIN Sentido ON Sentido_Entidad.sentidoId = Sentido.id
 WHERE Sentido_Entidad.entidadId = ?;
 `;
 
+const sensesRaceQuery = `
+SELECT Sentido.nombre, Sentido.descripcion, Raza_Sentido.rango
+FROM Raza_Sentido JOIN Sentido ON Raza_Sentido.sentidoId = Sentido.id
+WHERE Raza_Sentido.razaId = ?;
+`;
+
 export async function getSensesByEntity(id) {
   try {
     return await glosaryDatabase.query(sensesEntityQuery, [id]);
   } catch (err) {
     console.error("error on load senses by entity:", err);
+  }
+}
+
+export async function getSensesByRace(id) {
+  try {
+    return await glosaryDatabase.query(sensesRaceQuery, [id]);
+  } catch (err) {
+    console.error("error on load senses by race:", err);
   }
 }

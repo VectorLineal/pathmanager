@@ -420,10 +420,20 @@ ipcMain.handle("db-query", async (event, query, params) => {
     });
   });
 });
+const getIconPath = () => {
+  if (process.platform === "win32") {
+    return join(__dirname, "../public/icons/icon.ico");
+  } else if (process.platform === "darwin") {
+    return join(__dirname, "../public/icons/icon.icns");
+  } else {
+    return join(__dirname, "../public/icons/icon.png");
+  }
+};
 const createWindow = () => {
   const preload = join(__dirname, "../preload.js");
   console.log("preload path", preload);
   const win = new BrowserWindow({
+    icon: getIconPath(),
     width: 800,
     height: 600,
     webPreferences: {

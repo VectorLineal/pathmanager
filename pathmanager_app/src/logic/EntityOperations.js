@@ -11,8 +11,9 @@ import { getFeatsByEntity } from "./FeatOperations";
 import { getSpellsByEntity } from "./SpellOperations";
 
 const entitiesQuery = `
-SELECT Entidad.id, Entidad.nombre, nivel, experiencia, Alineacion.nombre AS alineacion, Tamano.nombre AS tamano,
-Raza.nombre AS raza, Clase.nombre AS clase, iniciativa, percepcion, armaduraNatural + armaduraItem + destreza + evasion as AC,salud
+SELECT Entidad.id, Entidad.nombre, nivel, experiencia, Alineacion.nombre AS alineacion,
+Tamano.nombre AS tamano, Raza.nombre AS raza, Clase.nombre AS clase, Entidad.percepcion,
+armaduraNatural + armaduraItem + Entidad.destreza + evasion as AC, Entidad.salud
 FROM Entidad JOIN Clase ON Entidad.claseId = Clase.id
 JOIN Alineacion ON Entidad.alineacionId = Alineacion.id
 JOIN Tamano ON Entidad.tamanoId = Tamano.id
@@ -21,13 +22,14 @@ ORDER BY nivel, raza, experiencia, Tamano.id, clase, Entidad.nombre;
 `;
 
 const entityQuery = `
-SELECT Entidad.nombre, nivel, experiencia, alineacionId, Alineacion.nombre AS alineacion, tamanoId,
-Tamano.nombre AS tamano, razaId, Raza.nombre AS raza, claseId, Clase.nombre AS clase, iniciativa,
-percepcion, armaduraNatural + armaduraItem + destreza + evasion as AC,
-armaduraNatural + armaduraItem as FFAC, salud, fortaleza, reflejos, voluntad, fuerza, destreza,
-constitucion, inteligencia, sabiduria, carisma, acrobacia, atletismo, fabricacion, engano, diplomacia,
-intimidacion, tradicion, medicina, naturaleza, ocultismo, actuacion, religion, sociedad, sigilo,
-supervivencia, robo, dinero, tesoro, descripcion
+SELECT Entidad.nombre, nivel, experiencia, alineacionId, Alineacion.nombre AS alineacion, Entidad.tamanoId,
+Tamano.nombre AS tamano, razaId, Raza.nombre AS raza, claseId, Clase.nombre AS clase, Entidad.percepcion,
+armaduraNatural + armaduraItem + Entidad.destreza + evasion as AC, armaduraNatural + armaduraItem as FFAC,
+Entidad.salud, Entidad.fortaleza, Entidad.reflejos, Entidad.voluntad, Entidad.fuerza, Entidad.destreza,
+Entidad.constitucion, Entidad.inteligencia, Entidad.sabiduria, Entidad.carisma, Entidad.acrobacia,
+Entidad.atletismo, Entidad.fabricacion, Entidad.engano, Entidad.diplomacia, Entidad.intimidacion,
+Entidad.tradicion, Entidad.medicina, Entidad.naturaleza, Entidad.ocultismo, Entidad.actuacion, Entidad.religion,
+Entidad.sociedad, Entidad.sigilo, Entidad.supervivencia, Entidad.robo, dinero, tesoro, descripcion
 FROM Entidad JOIN Clase ON Entidad.claseId = Clase.id
 JOIN Alineacion ON Entidad.alineacionId = Alineacion.id
 JOIN Tamano ON Entidad.tamanoId = Tamano.id
