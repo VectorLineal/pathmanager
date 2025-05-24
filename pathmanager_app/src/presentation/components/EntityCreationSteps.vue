@@ -30,12 +30,12 @@ const completeEntity = () => {
 
 const steps = [
   {
-    title: 'Raza',
-    content: 'Elegir Raza junto con clase y nivel'
+    title: 'Raza y Clase',
+    content: 'Elegir nombre, Raza junto con clase y nivel'
   },
   {
-    title: 'Clase',
-    content: 'Elegir tamaño, lenguages, inmunidades, movimientos, sentidos y resistencias'
+    title: 'Razgos Físicos',
+    content: 'Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias'
   },
   {
     title: 'Atributos',

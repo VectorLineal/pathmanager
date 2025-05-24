@@ -1,5 +1,11 @@
 import glosaryDatabase from "../data/services/DBPool";
 
+const allLanguagesQuery = `
+SELECT Lenguaje.id, Lenguaje.nombre, Rareza.nombre AS rareza
+FROM Lenguaje JOIN Rareza ON Lenguaje.rarezaId = Rareza.id
+ORDER BY rarezaId, Lenguaje.nombre;
+`;
+
 const languagesEntityQuery = `
 SELECT Lenguaje.nombre, rarezaId, Rareza.nombre AS rareza
 FROM Lenguaje_Entidad JOIN Lenguaje ON Lenguaje_Entidad.lenguajeId = Lenguaje.id
@@ -13,6 +19,14 @@ FROM Raza_Lenguaje JOIN Lenguaje ON Raza_Lenguaje.lenguajeId = Lenguaje.id
 JOIN Rareza ON Lenguaje.rarezaId = Rareza.id
 WHERE Raza_Lenguaje.razaId = ?;
 `;
+
+export async function getAllLanguages() {
+  try {
+    return await glosaryDatabase.query(allLanguagesQuery);
+  } catch (err) {
+    console.error("error on load all languages:", err);
+  }
+}
 
 export async function getLanguagesByEntity(id) {
   try {

@@ -1,5 +1,9 @@
 import glosaryDatabase from "../data/services/DBPool";
 
+const allsensesQuery = `
+SELECT * FROM Sentido;
+`;
+
 const sensesEntityQuery = `
 SELECT Sentido.nombre, Sentido.descripcion, Sentido_Entidad.rango
 FROM Sentido_Entidad JOIN Sentido ON Sentido_Entidad.sentidoId = Sentido.id
@@ -11,6 +15,14 @@ SELECT Sentido.nombre, Sentido.descripcion, Raza_Sentido.rango
 FROM Raza_Sentido JOIN Sentido ON Raza_Sentido.sentidoId = Sentido.id
 WHERE Raza_Sentido.razaId = ?;
 `;
+
+export async function getAllSenses() {
+  try {
+    return await glosaryDatabase.query(allsensesQuery);
+  } catch (err) {
+    console.error("error on load all senses:", err);
+  }
+}
 
 export async function getSensesByEntity(id) {
   try {
