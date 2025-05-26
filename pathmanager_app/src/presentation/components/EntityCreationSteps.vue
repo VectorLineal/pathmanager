@@ -1,7 +1,10 @@
 <template>
   <div>
     <a-steps :current="current" :items="items"></a-steps>
-    <div class="steps-content">
+    <KeepAlive>
+      <LevelClassRaceForm v-if="current == 0" />
+    </KeepAlive>
+    <div class="steps-content" v-if="current > 0">
       {{ steps[current].content }}
     </div>
     <div class="steps-action">
@@ -14,9 +17,39 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { message } from 'ant-design-vue';
+import { getAllAlignments } from "../../logic/AlignmentOperations";
+import { getAllClasses } from "../../logic/ClassOperations";
+import { getAllRaces } from "../../logic/RaceOperations";
+import { getAllSizes } from "../../logic/SizeOperations";
+import { getAllLanguages } from '../../logic/LanguageOperations';
+import { getAllStatusChanges }  from '../../logic/StatusChangeOperations';
+import { getAllMovementTypes } from '../../logic/MovementOperations';
+import { getAllTraits } from '../../logic/TraitOperations';
+import { alignmentsStorage, sizesStorage, racesStorage, classesStorage, languagesStorage, statusChangesStorage, movementsStorage, traitsStorage } from "../../logic/Storage";
+import LevelClassRaceForm from './LevelClassRaceForm.vue';
+
 const current = ref(0);
+const requestData = reactive({
+  level: 1,
+  clase: null,
+  race: null
+});
+
+try{
+  //se cargan al storage varias listas de valores simples {id, nombre}
+  if(alignmentsStorage.isEmpty()) alignmentsStorage.fillData(await getAllAlignments());
+  if(sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
+  if(racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
+  if(classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
+  if(languagesStorage.isEmpty()) languagesStorage.fillData(await getAllLanguages());
+  if(statusChangesStorage.isEmpty()) statusChangesStorage.fillData(await getAllStatusChanges());
+  if(movementsStorage.isEmpty()) movementsStorage.fillData(await getAllMovementTypes());
+  if(traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
+}catch(error){
+  console.error("error on enemies table", error);
+}
 
 const next = () => {
   current.value++;

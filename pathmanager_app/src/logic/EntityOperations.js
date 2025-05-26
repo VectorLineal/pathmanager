@@ -7,7 +7,6 @@ import { getInmunitiesByEntity } from "./InmunityOperations";
 import { getResWeakByEntity } from "./ResistanceOperations";
 import { getAttacksByEntity } from "./AttackOperations";
 import { getAbilitiesByEntity } from "./AbilityOperations";
-import { getFeatsByEntity } from "./FeatOperations";
 import { getSpellsByEntity } from "./SpellOperations";
 
 const entitiesQuery = `
@@ -75,8 +74,6 @@ export async function getEntity(id) {
     entity.ataques = attacks;
     const abilities = await getAbilitiesByEntity(id);
     entity.habilidades = abilities;
-    const feats = await getFeatsByEntity(id);
-    entity.proezas = feats;
     const spells = await getSpellsByEntity(id);
     entity.hechizos = spells;
 

@@ -1,7 +1,8 @@
 import glosaryDatabase from "../data/services/DBPool";
 
 const classesQuery = `
-SELECT * FROM Clase;
+SELECT * FROM Clase
+ORDER BY nombre;
 `;
 
 export async function getAllClasses() {

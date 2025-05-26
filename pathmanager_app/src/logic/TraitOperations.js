@@ -1,5 +1,9 @@
 import glosaryDatabase from "../data/services/DBPool";
 
+const allTraitsQuery = `
+SELECT * FROM Razgo ORDER BY nombre;
+`;
+
 const traitsEntityQuery = `
 SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
 FROM Razgo_Entidad JOIN Razgo ON Razgo.id = Razgo_Entidad.razgoId
@@ -25,6 +29,13 @@ WHERE Razgo_Arma.armaId = ?
 ORDER BY Razgo.nombre;
 `;
 
+export async function getAllTraits() {
+  try {
+    return await glosaryDatabase.query(allTraitsQuery);
+  } catch (err) {
+    console.error("error on load all traits:", err);
+  }
+}
 
 export async function getTraitByEntity(id) {
   try {

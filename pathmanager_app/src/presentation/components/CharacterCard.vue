@@ -1,7 +1,7 @@
 <template>
   <a-card>
     <template #cover>
-      <img alt="Retrato" :src="image" />
+      <img alt="Retrato" :src="image" class="portait"/>
     </template>
     <template #title>
       <h5>{{entity.nombre}}</h5>
@@ -106,5 +106,8 @@ const image = computed(() => {
 <style scoped>
 .subindex {
   font-weight: 400;
+}
+.portait{
+  margin-top: 13px;
 }
 </style>

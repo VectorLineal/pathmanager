@@ -1,6 +1,9 @@
 <template>
   <CButton color="danger" @click="goBack"><RollbackOutlined />Cancelar</CButton>
-  <EntityCreationSteps/>
+  <Suspense>
+    <EntityCreationSteps/>
+    <template #fallback> Cargando Datos para la creación de Enemigo... </template>
+  </Suspense>
 </template>
 <script setup>
 import { useRouter } from "vue-router";

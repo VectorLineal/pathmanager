@@ -657,6 +657,14 @@ CREATE TABLE SubclaseNivel_Habilidad(
 	PRIMARY KEY(subclaseId, habilidadId)
 );
 
+CREATE TABLE ClaseNivel_Proeza(
+ 	claseId integer NOT NULL,
+  	proezaId integer NOT NULL,
+	nivel integer NOT NULL,
+	FOREIGN KEY(claseId) REFERENCES Clase(id),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	PRIMARY KEY(claseId, proezaId)
+);
 
 CREATE TABLE Raza_Inmunidad(
  	razaId integer NOT NULL,

@@ -8,7 +8,8 @@ import { getSpeedsByRace } from "./MovementOperations";
 
 const racesQuery = `
 select Raza.id, Raza.nombre, Rareza.nombre AS rareza
-from Raza join Rareza on Raza.rarezaId = Rareza.id;
+from Raza join Rareza on Raza.rarezaId = Rareza.id
+ORDER BY Raza.nombre;
 `;
 
 const playableRacesQuery = `

@@ -1,16 +1,16 @@
 import glosaryDatabase from "../data/services/DBPool";
 
-const featEntityQuery = `
-select nombre, descripcion
-FROM Proeza_Entidad JOIN Proeza ON Proeza.id = Proeza_Entidad.proezaId
-WHERE Proeza_Entidad.entidadId = ?
-order by Proeza.nombre;
+const featClassLevelQuery = `
+SELECT nivel, nombre, requisito, descripcion, habilidadId
+FROM Proeza JOIN Proeza_Clase ON Proeza.id = Proeza_Clase.proezaId
+WHERE claseId = ? and nivel <= ??
+ORDER BY nivel;
 `;
 
-export async function getFeatsByEntity(id) {
+export async function getFeatsByClassLevel(id, level) {
   try {
-    return await glosaryDatabase.query(featEntityQuery, [id]);
+    return await glosaryDatabase.query(featClassLevelQuery, [id, level]);
   } catch (err) {
-    console.error("error on load feats by entity:", err);
+    console.error("error on load feats by class and level:", err);
   }
 }
