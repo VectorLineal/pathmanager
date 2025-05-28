@@ -2,7 +2,7 @@
   <div>
     <a-steps :current="current" :items="items"></a-steps>
     <KeepAlive>
-      <LevelClassRaceForm v-if="current == 0" />
+      <LevelClassRaceForm ref="lcrRef" v-if="current == 0" @updateData="onClassRaceUpdate" />
     </KeepAlive>
     <div class="steps-content" v-if="current > 0">
       {{ steps[current].content }}
@@ -17,8 +17,9 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, useTemplateRef, toRaw } from 'vue';
 import { message } from 'ant-design-vue';
+import Entity from '../../data/models/Entity';
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
 import { getAllRaces } from "../../logic/RaceOperations";
@@ -31,10 +32,11 @@ import { alignmentsStorage, sizesStorage, racesStorage, classesStorage, language
 import LevelClassRaceForm from './LevelClassRaceForm.vue';
 
 const current = ref(0);
-const requestData = reactive({
-  level: 1,
-  clase: null,
-  race: null
+const requestData = reactive(new Entity());
+
+const classRaceRef = useTemplateRef('lcrRef');
+const validationState = reactive({
+  classRaceValid: false
 });
 
 try{
@@ -51,15 +53,61 @@ try{
   console.error("error on enemies table", error);
 }
 
-const next = () => {
-  current.value++;
+const validateClassRace = async () => {
+  if (classRaceRef.value.validateAndUpdate == null) await classRaceRef.value.$.exposed.validateAndUpdate();
+  else await classRaceRef.value.validateAndUpdate();
+  return validationState.classRaceValid;
+};
+
+const validate = async () => {
+  switch (current.value) {
+    case 0:
+    default:
+      return await validateClassRace();
+    case 1:
+      return true;
+    case 2:
+      return true;
+    case 3:
+      return true;
+    case 4:
+      return true;
+    case 5:
+      return true;
+  }
+};
+
+const next = async () => {
+  const validator = await validate();
+  if (validator){
+    current.value++;
+    console.log("acumulated data: ", toRaw(requestData));
+  }
 };
 const prev = () => {
   current.value--;
 };
-const completeEntity = () => {
-    message.success('Personaje CREADO');
+const completeEntity = async () => {
+  const validator = await validate();
+
+  if (validator) onSubmit();
 };
+
+const onSubmit = () => {
+  message.success('Personaje CREADO');
+};
+
+const onClassRaceUpdate = (data, valid) => {
+  validationState.classRaceValid = valid;
+  if(valid){
+    requestData.setLevel(data.level);
+    requestData.name = data.name;
+    requestData.description = data.description;
+    requestData.classId = data.clase;
+    requestData.raceId = data.race;
+    requestData.traits = data.traits;
+  }
+}
 
 const steps = [
   {

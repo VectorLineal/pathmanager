@@ -6,12 +6,13 @@
 import { ref } from 'vue';
 import { classesStorage } from '../../logic/Storage';
 
-const emit = defineEmits("onSelect");
+const emit = defineEmits(["onSelect"]);
 
 const value = ref();
 const options = classesStorage.dataSelector;
 
 const handleChange = value => {
-  emit("onSelect", value);
+  const classData = classesStorage.getEntryById(value);
+  emit("onSelect", classData);
 };
 </script>

@@ -14,4 +14,11 @@ export default class PersistentFilterData{
             this.dataSelector.push({label: element.nombre, value: element.id});
         });
     }
+    getEntryById(id){
+        for(let i = 0; i < this.data.length; i++){
+            const entry = this.data[i];
+            if(entry.id == id) return entry;
+        }
+        return null;
+    }
 }

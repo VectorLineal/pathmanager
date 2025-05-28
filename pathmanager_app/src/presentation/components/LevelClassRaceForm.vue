@@ -7,42 +7,64 @@
     :label-col="labelCol"
     :wrapper-col="wrapperCol"
   >
-    <a-form-item label="Nombre" name="name">
-      <a-input v-model:value="formState.name" />
-    </a-form-item>
-    <a-form-item label="Nivel" name="level">
-      <a-input-number v-model:value="formState.level" :min="0" :max="23" />
-    </a-form-item>
-    <a-form-item label="Raza" name="race">
-      <RaceSelector @onSelect="selectClass"/>
-    </a-form-item>
-    <a-form-item label="Clase" name="clase">
-      <ClassSelector @onSelect="selectRace"/>
-    </a-form-item>
-    <a-form-item label="Razgos" name="traits">
-      <TraitsSelector @onSelect="selectTraits"/>
-    </a-form-item>
+    <a-row justify="space-around">
+      <a-col :sm="8" :md="7" :lg="6" :xl="4">
+        <a-form-item label="Nombre" name="name">
+          <a-input v-model:value="formState.name" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Nivel" name="level">
+          <a-input-number v-model:value="formState.level" :min="0" :max="25" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="6" :xl="6">
+        <a-form-item label="Raza" name="race">
+          <RaceSelector @onSelect="selectClass" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Clase" name="clase">
+          <ClassSelector @onSelect="selectRace" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+        <a-form-item label="Razgos" name="traits">
+          <TraitsSelector @onSelect="selectTraits" />
+        </a-form-item>
+      </a-col>
+    </a-row>
+    <a-row justify="center">
+      <a-col :xs="25" :sm="24">
+        <a-form-item label="Descripción" name="description">
+          <a-textarea v-model:value="formState.description" />
+        </a-form-item>
+      </a-col>
+    </a-row>
   </a-form>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import ClassSelector from "./ClassSelector.vue";
 import RaceSelector from "./RaceSelector.vue";
 import TraitsSelector from "./TraitsSelector.vue";
 
+const emit = defineEmits(["updateData"]);
+
 const formState = reactive({
   level: 0,
   name: "",
+  description: "",
   clase: null,
   race: null,
   traits: [],
 });
 const formRef = ref();
 const labelCol = {
-  span: 5,
+  span: 24,
 };
 const wrapperCol = {
-  span: 13,
+  span: 24,
 };
 
 const checkLevel = async (_rule, value) => {
@@ -54,8 +76,8 @@ const checkLevel = async (_rule, value) => {
   } else {
     if (value < 0) {
       return Promise.reject("El nivel mínimo es 0");
-    } else if (value > 23) {
-      return Promise.reject("El máximo es 23");
+    } else if (value > 25) {
+      return Promise.reject("El máximo es 25");
     } else {
       return Promise.resolve();
     }
@@ -79,7 +101,7 @@ const rules = {
   race: [
     {
       required: true,
-      message: "Seleccione",
+      message: "Seleccione una raza",
       trigger: "change",
     },
   ],
@@ -94,26 +116,23 @@ const rules = {
 };
 
 const selectClass = (value) => {
-  console.log(`selected ${value}`);
-  formState.clase = value;
+  formState.clase = value.id;
 };
 const selectRace = (value) => {
-  console.log(`selected ${value}`);
-  formState.race = value;
+  formState.race = value.id;
 };
 const selectTraits = (value) => {
-  console.log(`selected ${value}`);
   formState.traits = value;
 };
 
-const onSubmit = () => {
-  formRef.value
-    .validate()
-    .then(() => {
-      console.log("values", formState, toRaw(formState));
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
+const validateAndUpdate = async () => {
+  try {
+    await formRef.value.validate();
+    emit("updateData", toRaw(formState), true);
+  } catch (error) {
+    emit("updateData", {}, false);
+    return;
+  }
 };
+defineExpose({ validateAndUpdate });
 </script>

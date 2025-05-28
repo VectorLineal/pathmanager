@@ -6,7 +6,7 @@
 import { ref } from 'vue';
 import { traitsStorage } from '../../logic/Storage';
 
-const emit = defineEmits("onSelect");
+const emit = defineEmits(["onSelect"]);
 
 const value = ref([]);
 const options = traitsStorage.dataSelector;
