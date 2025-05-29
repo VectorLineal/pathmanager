@@ -9,10 +9,9 @@ order by HabilidadEspecial.nombre;
 `;
 
 const abilityRaceQuery = `
-SELECT HabilidadEspecial.id, nombre, efecto, requisito, critico, demora, alcance
-FROM Raza_Habilidad JOIN HabilidadEspecial ON HabilidadEspecial.id = Raza_Habilidad.habilidadId
-WHERE Raza_Habilidad.razaId = ?
-ORDER BY HabilidadEspecial.nombre;
+SELECT Raza_Habilidad.habilidadId
+FROM Raza_Habilidad
+WHERE Raza_Habilidad.razaId = ?;
 `;
 
 const getTraitsByReference = async (id, query) => {

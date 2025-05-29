@@ -20,12 +20,12 @@
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="6">
         <a-form-item label="Raza" name="race">
-          <RaceSelector @onSelect="selectClass" />
+          <RaceSelector @onSelect="selectRace" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="5" :xl="4">
         <a-form-item label="Clase" name="clase">
-          <ClassSelector @onSelect="selectRace" />
+          <ClassSelector @onSelect="selectClass" />
         </a-form-item>
       </a-col>
       <a-col :sm="8" :md="7" :lg="7" :xl="5">

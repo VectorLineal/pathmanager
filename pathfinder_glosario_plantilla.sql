@@ -546,9 +546,10 @@ create TABLE TradicionAdicional(
 CREATE TABLE Proeza_Jugador(
  	jugadorId integer NOT NULL,
   	proezaId integer NOT NULL,
+	variables integer NOT NULL DEFAULT(0),
 	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
-	PRIMARY KEY(jugadorId, proezaId)
+	PRIMARY KEY(jugadorId, proezaId, variables)
 );
 
 CREATE TABLE Hechizo_Jugador(

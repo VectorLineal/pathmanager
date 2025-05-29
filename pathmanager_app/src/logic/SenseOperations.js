@@ -11,8 +11,8 @@ WHERE Sentido_Entidad.entidadId = ?;
 `;
 
 const sensesRaceQuery = `
-SELECT Sentido.nombre, Sentido.descripcion, Raza_Sentido.rango
-FROM Raza_Sentido JOIN Sentido ON Raza_Sentido.sentidoId = Sentido.id
+SELECT Raza_Sentido.sentidoId, Raza_Sentido.rango
+FROM Raza_Sentido
 WHERE Raza_Sentido.razaId = ?;
 `;
 

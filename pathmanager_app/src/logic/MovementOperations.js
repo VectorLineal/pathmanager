@@ -11,8 +11,8 @@ WHERE Velocidad.entidadId = ?;
 `;
 
 const speedRaceQuery = `
-SELECT Movimiento.nombre, cantidad
-FROM Raza_Velocidad JOIN Movimiento ON Raza_Velocidad.movimientoId = Movimiento.id
+SELECT Raza_Velocidad.movimientoId , cantidad
+FROM Raza_Velocidad
 WHERE Raza_Velocidad.razaId = ?;
 `;
 

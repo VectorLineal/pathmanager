@@ -60,5 +60,6 @@ export async function getRaceById(id) {
     return race;
   } catch (err) {
     console.error("error on load single race:", err);
+    return null;
   }
 }

@@ -43,6 +43,12 @@ export default class Entity{
         this.sizeId = sizeId;
         this.alignmentId = alignmentId;
         this.traits = [];
+        this.abilities = [];
+        this.inmunities = [];
+        this.resistances = [];
+        this.senses = [];
+        this.languages = [];
+        this.movements = [];
     }
 
     calculateXp(){
@@ -59,6 +65,24 @@ export default class Entity{
     setLevel(level){
         this.level = level;
         this.calculateXp();
+    }
+
+    setInmunities(inmunities){
+        inmunities.forEach((item) => {
+            this.inmunities.push(item.estadoId);
+        });
+    }
+
+    setAbilities(abilities){
+        abilities.forEach((item) => {
+            this.abilities.push(item.habilidadId);
+        });
+    }
+
+    setLanguages(languages){
+        languages.forEach((item) => {
+            this.languages.push(item.lenguajeId);
+        });
     }
 
     getFlatFootedArmor(){

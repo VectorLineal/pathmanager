@@ -4,25 +4,25 @@
     <KeepAlive>
       <LevelClassRaceForm ref="lcrRef" v-if="current == 0" @updateData="onClassRaceUpdate" />
     </KeepAlive>
-    <div class="steps-content" v-if="current > 0">
+    <KeepAlive>
+      <PhysicalTraitsForm ref="ptRef" v-if="current == 1" :intialData="requestData" @updateData="onPhysicalTraitsUpdate" />
+    </KeepAlive>
+    <div class="steps-content" v-if="current > 1">
       {{ steps[current].content }}
     </div>
     <div class="steps-action">
-      <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous</a-button>
-      <a-button v-if="current < steps.length - 1" type="primary" @click="next">Next</a-button>
-      <a-button v-if="current == steps.length - 1" type="primary"  @click="completeEntity">
-        Done
-      </a-button>
+      <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Anterior</a-button>
+      <a-button v-if="current <= steps.length - 1" type="primary" @click="next">{{nextText}}</a-button>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, reactive, useTemplateRef, toRaw } from 'vue';
+import { ref, reactive, useTemplateRef, toRaw, computed } from 'vue';
 import { message } from 'ant-design-vue';
 import Entity from '../../data/models/Entity';
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
-import { getAllRaces } from "../../logic/RaceOperations";
+import { getAllRaces, getRaceById } from "../../logic/RaceOperations";
 import { getAllSizes } from "../../logic/SizeOperations";
 import { getAllLanguages } from '../../logic/LanguageOperations';
 import { getAllStatusChanges }  from '../../logic/StatusChangeOperations';
@@ -30,14 +30,20 @@ import { getAllMovementTypes } from '../../logic/MovementOperations';
 import { getAllTraits } from '../../logic/TraitOperations';
 import { alignmentsStorage, sizesStorage, racesStorage, classesStorage, languagesStorage, statusChangesStorage, movementsStorage, traitsStorage } from "../../logic/Storage";
 import LevelClassRaceForm from './LevelClassRaceForm.vue';
+import PhysicalTraitsForm from './PhysicalTraitsForm.vue';
 
 const current = ref(0);
 const requestData = reactive(new Entity());
 
 const classRaceRef = useTemplateRef('lcrRef');
+const physicalTraitsRef = useTemplateRef('ptRef');
 const validationState = reactive({
-  classRaceValid: false
+  classRaceValid: false,
+  physicalTraitsValid: false
 });
+const nextText = computed(()=>{
+  return current.value == steps.length - 1? 'Crear':'Siguiente';
+})
 
 try{
   //se cargan al storage varias listas de valores simples {id, nombre}
@@ -56,48 +62,46 @@ try{
 const validateClassRace = async () => {
   if (classRaceRef.value.validateAndUpdate == null) await classRaceRef.value.$.exposed.validateAndUpdate();
   else await classRaceRef.value.validateAndUpdate();
-  return validationState.classRaceValid;
+};
+
+const validatePhysicalTraits = async () => {
+  if (physicalTraitsRef.value.validateAndUpdate == null) await physicalTraitsRef.value.$.exposed.validateAndUpdate();
+  else await physicalTraitsRef.value.validateAndUpdate();
 };
 
 const validate = async () => {
   switch (current.value) {
     case 0:
     default:
-      return await validateClassRace();
+      await validateClassRace();
+      break;
     case 1:
-      return true;
+      await validatePhysicalTraits();
+      break;
     case 2:
-      return true;
+      return;
     case 3:
-      return true;
+      return;
     case 4:
-      return true;
+      return;
     case 5:
-      return true;
+      onSubmit();
+      break;
   }
 };
 
 const next = async () => {
-  const validator = await validate();
-  if (validator){
-    current.value++;
-    console.log("acumulated data: ", toRaw(requestData));
-  }
+  await validate();
 };
 const prev = () => {
   current.value--;
-};
-const completeEntity = async () => {
-  const validator = await validate();
-
-  if (validator) onSubmit();
 };
 
 const onSubmit = () => {
   message.success('Personaje CREADO');
 };
 
-const onClassRaceUpdate = (data, valid) => {
+const onClassRaceUpdate = async (data, valid) => {
   validationState.classRaceValid = valid;
   if(valid){
     requestData.setLevel(data.level);
@@ -106,8 +110,39 @@ const onClassRaceUpdate = (data, valid) => {
     requestData.classId = data.clase;
     requestData.raceId = data.race;
     requestData.traits = data.traits;
+    const raceData = await getRaceById(requestData.raceId);
+    requestData.sizeId = raceData.tamanoId;
+    requestData.health = raceData.salud;
+    requestData.str = raceData.fuerza;
+    requestData.dex = raceData.destreza;
+    requestData.con = raceData.constitucion;
+    requestData.int = raceData.inteligencia;
+    requestData.wis = raceData.sabiduria;
+    requestData.cha = raceData.carisma;
+    requestData.resistances = raceData.resistencias;
+    requestData.senses = raceData.sentidos;
+    requestData.movements = raceData.velocidades;
+    requestData.setAbilities(raceData.habilidades);
+    requestData.setInmunities(raceData.inmunidades);
+    requestData.setLanguages(raceData.lenguages);
+    console.log("acumulated data: ", toRaw(requestData));
+    current.value++;
   }
-}
+};
+
+const onPhysicalTraitsUpdate = async (data, valid) => {
+  validationState.physicalTraitsValid = valid;
+  if(valid){
+    requestData.sizeId = data.size;
+    requestData.resistances = data.resistances;
+    requestData.senses = data.senses;
+    requestData.movements = data.movements;
+    requestData.inmunities = data.inmunities;
+    requestData.languages = data.languages;
+    console.log("acumulated data: ", toRaw(requestData));
+    current.value++;
+  }
+};
 
 const steps = [
   {

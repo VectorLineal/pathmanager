@@ -14,9 +14,8 @@ WHERE Lenguaje_Entidad.entidadId = ?;
 `;
 
 const languagesRaceQuery = `
-SELECT Lenguaje.nombre, rarezaId, Rareza.nombre AS rareza
-FROM Raza_Lenguaje JOIN Lenguaje ON Raza_Lenguaje.lenguajeId = Lenguaje.id
-JOIN Rareza ON Lenguaje.rarezaId = Rareza.id
+SELECT Raza_Lenguaje.lenguajeId
+FROM Raza_Lenguaje
 WHERE Raza_Lenguaje.razaId = ?;
 `;
 

@@ -8,10 +8,9 @@ order by cantidad;
 `;
 
 const resistanceRaceQuery = `
-SELECT TipoDano.nombre, cantidad
-FROM Raza_Resistencia JOIN TipoDano ON Raza_Resistencia.danoId = TipoDano.id
-WHERE Raza_Resistencia.razaId = ? AND Raza_Resistencia.cantidad != 0
-order by cantidad;
+SELECT Raza_Resistencia.danoId, Raza_Resistencia.cantidad
+FROM Raza_Resistencia
+WHERE Raza_Resistencia.razaId = ?;
 `;
 
 export async function getResWeakByEntity(id) {
