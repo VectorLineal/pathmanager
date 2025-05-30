@@ -9,3 +9,5 @@ export const languagesStorage = reactive( new PersistentFilterData());
 export const statusChangesStorage = reactive( new PersistentFilterData());
 export const movementsStorage = reactive( new PersistentFilterData());
 export const traitsStorage = reactive( new PersistentFilterData());
+export const damageTypesStorage = reactive( new PersistentFilterData());
+export const sensesStorage = reactive( new PersistentFilterData());

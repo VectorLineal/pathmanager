@@ -2,60 +2,103 @@
   <div>
     <a-steps :current="current" :items="items"></a-steps>
     <KeepAlive>
-      <LevelClassRaceForm ref="lcrRef" v-if="current == 0" @updateData="onClassRaceUpdate" />
+      <LevelClassRaceForm
+        ref="lcrRef"
+        v-if="current == 0"
+        @updateData="onClassRaceUpdate"
+      />
     </KeepAlive>
     <KeepAlive>
-      <PhysicalTraitsForm ref="ptRef" v-if="current == 1" :intialData="requestData" @updateData="onPhysicalTraitsUpdate" />
+      <PhysicalTraitsForm
+        ref="ptRef"
+        v-if="current == 1"
+        :intialData="requestData"
+        @updateData="onPhysicalTraitsUpdate"
+      />
     </KeepAlive>
-    <div class="steps-content" v-if="current > 1">
+    <KeepAlive>
+      <AtributesForm
+        ref="atRef"
+        v-if="current == 2"
+        :intialData="requestData"
+        @updateData="onAtributessUpdate"
+      />
+    </KeepAlive>
+    <div class="steps-content" v-if="current > 2">
       {{ steps[current].content }}
     </div>
     <div class="steps-action">
-      <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Anterior</a-button>
-      <a-button v-if="current <= steps.length - 1" type="primary" @click="next">{{nextText}}</a-button>
+      <a-button v-if="current > 0" style="margin-left: 8px" @click="prev"
+        >Anterior</a-button
+      >
+      <a-button
+        v-if="current <= steps.length - 1"
+        type="primary"
+        @click="next"
+        >{{ nextText }}</a-button
+      >
     </div>
   </div>
 </template>
 <script setup>
-import { ref, reactive, useTemplateRef, toRaw, computed } from 'vue';
-import { message } from 'ant-design-vue';
-import Entity from '../../data/models/Entity';
+import { ref, reactive, useTemplateRef, toRaw, computed } from "vue";
+import { message } from "ant-design-vue";
+import Entity from "../../data/models/Entity";
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
 import { getAllRaces, getRaceById } from "../../logic/RaceOperations";
 import { getAllSizes } from "../../logic/SizeOperations";
-import { getAllLanguages } from '../../logic/LanguageOperations';
-import { getAllStatusChanges }  from '../../logic/StatusChangeOperations';
-import { getAllMovementTypes } from '../../logic/MovementOperations';
-import { getAllTraits } from '../../logic/TraitOperations';
-import { alignmentsStorage, sizesStorage, racesStorage, classesStorage, languagesStorage, statusChangesStorage, movementsStorage, traitsStorage } from "../../logic/Storage";
-import LevelClassRaceForm from './LevelClassRaceForm.vue';
-import PhysicalTraitsForm from './PhysicalTraitsForm.vue';
+import { getAllLanguages } from "../../logic/LanguageOperations";
+import { getAllStatusChanges } from "../../logic/StatusChangeOperations";
+import { getAllMovementTypes } from "../../logic/MovementOperations";
+import { getAllTraits } from "../../logic/TraitOperations";
+import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
+import { getAllSenses } from "../../logic/SenseOperations";
+import {
+  alignmentsStorage,
+  sizesStorage,
+  racesStorage,
+  classesStorage,
+  languagesStorage,
+  statusChangesStorage,
+  movementsStorage,
+  traitsStorage,
+  damageTypesStorage,
+  sensesStorage,
+} from "../../logic/Storage";
+import LevelClassRaceForm from "./LevelClassRaceForm.vue";
+import PhysicalTraitsForm from "./PhysicalTraitsForm.vue";
+import AtributesForm from "./AtributesForm.vue";
 
 const current = ref(0);
 const requestData = reactive(new Entity());
+const spellTradition = ref();
 
-const classRaceRef = useTemplateRef('lcrRef');
-const physicalTraitsRef = useTemplateRef('ptRef');
-const validationState = reactive({
-  classRaceValid: false,
-  physicalTraitsValid: false
+const classRaceRef = useTemplateRef("lcrRef");
+const physicalTraitsRef = useTemplateRef("ptRef");
+const atributesRef = useTemplateRef("atRef");
+const nextText = computed(() => {
+  return current.value == steps.length - 1 ? "Crear" : "Siguiente";
 });
-const nextText = computed(()=>{
-  return current.value == steps.length - 1? 'Crear':'Siguiente';
-})
 
-try{
+try {
   //se cargan al storage varias listas de valores simples {id, nombre}
-  if(alignmentsStorage.isEmpty()) alignmentsStorage.fillData(await getAllAlignments());
-  if(sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
-  if(racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
-  if(classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
-  if(languagesStorage.isEmpty()) languagesStorage.fillData(await getAllLanguages());
-  if(statusChangesStorage.isEmpty()) statusChangesStorage.fillData(await getAllStatusChanges());
-  if(movementsStorage.isEmpty()) movementsStorage.fillData(await getAllMovementTypes());
-  if(traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
-}catch(error){
+  if (alignmentsStorage.isEmpty())
+    alignmentsStorage.fillData(await getAllAlignments());
+  if (sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
+  if (racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
+  if (classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
+  if (languagesStorage.isEmpty())
+    languagesStorage.fillData(await getAllLanguages());
+  if (statusChangesStorage.isEmpty())
+    statusChangesStorage.fillData(await getAllStatusChanges());
+  if (movementsStorage.isEmpty())
+    movementsStorage.fillData(await getAllMovementTypes());
+  if (traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
+  if (damageTypesStorage.isEmpty())
+    damageTypesStorage.fillData(await getAllDamageTypes());
+  if (sensesStorage.isEmpty()) sensesStorage.fillData(await getAllSenses());
+} catch (error) {
   console.error("error on enemies table", error);
 }
 
@@ -68,6 +111,10 @@ const validatePhysicalTraits = async () => {
   if (physicalTraitsRef.value.validateAndUpdate == null) await physicalTraitsRef.value.$.exposed.validateAndUpdate();
   else await physicalTraitsRef.value.validateAndUpdate();
 };
+const validateAtributes = async () => {
+  if (atributesRef.value.validateAndUpdate == null) await atributesRef.value.$.exposed.validateAndUpdate();
+  else await atributesRef.value.validateAndUpdate();
+};
 
 const validate = async () => {
   switch (current.value) {
@@ -79,7 +126,8 @@ const validate = async () => {
       await validatePhysicalTraits();
       break;
     case 2:
-      return;
+      await validateAtributes();
+      break;
     case 3:
       return;
     case 4:
@@ -98,18 +146,21 @@ const prev = () => {
 };
 
 const onSubmit = () => {
-  message.success('Personaje CREADO');
+  message.success("Personaje CREADO");
 };
 
 const onClassRaceUpdate = async (data, valid) => {
-  validationState.classRaceValid = valid;
-  if(valid){
+  if (valid) {
     requestData.setLevel(data.level);
     requestData.name = data.name;
     requestData.description = data.description;
     requestData.classId = data.clase;
     requestData.raceId = data.race;
     requestData.traits = data.traits;
+    requestData.loot = data.tesoro;
+    requestData.money = data.dinero;
+    spellTradition.value = data.tradicionHechizo;
+    console.log("can cast spells:", spellTradition.value);
     const raceData = await getRaceById(requestData.raceId);
     requestData.sizeId = raceData.tamanoId;
     requestData.health = raceData.salud;
@@ -131,8 +182,7 @@ const onClassRaceUpdate = async (data, valid) => {
 };
 
 const onPhysicalTraitsUpdate = async (data, valid) => {
-  validationState.physicalTraitsValid = valid;
-  if(valid){
+  if (valid) {
     requestData.sizeId = data.size;
     requestData.resistances = data.resistances;
     requestData.senses = data.senses;
@@ -144,33 +194,65 @@ const onPhysicalTraitsUpdate = async (data, valid) => {
   }
 };
 
+const onAtributessUpdate = async (data, valid) => {
+  if (valid) {
+    requestData.str = data.str;
+    requestData.dex = data.dex;
+    requestData.con = data.con;
+    requestData.int = data.int;
+    requestData.wis = data.wis;
+    requestData.cha = data.cha;
+    requestData.acrobatics = data.acrobatics;
+    requestData.arcana = data.arcana;
+    requestData.atletism = data.athletism;
+    requestData.crafting = data.crafting;
+    requestData.deceiving = data.deceiving;
+    requestData.diplomacy = data.diplomacy;
+    requestData.intimidation = data.intimidation;
+    requestData.lore = data.lore;
+    requestData.medicine = data.medicine;
+    requestData.nature = data.nature;
+    requestData.ocultism = data.ocultism;
+    requestData.performance = data.performance;
+    requestData.religion = data.religion;
+    requestData.society = data.society;
+    requestData.stealth = data.stealth;
+    requestData.survival = data.survival;
+    requestData.thievery = data.thievery;
+    console.log("acumulated data: ", toRaw(requestData));
+    current.value++;
+  }
+};
+
 const steps = [
   {
-    title: 'Raza y Clase',
-    content: 'Elegir nombre, Raza junto con clase y nivel'
+    title: "Raza y Clase",
+    content: "Elegir nombre, Raza junto con clase y nivel",
   },
   {
-    title: 'Razgos Físicos',
-    content: 'Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias'
+    title: "Razgos Físicos",
+    content:
+      "Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias",
   },
   {
-    title: 'Atributos',
-    content: 'Elegir atributos y habilididades base',
+    title: "Atributos",
+    content: "Elegir atributos y habilididades base",
   },
   {
-    title: 'Defensas',
-    content: 'Modificar AC, salud, percepción, fortaleza, reflejos, voluntad',
+    title: "Defensas",
+    content:
+      "Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad, dinero",
   },
   {
-    title: 'Ataques',
-    content: 'Ataques y habilidades especiales',
+    title: "Ataques",
+    content: "Ataques y habilidades especiales, loot",
   },
   {
-    title: 'Hechizos',
-    content: 'Opcionalmente se pueden añadir hechizos',
+    title: "Hechizos",
+    content: "Opcionalmente se pueden añadir hechizos",
   },
 ];
-const items = steps.map(item => ({
+const items = steps.map((item) => ({
   key: item.title,
   title: item.title,
 }));
@@ -190,7 +272,7 @@ const items = steps.map(item => ({
   margin-top: 24px;
 }
 
-[data-theme='dark'] .steps-content {
+[data-theme="dark"] .steps-content {
   background-color: #2f2f2f;
   border: 1px dashed #404040;
 }

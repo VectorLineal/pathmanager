@@ -28,6 +28,11 @@
           <ClassSelector @onSelect="selectClass" />
         </a-form-item>
       </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Dinero" name="dinero">
+          <a-input-number v-model:value="formState.dinero" :min="0" />
+        </a-form-item>
+      </a-col>
       <a-col :sm="8" :md="7" :lg="7" :xl="5">
         <a-form-item label="Razgos" name="traits">
           <TraitsSelector @onSelect="selectTraits" />
@@ -35,9 +40,14 @@
       </a-col>
     </a-row>
     <a-row justify="center">
-      <a-col :xs="25" :sm="24">
+      <a-col :xs="25" :sm="24" :lg="12">
         <a-form-item label="Descripción" name="description">
           <a-textarea v-model:value="formState.description" />
+        </a-form-item>
+      </a-col>
+      <a-col :xs="25" :sm="24" :lg="12">
+        <a-form-item label="Tesoro" name="tesoro">
+          <a-textarea v-model:value="formState.tesoro" />
         </a-form-item>
       </a-col>
     </a-row>
@@ -56,6 +66,9 @@ const formState = reactive({
   name: "",
   description: "",
   clase: null,
+  tradicionHechizo: null,
+  tesoro: '',
+  dinero: 0,
   race: null,
   traits: [],
 });
@@ -117,6 +130,7 @@ const rules = {
 
 const selectClass = (value) => {
   formState.clase = value.id;
+  formState.tradicionHechizo = value.tradicionId;
 };
 const selectRace = (value) => {
   formState.race = value.id;

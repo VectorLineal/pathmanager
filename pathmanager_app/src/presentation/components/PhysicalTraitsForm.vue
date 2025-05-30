@@ -7,7 +7,7 @@
     :label-col="labelCol"
     :wrapper-col="wrapperCol"
   >
-    <a-row justify="space-around">
+    <a-row justify="space-around" align="middle">
       <a-col :sm="7" :md="6" :lg="6" :xl="6">
         <a-form-item label="Tamaño" name="size">
           <SizeSelector :initialValue="props.intialData.sizeId" @onSelect="selectSize" />
@@ -24,6 +24,23 @@
         </a-form-item>
       </a-col>
     </a-row>
+    <a-row justify="space-around" align="middle">
+      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+        <a-form-item label="Movimientos" name="movements">
+          <MovementsSelector :initialData="props.intialData.movements" @updatedValues="selectMovements" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+        <a-form-item label="Resistencias" name="resistances">
+          <ResistancesSelector :initialData="props.intialData.resistances" @updatedValues="selectResistances" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+        <a-form-item label="Sentidos" name="senses">
+          <SensesSelector :initialData="props.intialData.senses" @updatedValues="selectSenses" />
+        </a-form-item>
+      </a-col>
+    </a-row>
   </a-form>
 </template>
 <script setup>
@@ -31,6 +48,9 @@ import { reactive, ref, toRaw } from "vue";
 import SizeSelector from "./SizeSelector.vue";
 import InmunitiesSelector from "./InmunitiesSelector.vue";
 import LanguagesSelector from "./LanguagesSelector.vue";
+import MovementsSelector from "./MovementsSelector.vue";
+import ResistancesSelector from "./ResistancesSelector.vue";
+import SensesSelector from "./SensesSelector.vue";
 
 const props = defineProps({
   intialData: Object
@@ -72,7 +92,7 @@ const rules = {
   ],
   senses: [
     {
-      whitespace: true,
+      type: 'array',
       required: true,
       message: "Seleccione al menos un tipo de sentido",
       trigger: "change",
@@ -88,6 +108,16 @@ const selectSize = (value) => {
 };
 const selectInmunities = (value) => {
   formState.inmunities = value;
+};
+
+const selectMovements = (value) => {
+  formState.movements = value;
+};
+const selectResistances = (value) => {
+  formState.resistances = value;
+};
+const selectSenses = (value) => {
+  formState.senses = value;
 };
 
 const validateAndUpdate = async () => {

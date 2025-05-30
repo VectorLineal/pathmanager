@@ -80,6 +80,7 @@ export default class Entity{
     }
 
     setLanguages(languages){
+        this.languages = [];
         languages.forEach((item) => {
             this.languages.push(item.lenguajeId);
         });
