@@ -1,7 +1,8 @@
 import glosaryDatabase from "../data/services/DBPool";
 
 const statusChangesQuery = `
-SELECT * FROM CambioEstado;
+SELECT * FROM CambioEstado
+order by nombre;
 `;
 
 export async function getAllStatusChanges() {

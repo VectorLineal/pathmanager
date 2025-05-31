@@ -1,7 +1,8 @@
 import glosaryDatabase from "../data/services/DBPool";
 
 const allMovementsQuery = `
-SELECT * FROM Movimiento;
+SELECT * FROM Movimiento
+order by nombre;
 `;
 
 const speedEntityQuery = `

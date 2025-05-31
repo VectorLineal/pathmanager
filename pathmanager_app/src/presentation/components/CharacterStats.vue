@@ -9,13 +9,16 @@
             <MappedAttacks :attacks="entity.ataques"/>
             <MappedAbilities :abilities="entity.habilidades"/>
             <SpellList v-if="entity.hechizos.length > 0" :spells="entity.hechizos"/>
-            <p v-if="hasLoot"><b>oro: </b>{{ money.gold }}, <b>plata: </b>{{ money.silver }}, <b>cobre: </b>{{ money.coopper }}, <template v-if="entity.tesoro != null"><b>tesoro: </b> {{ entity.tesoro }}</template></p>
+            <p v-if="hasLoot">
+                <DollarCircleFilled :style="goldStyle"/>{{ money.gold }}, <DollarCircleFilled :style="silverStyle"/>{{ money.silver }}, <DollarCircleFilled :style="copperStyle"/>{{ money.coopper }}, <template v-if="entity.tesoro != null"><b>tesoro: </b> {{ entity.tesoro }}</template>
+            </p>
             <p>{{ entity.descripcion }}</p>
         </a-col>
     </a-row>
 </template>
 <script setup>
 import { ref, computed } from 'vue';
+import { DollarCircleFilled } from '@ant-design/icons-vue';
 import CharacterCard from './CharacterCard.vue';
 import MappedWeakRes from './MappedWeakRes.vue';
 import MappedAttacks from './MappedAttacks.vue';
@@ -32,6 +35,16 @@ const entity = ref();
 const hasLoot = computed(() => {
     return entity.value.dinero > 0 || entity.value.tesoro != null
 });
+
+const goldStyle = {
+    color: '#efb810'
+};
+const silverStyle = {
+    color: '#c3c4c5'
+};
+const copperStyle = {
+    color: '#cd7f32'
+};
 
 const money = computed(() => {
     let curMoney = entity.value.dinero;

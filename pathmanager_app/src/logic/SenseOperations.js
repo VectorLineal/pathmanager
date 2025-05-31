@@ -1,7 +1,8 @@
 import glosaryDatabase from "../data/services/DBPool";
 
 const allsensesQuery = `
-SELECT * FROM Sentido;
+SELECT * FROM Sentido
+order by nombre;
 `;
 
 const sensesEntityQuery = `

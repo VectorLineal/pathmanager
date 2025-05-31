@@ -16,6 +16,14 @@ WHERE Hechizo_Entidad.entidadId = ?
 ORDER by nivel_final, Hechizo.nombre, escuela;
 `;
 
+const spellsByTraditionCasterLevelQuery = `
+SELECT Hechizo.id, Hechizo.nombre || '(' || Escuela.nombre || ')' AS nombre, hechizo.nivel
+FROM Hechizo JOIN Tradicion_Hechizo on Hechizo.id = Tradicion_Hechizo.hechizoId
+JOIN Escuela on Hechizo.escuelaId = Escuela.id
+WHERE tradicionId = ? AND Hechizo.nivel <= ??
+ORDER BY Hechizo.nivel, Hechizo.escuelaId, Hechizo.nombre;
+`;
+
 export async function getSpellsByEntity(id) {
   try {
     const spells = await glosaryDatabase.query(spellsEntityQuery, [id]);
@@ -29,5 +37,15 @@ export async function getSpellsByEntity(id) {
     return spells;
   } catch (err) {
     console.error("error on load spells by entity:", err);
+  }
+}
+
+export async function getSpellsByTraditionCasterLevel(tradition, entityLevel) {
+  const level = Math.ceil(entityLevel / 2);
+  try {
+    const spells = await glosaryDatabase.query(spellsByTraditionCasterLevelQuery, [tradition, level]);
+    return spells;
+  } catch (err) {
+    console.error("error on load spells by caster level and tradition:", err);
   }
 }

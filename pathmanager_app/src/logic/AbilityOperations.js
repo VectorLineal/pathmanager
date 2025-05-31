@@ -1,6 +1,12 @@
 import glosaryDatabase from "../data/services/DBPool";
 import { getTraitByAbility } from "./TraitOperations";
 
+const abilitiesQuery = `
+SELECT id, nombre
+FROM HabilidadEspecial
+ORDER BY nombre;
+`;
+
 const abilityEntityQuery = `
 select HabilidadEspecial.id, nombre, efecto, requisito, critico, demora, alcance
 FROM Habilidad_Entidad JOIN HabilidadEspecial ON HabilidadEspecial.id = Habilidad_Entidad.habilidadId
@@ -13,6 +19,14 @@ SELECT Raza_Habilidad.habilidadId
 FROM Raza_Habilidad
 WHERE Raza_Habilidad.razaId = ?;
 `;
+
+export async function getAllAbilities() {
+  try {
+    return await glosaryDatabase.query(abilitiesQuery);
+  } catch (err) {
+    console.error("error on load all abilities:", err);
+  }
+}
 
 const getTraitsByReference = async (id, query) => {
   const abilities = await glosaryDatabase.query(query, [id]);

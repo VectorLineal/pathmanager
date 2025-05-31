@@ -1,7 +1,8 @@
 import glosaryDatabase from "../data/services/DBPool";
 
 const damageTypesQuery = `
-SELECT * FROM TipoDano;
+SELECT * FROM TipoDano
+order by nombre;
 `;
 
 export async function getAllDamageTypes() {

@@ -1,6 +1,6 @@
 <template>
     <h5>Ataques:</h5>
-    <p v-for="ataque in props.attacks"><GenericAction :name="ataque.nombre" :delay="ataque.demora">
+    <p v-for="ataque in props.attacks"><GenericAction :name="ataque.nombre" :delay="1">
         <template #content>
             {{ '+' + ataque.bono_ataque }}(
                 <TraitTag

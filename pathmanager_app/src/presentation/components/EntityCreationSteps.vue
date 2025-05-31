@@ -24,9 +24,13 @@
         @updateData="onAtributessUpdate"
       />
     </KeepAlive>
-    <div class="steps-content" v-if="current > 2">
-      {{ steps[current].content }}
-    </div>
+    <KeepAlive>
+      <AttacksSpellsForm
+        ref="saRef"
+        v-if="current == 3"
+        @updateData="onAttackSpellsUpdate"
+      />
+    </KeepAlive>
     <div class="steps-action">
       <a-button v-if="current > 0" style="margin-left: 8px" @click="prev"
         >Anterior</a-button
@@ -41,7 +45,7 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, useTemplateRef, toRaw, computed } from "vue";
+import { ref, provide, reactive, useTemplateRef, toRaw, computed } from "vue";
 import { message } from "ant-design-vue";
 import Entity from "../../data/models/Entity";
 import { getAllAlignments } from "../../logic/AlignmentOperations";
@@ -54,6 +58,12 @@ import { getAllMovementTypes } from "../../logic/MovementOperations";
 import { getAllTraits } from "../../logic/TraitOperations";
 import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
 import { getAllSenses } from "../../logic/SenseOperations";
+import { getAllWeaponCategories } from "../../logic/WeaponCategoryOptions";
+import { getAllWeaponGroups } from "../../logic/WeaponGroupOperations";
+import { getAllWeaponTypes } from "../../logic/WeaponTypeOperations";
+import { getAllWeapons } from "../../logic/WeaponOperations";
+import { getSpellsByTraditionCasterLevel } from "../../logic/SpellOperations";
+import { getAllAbilities } from "../../logic/AbilityOperations";
 import {
   alignmentsStorage,
   sizesStorage,
@@ -65,58 +75,119 @@ import {
   traitsStorage,
   damageTypesStorage,
   sensesStorage,
+  weaponCategoriesStorage,
+  weaponGroupsStorage,
+  weaponTypesStorage
 } from "../../logic/Storage";
 import LevelClassRaceForm from "./LevelClassRaceForm.vue";
 import PhysicalTraitsForm from "./PhysicalTraitsForm.vue";
 import AtributesDeffensesForm from "./AtributesDeffensesForm.vue";
+import AttacksSpellsForm from "./AttacksSpellsForm.vue";
 
 const current = ref(0);
 const requestData = reactive(new Entity());
 const spellTradition = ref();
+const availableSpells = ref({});
+const abilities = ref([]);
+const weapons = ref([]);
+
 
 const classRaceRef = useTemplateRef("lcrRef");
 const physicalTraitsRef = useTemplateRef("ptRef");
 const atributesRef = useTemplateRef("atRef");
+const attackSpellsRef = useTemplateRef("saRef");
 const nextText = computed(() => {
   return current.value == steps.length - 1 ? "Crear" : "Siguiente";
 });
 
 try {
   //se cargan al storage varias listas de valores simples {id, nombre}
-  if (alignmentsStorage.isEmpty())
-    alignmentsStorage.fillData(await getAllAlignments());
+  if (alignmentsStorage.isEmpty()) alignmentsStorage.fillData(await getAllAlignments());
   if (sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
   if (racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
   if (classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
-  if (languagesStorage.isEmpty())
-    languagesStorage.fillData(await getAllLanguages());
-  if (statusChangesStorage.isEmpty())
-    statusChangesStorage.fillData(await getAllStatusChanges());
-  if (movementsStorage.isEmpty())
-    movementsStorage.fillData(await getAllMovementTypes());
+  if (languagesStorage.isEmpty())  languagesStorage.fillData(await getAllLanguages());
+  if (statusChangesStorage.isEmpty()) statusChangesStorage.fillData(await getAllStatusChanges());
+  if (movementsStorage.isEmpty()) movementsStorage.fillData(await getAllMovementTypes());
   if (traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
-  if (damageTypesStorage.isEmpty())
-    damageTypesStorage.fillData(await getAllDamageTypes());
+  if (damageTypesStorage.isEmpty()) damageTypesStorage.fillData(await getAllDamageTypes());
   if (sensesStorage.isEmpty()) sensesStorage.fillData(await getAllSenses());
+  if (weaponCategoriesStorage.isEmpty()) weaponCategoriesStorage.fillData(await getAllWeaponCategories());
+  if (weaponGroupsStorage.isEmpty()) weaponGroupsStorage.fillData(await getAllWeaponGroups());
+  if (weaponTypesStorage.isEmpty()) weaponTypesStorage.fillData(await getAllWeaponTypes());
+  //se cargan todas las habilidades especiales
+  const abilitiesData = await getAllAbilities();
+  abilitiesData.forEach(element => {
+    abilities.value.push({label: element.nombre, value: element.id});
+  });
+  //se cargan todas las armas
+  const weaponsData = await getAllWeapons();
+  console.log("fetched weapons:", weaponsData);
+  weaponsData.forEach(element => {
+    weapons.value.push({label: element.nombre, value: element.id});
+  });
 } catch (error) {
   console.error("error on enemies table", error);
 }
 
-const validateClassRace = async () => {
-  if (classRaceRef.value.validateAndUpdate == null)
-    await classRaceRef.value.$.exposed.validateAndUpdate();
-  else await classRaceRef.value.validateAndUpdate();
+const loadAbilities = async () => {
+  try{
+    const abilitiesData = await getAllAbilities();
+    abilities.value = [];
+    abilitiesData.forEach(element => {
+      abilities.value.push({label: element.nombre, value: element.id});
+    });
+  }catch(error){
+    console.error("error on load special abilites", error);
+  }
 };
 
+const loadWeapons = async () => {
+  try{
+    const weaponsData = await getAllWeapons();
+    weapons.value = [];
+    weaponsData.forEach(element => {
+      weapons.value.push({label: element.nombre, value: element.id});
+    });
+  }catch(error){
+    console.error("error on load weapons", error);
+  }
+};
+
+const loadSpells = async () => {
+  try{
+    const spellsData = await getSpellsByTraditionCasterLevel(spellTradition.value, requestData.level);
+    availableSpells.value = {}; 
+    spellsData.forEach(element => {
+      const head = element.nivel == 0? 'Trucos':'Nivel ' + element.nivel;
+      const option = {label: element.nombre, value: element.id};
+      if(availableSpells.value[head] == null) availableSpells.value[head] = [option];
+      else availableSpells.value[head].push(option);
+    });
+  }catch(error){
+    console.error("error on load available spells", error);
+  }
+};
+
+provide('weapons', {weapons, loadWeapons});
+provide('abilities', {abilities, loadAbilities});
+provide('spells', {availableSpells, loadSpells});
+
+const validateClassRace = async () => {
+  if (classRaceRef.value.validateAndUpdate == null) await classRaceRef.value.$.exposed.validateAndUpdate();
+  else await classRaceRef.value.validateAndUpdate();
+};
 const validatePhysicalTraits = async () => {
-  if (physicalTraitsRef.value.validateAndUpdate == null)
-    await physicalTraitsRef.value.$.exposed.validateAndUpdate();
+  if (physicalTraitsRef.value.validateAndUpdate == null) await physicalTraitsRef.value.$.exposed.validateAndUpdate();
   else await physicalTraitsRef.value.validateAndUpdate();
 };
 const validateAtributes = async () => {
-  if (atributesRef.value.validateAndUpdate == null)
-    await atributesRef.value.$.exposed.validateAndUpdate();
+  if (atributesRef.value.validateAndUpdate == null) await atributesRef.value.$.exposed.validateAndUpdate();
   else await atributesRef.value.validateAndUpdate();
+};
+const validateAtttackSpells = async () => {
+  if (attackSpellsRef.value.validateAndUpdate == null) await attackSpellsRef.value.$.exposed.validateAndUpdate();
+  else await attackSpellsRef.value.validateAndUpdate();
 };
 
 const validate = async () => {
@@ -132,9 +203,7 @@ const validate = async () => {
       await validateAtributes();
       return;
     case 3:
-      return;
-    case 4:
-      onSubmit();
+      await validateAtttackSpells();
       return;
   }
 };
@@ -161,7 +230,8 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.loot = data.tesoro;
     requestData.money = data.dinero;
     spellTradition.value = data.tradicionHechizo;
-    console.log("can cast spells:", spellTradition.value);
+    await loadSpells();
+    console.log("can cast spells:", availableSpells.value);
     const raceData = await getRaceById(requestData.raceId);
     requestData.sizeId = raceData.tamanoId;
     requestData.health = raceData.salud;
@@ -234,6 +304,16 @@ const onAtributessUpdate = async (data, valid) => {
   }
 };
 
+const onAttackSpellsUpdate = async (data, valid) => {
+  if (valid) {
+    requestData.abilities = data.abilities;
+    requestData.attacks = data.attacks;
+    requestData.spells = data.spells;
+    console.log("acumulated data: ", toRaw(requestData));
+    onSubmit();
+  }
+};
+
 const steps = [
   {
     title: "Raza y Clase",
@@ -250,12 +330,8 @@ const steps = [
       "Elegir atributos y habilididades base, Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad",
   },
   {
-    title: "Ataques",
-    content: "Ataques y habilidades especiales",
-  },
-  {
-    title: "Hechizos",
-    content: "Opcionalmente se pueden añadir hechizos",
+    title: "Ataques, Habilidades y Hechizos",
+    content: "Ataques, habilidades especiales y opcionalmente hechizos",
   },
 ];
 const items = steps.map((item) => ({
