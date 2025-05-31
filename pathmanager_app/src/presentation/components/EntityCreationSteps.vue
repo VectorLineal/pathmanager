@@ -17,7 +17,7 @@
       />
     </KeepAlive>
     <KeepAlive>
-      <AtributesForm
+      <AtributesDeffensesForm
         ref="atRef"
         v-if="current == 2"
         :intialData="requestData"
@@ -68,7 +68,7 @@ import {
 } from "../../logic/Storage";
 import LevelClassRaceForm from "./LevelClassRaceForm.vue";
 import PhysicalTraitsForm from "./PhysicalTraitsForm.vue";
-import AtributesForm from "./AtributesForm.vue";
+import AtributesDeffensesForm from "./AtributesDeffensesForm.vue";
 
 const current = ref(0);
 const requestData = reactive(new Entity());
@@ -103,16 +103,19 @@ try {
 }
 
 const validateClassRace = async () => {
-  if (classRaceRef.value.validateAndUpdate == null) await classRaceRef.value.$.exposed.validateAndUpdate();
+  if (classRaceRef.value.validateAndUpdate == null)
+    await classRaceRef.value.$.exposed.validateAndUpdate();
   else await classRaceRef.value.validateAndUpdate();
 };
 
 const validatePhysicalTraits = async () => {
-  if (physicalTraitsRef.value.validateAndUpdate == null) await physicalTraitsRef.value.$.exposed.validateAndUpdate();
+  if (physicalTraitsRef.value.validateAndUpdate == null)
+    await physicalTraitsRef.value.$.exposed.validateAndUpdate();
   else await physicalTraitsRef.value.validateAndUpdate();
 };
 const validateAtributes = async () => {
-  if (atributesRef.value.validateAndUpdate == null) await atributesRef.value.$.exposed.validateAndUpdate();
+  if (atributesRef.value.validateAndUpdate == null)
+    await atributesRef.value.$.exposed.validateAndUpdate();
   else await atributesRef.value.validateAndUpdate();
 };
 
@@ -121,20 +124,18 @@ const validate = async () => {
     case 0:
     default:
       await validateClassRace();
-      break;
+      return;
     case 1:
       await validatePhysicalTraits();
-      break;
+      return;
     case 2:
       await validateAtributes();
-      break;
+      return;
     case 3:
       return;
     case 4:
-      return;
-    case 5:
       onSubmit();
-      break;
+      return;
   }
 };
 
@@ -204,7 +205,7 @@ const onAtributessUpdate = async (data, valid) => {
     requestData.cha = data.cha;
     requestData.acrobatics = data.acrobatics;
     requestData.arcana = data.arcana;
-    requestData.atletism = data.athletism;
+    requestData.atletism = data.atletism;
     requestData.crafting = data.crafting;
     requestData.deceiving = data.deceiving;
     requestData.diplomacy = data.diplomacy;
@@ -219,6 +220,15 @@ const onAtributessUpdate = async (data, valid) => {
     requestData.stealth = data.stealth;
     requestData.survival = data.survival;
     requestData.thievery = data.thievery;
+    requestData.naturalArmor = data.naturalArmor;
+    requestData.itemArmor = data.itemArmor;
+    requestData.dodge = data.dodge;
+    requestData.health = data.health;
+    requestData.perception = data.perception;
+    requestData.attackBonus = data.attackBonus;
+    requestData.fort = data.fort;
+    requestData.reflex = data.reflex;
+    requestData.will = data.will;
     console.log("acumulated data: ", toRaw(requestData));
     current.value++;
   }
@@ -235,17 +245,13 @@ const steps = [
       "Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias",
   },
   {
-    title: "Atributos",
-    content: "Elegir atributos y habilididades base",
-  },
-  {
-    title: "Defensas",
+    title: "Atributos y Defensas",
     content:
-      "Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad, dinero",
+      "Elegir atributos y habilididades base, Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad",
   },
   {
     title: "Ataques",
-    content: "Ataques y habilidades especiales, loot",
+    content: "Ataques y habilidades especiales",
   },
   {
     title: "Hechizos",

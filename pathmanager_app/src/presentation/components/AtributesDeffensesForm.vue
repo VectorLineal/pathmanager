@@ -19,7 +19,7 @@
       </a-col>
       <a-col :sm="4" :md="3" :lg="3" :xl="2">
         <a-form-item label="Constitución" name="con">
-          <a-input-number v-model:value="formState.str" :min="-5" :max="50" />
+          <a-input-number v-model:value="formState.con" :min="-5" :max="50" />
         </a-form-item>
       </a-col>
       <a-col :sm="4" :md="3" :lg="3" :xl="2">
@@ -50,8 +50,8 @@
         </a-form-item>
       </a-col>
       <a-col :sm="4" :md="3" :lg="3" :xl="2">
-        <a-form-item label="Atletismo" name="athletism">
-          <a-input-number v-model:value="formState.athletism" :min="0" :max="50" />
+        <a-form-item label="Atletismo" name="atletism">
+          <a-input-number v-model:value="formState.atletism" :min="0" :max="50" />
         </a-form-item>
       </a-col>
       <a-col :sm="4" :md="3" :lg="3" :xl="2">
@@ -125,6 +125,53 @@
         </a-form-item>
       </a-col>
     </a-row>
+    <a-row justify="space-around">
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Armadura Natural" name="naturalArmor">
+          <a-input-number v-model:value="formState.naturalArmor" :min="10" :max="150" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Armadura de Ítem" name="itemArmor">
+          <a-input-number v-model:value="formState.itemArmor" :min="0" :max="50" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Evasión" name="dodge">
+          <a-input-number v-model:value="formState.dodge" :min="0" :max="50" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Salud" name="health">
+          <a-input-number v-model:value="formState.health" :min="10" :max="5000" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Percepción" name="perception">
+          <a-input-number v-model:value="formState.perception" :min="0" :max="50" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Fortaleza" name="fort">
+          <a-input-number v-model:value="formState.fort" :min="0" :max="100" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Reflejos" name="reflex">
+          <a-input-number v-model:value="formState.reflex" :min="0" :max="100" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Voluntad" name="will">
+          <a-input-number v-model:value="formState.will" :min="0" :max="100" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+        <a-form-item label="Ataque" name="attackBonus">
+          <a-input-number v-model:value="formState.attackBonus" :min="0" :max="100" />
+        </a-form-item>
+      </a-col>
+    </a-row>
   </a-form>
 </template>
 <script setup>
@@ -143,23 +190,32 @@ const formState = reactive({
   int: props.intialData != null? props.intialData.int:0,
   wis: props.intialData != null? props.intialData.wis:0,
   cha: props.intialData != null? props.intialData.cha:0,
-  acrobatics: 0,
-  arcana: 0,
-  athletism: 0,
-  crafting: 0,
-  deceiving: 0,
-  diplomacy: 0,
-  intimidation: 0,
-  lore: 0,
-  medicine: 0,
-  nature: 0,
-  ocultism: 0,
-  performance: 0,
-  religion: 0,
-  society: 0,
-  stealth: 0,
-  survival: 0,
-  thievery: 0
+  acrobatics: props.intialData != null? props.intialData.acrobatics:0,
+  arcana: props.intialData != null? props.intialData.arcana:0,
+  atletism: props.intialData != null? props.intialData.atletism:0,
+  crafting: props.intialData != null? props.intialData.crafting:0,
+  deceiving: props.intialData != null? props.intialData.deceiving:0,
+  diplomacy: props.intialData != null? props.intialData.diplomacy:0,
+  intimidation: props.intialData != null? props.intialData.intimidation:0,
+  lore: props.intialData != null? props.intialData.lore:0,
+  medicine: props.intialData != null? props.intialData.medicine:0,
+  nature: props.intialData != null? props.intialData.nature:0,
+  ocultism: props.intialData != null? props.intialData.ocultism:0,
+  performance: props.intialData != null? props.intialData.performance:0,
+  religion: props.intialData != null? props.intialData.religion:0,
+  society: props.intialData != null? props.intialData.society:0,
+  stealth: props.intialData != null? props.intialData.stealth:0,
+  survival: props.intialData != null? props.intialData.survival:0,
+  thievery: props.intialData != null? props.intialData.thievery:0,
+  naturalArmor: props.intialData != null? props.intialData.naturalArmor:0,
+  itemArmor: props.intialData != null? props.intialData.itemArmor:0,
+  dodge: props.intialData != null? props.intialData.dodge:0,
+  health: props.intialData != null? props.intialData.health:0,
+  perception: props.intialData != null? props.intialData.perception:0,
+  attackBonus: props.intialData != null? props.intialData.attackBonus:0,
+  fort: props.intialData != null? props.intialData.fort:0,
+  reflex: props.intialData != null? props.intialData.reflex:0,
+  will: props.intialData != null? props.intialData.will:0
 });
 const formRef = ref();
 const labelCol = {

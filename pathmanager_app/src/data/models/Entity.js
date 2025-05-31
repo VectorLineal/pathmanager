@@ -44,6 +44,8 @@ export default class Entity{
         this.alignmentId = alignmentId;
         this.traits = [];
         this.abilities = [];
+        this.attacks = [];
+        this.spells = [];
         this.inmunities = [];
         this.resistances = [];
         this.senses = [];
