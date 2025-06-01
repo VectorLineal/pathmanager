@@ -66,7 +66,7 @@ export default class Entity{
 
     setLevel(level){
         this.level = level;
-        this.calculateXp();
+        this.xp = this.calculateXp();
     }
 
     setInmunities(inmunities){

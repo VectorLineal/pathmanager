@@ -256,7 +256,7 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.setAbilities(raceData.habilidades);
     requestData.setInmunities(raceData.inmunidades);
     requestData.setLanguages(raceData.lenguages);
-    console.log("acumulated data: ", toRaw(requestData));
+    //console.log("acumulated data: ", toRaw(requestData));
     current.value++;
   }
 };
@@ -269,7 +269,7 @@ const onPhysicalTraitsUpdate = (data, valid) => {
     requestData.movements = data.movements;
     requestData.inmunities = data.inmunities;
     requestData.languages = data.languages;
-    console.log("acumulated data: ", toRaw(requestData));
+    //console.log("acumulated data: ", toRaw(requestData));
     current.value++;
   }
 };
@@ -308,7 +308,7 @@ const onAtributessUpdate = (data, valid) => {
     requestData.fort = data.fort;
     requestData.reflex = data.reflex;
     requestData.will = data.will;
-    console.log("acumulated data: ", toRaw(requestData));
+    //console.log("acumulated data: ", toRaw(requestData));
     current.value++;
   }
 };
@@ -318,7 +318,7 @@ const onAttackSpellsUpdate = async (data, valid) => {
     requestData.abilities = data.abilities;
     requestData.attacks = data.attacks;
     requestData.spells = data.spells;
-    console.log("acumulated data: ", toRaw(requestData));
+    console.log("request data: ", toRaw(requestData));
     await onSubmit();
   }
 };
