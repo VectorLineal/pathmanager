@@ -20,6 +20,10 @@ FROM Raza_Habilidad
 WHERE Raza_Habilidad.razaId = ?;
 `;
 
+const abilityEntityCreate = `
+INSERT INTO Habilidad_Entidad(habilidadId, entidadId) VALUES(?, ?);
+`;
+
 export async function getAllAbilities() {
   try {
     return await glosaryDatabase.query(abilitiesQuery);
@@ -51,5 +55,13 @@ export async function getAbilitiesByRace(id) {
     return await getTraitsByReference(id, abilityRaceQuery);
   } catch (err) {
     console.error("error on load abilities by race:", err);
+  }
+}
+
+export async function createAbilityEntity(ability, entity) {
+  try {
+    return await glosaryDatabase.create(abilityEntityCreate, [ability, entity]);
+  } catch (err) {
+    console.error("error on create ability entity:", err);
   }
 }

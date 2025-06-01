@@ -11,6 +11,11 @@ WHERE Entidad.id = ?
 order by Arma.nombre;
 `;
 
+const createAttackEntityQuery = `
+INSERT INTO Ataque(entidadId, armaId, monto, alcance, efecto, bono, danoId)
+VALUES(?, ?, ?, ?, ?, ?, ?);
+`;
+
 export async function getAttacksByEntity(id) {
   try {
     const attacks = await glosaryDatabase.query(attackEntityQuery, [id]);
@@ -22,5 +27,15 @@ export async function getAttacksByEntity(id) {
     return attacks;
   } catch (err) {
     console.error("error on load attacks by entity:", err);
+  }
+}
+
+export async function createAttackEntity(entity, attack) {
+  try {
+    return await glosaryDatabase.create(createAttackEntityQuery,
+      [entity, attack.armaId, attack.monto, attack.alcance, attack.efecto, attack.bono, attack.danoId]
+    );
+  } catch (err) {
+    console.error("error on create attack entity:", err);
   }
 }

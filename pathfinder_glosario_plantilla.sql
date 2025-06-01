@@ -840,6 +840,8 @@ CREATE TABLE Deidad(
 
 INSERT INTO Deidad(nombre, edicto, anatema, simbolo, atributoId, atributoId2, armaId, alineacionId) VALUES('Gorum', 'obtener victoria en la batalla aunque llegue a sus límites y usando armadura', 'matar prisioneros o enemigos que se rindan, evitar conflictos mediante negociación o ganar el combate de manera no honorable o con magia', 'espada en la montaña', 1, 3, 17, 7);
 INSERT INTO Deidad(nombre, edicto, anatema, simbolo, armaId, alineacionId) VALUES('Asmodeus', 'negociar contratos para ganar ventajas, mandar tiránicamente y torturar a los débiles, mostar subordinación ante los superiores', 'infringir un contrato, ayudar a los débiles y mostrar piedad ante el enemigo', 'pentagrama rojo', 18, 6);
+INSERT INTO Deidad(nombre, edicto, anatema, simbolo, fuente, habilidadId, atributoId, atributoId2, armaId, alineacionId)
+VALUES('Sarenrae(la flor del amanecer)', 'destruir al engendro de Rovagug, proteger aliados, ayudar a los enfermos y heridos, buscar y proveer redención', 'crear no-muertos, mentir, negar redención a criaturas arrepentidas, no destruir criaturas malvadas', 'ankh angelical', 1, 18, 3, 5, 3, 2);
 
 CREATE TABLE Deidad_Hechizo(
  	hechizoId integer NOT NULL,

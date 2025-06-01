@@ -19,6 +19,10 @@ FROM Raza_Lenguaje
 WHERE Raza_Lenguaje.razaId = ?;
 `;
 
+const languageEntityCreate = `
+INSERT INTO Lenguaje_Entidad(lenguajeId, entidadId) VALUES(?, ?);
+`;
+
 export async function getAllLanguages() {
   try {
     return await glosaryDatabase.query(allLanguagesQuery);
@@ -40,5 +44,13 @@ export async function getLanguagesByRace(id) {
     return await glosaryDatabase.query(languagesRaceQuery, [id]);
   } catch (err) {
     console.error("error on load languages by race:", err);
+  }
+}
+
+export async function createLanguageEntity(language, entity) {
+  try {
+    return await glosaryDatabase.create(languageEntityCreate, [language, entity]);
+  } catch (err) {
+    console.error("error on create language entity:", err);
   }
 }

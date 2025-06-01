@@ -29,6 +29,10 @@ WHERE Razgo_Arma.armaId = ?
 ORDER BY Razgo.nombre;
 `;
 
+const traitEntityCreate = `
+INSERT INTO Razgo_Entidad(razgoId, entidadId) VALUES(?, ?);
+`;
+
 export async function getAllTraits() {
   try {
     return await glosaryDatabase.query(allTraitsQuery);
@@ -63,5 +67,13 @@ export async function getTraitByWeapon(id) {
     return await glosaryDatabase.query(traitsWeaponQuery, [id]);
   } catch (err) {
     console.error("error on load traits by weapon:", err);
+  }
+}
+
+export async function createTraitEntity(trait, entity) {
+  try {
+    return await glosaryDatabase.create(traitEntityCreate, [trait, entity]);
+  } catch (err) {
+    console.error("error on create trait entity:", err);
   }
 }

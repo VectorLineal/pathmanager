@@ -47,6 +47,7 @@
 <script setup>
 import { ref, provide, reactive, useTemplateRef, toRaw, computed } from "vue";
 import { message } from "ant-design-vue";
+import { useRouter } from "vue-router";
 import Entity from "../../data/models/Entity";
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
@@ -64,6 +65,7 @@ import { getAllWeaponTypes } from "../../logic/WeaponTypeOperations";
 import { getAllWeapons } from "../../logic/WeaponOperations";
 import { getSpellsByTraditionCasterLevel } from "../../logic/SpellOperations";
 import { getAllAbilities } from "../../logic/AbilityOperations";
+import { createEntity } from "../../logic/EntityOperations";
 import {
   alignmentsStorage,
   sizesStorage,
@@ -83,6 +85,8 @@ import LevelClassRaceForm from "./LevelClassRaceForm.vue";
 import PhysicalTraitsForm from "./PhysicalTraitsForm.vue";
 import AtributesDeffensesForm from "./AtributesDeffensesForm.vue";
 import AttacksSpellsForm from "./AttacksSpellsForm.vue";
+
+const router = useRouter();
 
 const current = ref(0);
 const requestData = reactive(new Entity());
@@ -122,7 +126,6 @@ try {
   });
   //se cargan todas las armas
   const weaponsData = await getAllWeapons();
-  console.log("fetched weapons:", weaponsData);
   weaponsData.forEach(element => {
     weapons.value.push({label: element.nombre, value: element.id});
   });
@@ -215,8 +218,13 @@ const prev = () => {
   current.value--;
 };
 
-const onSubmit = () => {
-  message.success("Personaje CREADO");
+const onSubmit = async () => {
+  const created = await createEntity(toRaw(requestData));
+  if(created){
+    message.success(requestData.name + " nivel " + requestData.level + " CREADO");
+    router.push('/');
+  }
+  else message.error("Fallo al crear personaje");
 };
 
 const onClassRaceUpdate = async (data, valid) => {
@@ -229,6 +237,7 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.traits = data.traits;
     requestData.loot = data.tesoro;
     requestData.money = data.dinero;
+    requestData.alignmentId = data.alineacion
     spellTradition.value = data.tradicionHechizo;
     await loadSpells();
     console.log("can cast spells:", availableSpells.value);
@@ -252,7 +261,7 @@ const onClassRaceUpdate = async (data, valid) => {
   }
 };
 
-const onPhysicalTraitsUpdate = async (data, valid) => {
+const onPhysicalTraitsUpdate = (data, valid) => {
   if (valid) {
     requestData.sizeId = data.size;
     requestData.resistances = data.resistances;
@@ -265,7 +274,7 @@ const onPhysicalTraitsUpdate = async (data, valid) => {
   }
 };
 
-const onAtributessUpdate = async (data, valid) => {
+const onAtributessUpdate = (data, valid) => {
   if (valid) {
     requestData.str = data.str;
     requestData.dex = data.dex;
@@ -310,7 +319,7 @@ const onAttackSpellsUpdate = async (data, valid) => {
     requestData.attacks = data.attacks;
     requestData.spells = data.spells;
     console.log("acumulated data: ", toRaw(requestData));
-    onSubmit();
+    await onSubmit();
   }
 };
 

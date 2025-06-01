@@ -17,6 +17,10 @@ FROM Raza_Velocidad
 WHERE Raza_Velocidad.razaId = ?;
 `;
 
+const movementEntityCreate = `
+INSERT INTO Velocidad(entidadId, movimientoId , cantidad) VALUES(?, ?, ?);
+`;
+
 export async function getAllMovementTypes() {
   try {
     return await glosaryDatabase.query(allMovementsQuery);
@@ -38,5 +42,15 @@ export async function getSpeedsByRace(id) {
     return await glosaryDatabase.query(speedRaceQuery, [id]);
   } catch (err) {
     console.error("error on load speeds by race:", err);
+  }
+}
+
+export async function createMovementEntity(entity, movement) {
+  try {
+    return await glosaryDatabase.create(movementEntityCreate,
+      [entity, movement.movimientoId, movement.cantidad]
+    );
+  } catch (err) {
+    console.error("error on create movement entity:", err);
   }
 }

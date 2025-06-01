@@ -420,6 +420,14 @@ ipcMain.handle("db-query", async (event, query, params) => {
     });
   });
 });
+ipcMain.handle("db-create", async (event, query, params) => {
+  return new Promise((resolve2, reject) => {
+    db.run(query, params, function(err) {
+      if (err) return reject(err);
+      resolve2(this.lastID);
+    });
+  });
+});
 const getIconPath = () => {
   if (process.platform === "win32") {
     return join(__dirname, "../public/icons/icon.ico");

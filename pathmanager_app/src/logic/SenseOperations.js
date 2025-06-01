@@ -17,6 +17,10 @@ FROM Raza_Sentido
 WHERE Raza_Sentido.razaId = ?;
 `;
 
+const senseEntityCreate = `
+INSERT INTO Sentido_Entidad(entidadId, sentidoId, rango) VALUES(?, ?, ?);
+`;
+
 export async function getAllSenses() {
   try {
     return await glosaryDatabase.query(allsensesQuery);
@@ -38,5 +42,15 @@ export async function getSensesByRace(id) {
     return await glosaryDatabase.query(sensesRaceQuery, [id]);
   } catch (err) {
     console.error("error on load senses by race:", err);
+  }
+}
+
+export async function createSenseEntity(entity, sense) {
+  try {
+    return await glosaryDatabase.create(senseEntityCreate,
+      [entity, sense.sentidoId, sense.rango]
+    );
+  } catch (err) {
+    console.error("error on create sense entity:", err);
   }
 }

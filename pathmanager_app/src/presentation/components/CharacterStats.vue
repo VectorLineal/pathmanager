@@ -52,7 +52,7 @@ const money = computed(() => {
     curMoney /= 100;
     const silver = curMoney % 100;
     curMoney /= 100;
-    const gold = curMoney;
+    const gold = Math.floor(curMoney);
 
     return{gold, silver, coopper};
 });

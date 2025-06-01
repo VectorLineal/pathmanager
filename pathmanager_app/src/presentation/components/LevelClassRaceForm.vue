@@ -13,7 +13,7 @@
           <a-input v-model:value="formState.name" />
         </a-form-item>
       </a-col>
-      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+      <a-col :sm="4" :md="3" :lg="3" :xl="3">
         <a-form-item label="Nivel" name="level">
           <a-input-number v-model:value="formState.level" :min="0" :max="25" />
         </a-form-item>
@@ -28,7 +28,12 @@
           <ClassSelector @onSelect="selectClass" />
         </a-form-item>
       </a-col>
-      <a-col :sm="4" :md="3" :lg="3" :xl="2">
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Alineación" name="alineacion">
+          <AlignmentSelector @onSelect="selectAlignment" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="4" :md="3" :lg="3" :xl="3">
         <a-form-item label="Dinero" name="dinero">
           <a-input-number v-model:value="formState.dinero" :min="0" />
         </a-form-item>
@@ -58,6 +63,7 @@ import { reactive, ref, toRaw } from "vue";
 import ClassSelector from "./ClassSelector.vue";
 import RaceSelector from "./RaceSelector.vue";
 import TraitsSelector from "./TraitsSelector.vue";
+import AlignmentSelector from "./AlignmentSelector.vue";
 
 const emit = defineEmits(["updateData"]);
 
@@ -66,6 +72,7 @@ const formState = reactive({
   name: "",
   description: "",
   clase: null,
+  alineacion: null,
   tradicionHechizo: null,
   tesoro: '',
   dinero: 0,
@@ -118,6 +125,13 @@ const rules = {
       trigger: "change",
     },
   ],
+  alineacion: [
+    {
+      required: true,
+      message: "Seleccione una alineación",
+      trigger: "change",
+    },
+  ],
   name: [
     {
       whitespace: true,
@@ -131,6 +145,9 @@ const rules = {
 const selectClass = (value) => {
   formState.clase = value.id;
   formState.tradicionHechizo = value.tradicionId;
+};
+const selectAlignment = (value) => {
+  formState.alineacion = value;
 };
 const selectRace = (value) => {
   formState.race = value.id;

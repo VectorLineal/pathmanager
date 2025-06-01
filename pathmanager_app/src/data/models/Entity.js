@@ -94,4 +94,13 @@ export default class Entity{
     getArmor(){
         return this.getFlatFootedArmor() + this.dodge + this.dex;
     }
+    getCreationVector(){
+        return [this.name, this.description, this.loot, this.level, this.xp, this.perception, this.naturalArmor,
+            this.itemArmor, this.dodge, this.health, this.fort, this.reflex, this.will, this.attackBonus,
+            this.str, this.dex, this.con, this.int, this.wis, this.cha, this.acrobatics, this.arcana, this.atletism,
+            this.crafting, this.deceiving, this.diplomacy, this.intimidation, this.lore, this.medicine, this.nature,
+            this.ocultism, this.performance, this.religion, this.society, this.stealth, this.survival, this.thievery,
+            this.money, this.raceId, this.sizeId, this.alignmentId, this.classId
+        ];
+    }
 };

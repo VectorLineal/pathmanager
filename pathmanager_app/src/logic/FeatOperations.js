@@ -3,7 +3,7 @@ import glosaryDatabase from "../data/services/DBPool";
 const featClassLevelQuery = `
 SELECT nivel, nombre, requisito, descripcion, habilidadId
 FROM Proeza JOIN Proeza_Clase ON Proeza.id = Proeza_Clase.proezaId
-WHERE claseId = ? and nivel <= ??
+WHERE claseId = ? and nivel <= ?
 ORDER BY nivel;
 `;
 

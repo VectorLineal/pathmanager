@@ -1,13 +1,13 @@
 import glosaryDatabase from "../data/services/DBPool";
-import { getTraitByEntity } from "./TraitOperations";
-import { getSensesByEntity } from "./SenseOperations";
-import { getLanguagesByEntity } from "./LanguageOperations";
-import { getSpeedsByEntity } from "./MovementOperations";
-import { getInmunitiesByEntity } from "./InmunityOperations";
-import { getResWeakByEntity } from "./ResistanceOperations";
-import { getAttacksByEntity } from "./AttackOperations";
-import { getAbilitiesByEntity } from "./AbilityOperations";
-import { getSpellsByEntity } from "./SpellOperations";
+import { getTraitByEntity, createTraitEntity } from "./TraitOperations";
+import { getSensesByEntity, createSenseEntity } from "./SenseOperations";
+import { getLanguagesByEntity, createLanguageEntity } from "./LanguageOperations";
+import { getSpeedsByEntity, createMovementEntity } from "./MovementOperations";
+import { getInmunitiesByEntity, createInmunityEntity } from "./InmunityOperations";
+import { getResWeakByEntity, createResistanceEntity } from "./ResistanceOperations";
+import { getAttacksByEntity, createAttackEntity } from "./AttackOperations";
+import { getAbilitiesByEntity, createAbilityEntity } from "./AbilityOperations";
+import { getSpellsByEntity, createSpellEntity } from "./SpellOperations";
 
 const entitiesQuery = `
 SELECT Entidad.id, Entidad.nombre, nivel, experiencia, Alineacion.nombre AS alineacion,
@@ -36,6 +36,16 @@ JOIN Raza ON Entidad.razaId = Raza.id
 WHERE Entidad.id = ?;
 `;
 
+const entityCreate = `
+INSERT INTO Entidad(nombre, descripcion, tesoro, nivel, experiencia, percepcion, armaduraNatural,
+armaduraItem, evasion, salud, fortaleza, reflejos, voluntad, ataqueBase, fuerza, destreza, constitucion,
+inteligencia, sabiduria, carisma, acrobacia, arcana, atletismo, fabricacion, engano, diplomacia, intimidacion,
+tradicion, medicina, naturaleza, ocultismo, actuacion, religion, sociedad, sigilo, supervivencia, robo,
+dinero, razaId, tamanoId, alineacionId, claseId)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+?, ?, ?, ?, ?, ?);
+`;
+
 export async function getAllEntities() {
   try {
     const entities = await glosaryDatabase.query(entitiesQuery);
@@ -51,11 +61,8 @@ export async function getAllEntities() {
 
 export async function getEntity(id) {
   try {
-    console.log("input id:", id);
     const eQuery = await glosaryDatabase.query(entityQuery, [id]);
-    console.log("query:", eQuery);
     const entity = eQuery[0];
-    console.log("queried entity:", entity);
     //se añaden datos en forma de arreglos
     const traits = await getTraitByEntity(id);
     entity.razgos = traits;
@@ -80,5 +87,45 @@ export async function getEntity(id) {
     return entity;
   } catch (err) {
     console.error("error on load single entitiy:", err);
+  }
+}
+
+export async function createEntity(entity) {
+  try {
+    //se crea la entidad como tal y se retorna el Id
+    const entidadId = await glosaryDatabase.create(entityCreate, entity.getCreationVector());
+    console.log("completed entity transaction:", entidadId);
+    //se crea cada una de las relaciones muchos a muchos
+    for(let i = 0; i < entity.traits.length; i++){
+      await createTraitEntity(entity.traits[i], entidadId);
+    };
+    for(let i = 0; i < entity.abilities.length; i++){
+      await createAbilityEntity(entity.abilities[i], entidadId);
+    };
+    for(let i = 0; i < entity.inmunities.length; i++){
+      await createInmunityEntity(entity.inmunities[i], entidadId);
+    };
+    for(let i = 0; i < entity.languages.length; i++){
+      await createLanguageEntity(entity.languages[i], entidadId);
+    };
+    for(let i = 0; i < entity.attacks.length; i++){
+      await createAttackEntity(entidadId, entity.attacks[i]);
+    };
+    for(let i = 0; i < entity.spells.length; i++){
+      await createSpellEntity(entidadId, entity.spells[i]);
+    };
+    for(let i = 0; i < entity.resistances.length; i++){
+      await createResistanceEntity(entidadId, entity.resistances[i]);
+    };
+    for(let i = 0; i < entity.senses.length; i++){
+      await createSenseEntity(entidadId, entity.senses[i]);
+    };
+    for(let i = 0; i < entity.movements.length; i++){
+      await createMovementEntity(entidadId, entity.movements[i]);
+    };
+    return true;
+  } catch (err) {
+    console.error("error on create entity:", err);
+    return false;
   }
 }

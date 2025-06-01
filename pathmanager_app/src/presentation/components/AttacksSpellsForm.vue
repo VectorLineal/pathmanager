@@ -69,7 +69,6 @@ const selectAbilities = (value) => {
 };
 const selectAttacks = (value) => {
   formState.attacks = value;
-    console.log("ataques",formState.attacks)
 };
 const selectSpells = (value) => {
   formState.spells = value;

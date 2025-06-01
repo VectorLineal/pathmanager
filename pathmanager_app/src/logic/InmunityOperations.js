@@ -16,9 +16,13 @@ FROM Raza_Inmunidad
 WHERE Raza_Inmunidad.razaId = ?;
 `;
 
+const inmunityEntityCreate = `
+INSERT INTO Inmunidad(estadoId, entidadId) VALUES(?, ?);
+`;
+
 export async function getInmunitiesByEntity(id) {
   try {
-    return await glosaryDatabase.query(inmunityEntityQuery, [id]);
+    return await glosaryDatabase.query(inmunityEntityQuery, [id, id]);
   } catch (err) {
     console.error("error on load inmunities by entity:", err);
   }
@@ -29,5 +33,13 @@ export async function getInmunitiesByRace(id) {
     return await glosaryDatabase.query(inmunityRaceQuery, [id]);
   } catch (err) {
     console.error("error on load inmunities by race:", err);
+  }
+}
+
+export async function createInmunityEntity(inmunity, entity) {
+  try {
+    return await glosaryDatabase.create(inmunityEntityCreate, [inmunity, entity]);
+  } catch (err) {
+    console.error("error on create inmunity entity:", err);
   }
 }

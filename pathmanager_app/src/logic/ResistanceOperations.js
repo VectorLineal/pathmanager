@@ -13,6 +13,10 @@ FROM Raza_Resistencia
 WHERE Raza_Resistencia.razaId = ?;
 `;
 
+const resistanceEntityCreate = `
+INSERT INTO Resistencia(entidadId, danoId, cantidad) VALUES(?, ?, ?);
+`;
+
 export async function getResWeakByEntity(id) {
   try {
     return await glosaryDatabase.query(resistanceEntityQuery, [id]);
@@ -26,5 +30,15 @@ export async function getResWeakByRace(id) {
     return await glosaryDatabase.query(resistanceRaceQuery, [id]);
   } catch (err) {
     console.error("error on load resistances by race:", err);
+  }
+}
+
+export async function createResistanceEntity(entity, resistance) {
+  try {
+    return await glosaryDatabase.create(resistanceEntityCreate,
+      [entity, resistance.danoId, resistance.cantidad]
+    );
+  } catch (err) {
+    console.error("error on create resistance entity:", err);
   }
 }

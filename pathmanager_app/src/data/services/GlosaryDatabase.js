@@ -30,4 +30,18 @@ export default class GlosaryDatabase {
       throw err
     }
   }
+
+  async create(sql, params = []) {
+    if (!this.isElectron) {
+      console.warn('Not running in Electron environment - returning mock data');
+      return null;
+    }
+
+    try {
+      return await window.electronAPI.db.create(sql, params)
+    } catch (err) {
+      console.error('Database insertion failed:', err)
+      throw err
+    }
+  }
 }

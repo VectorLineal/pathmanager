@@ -20,8 +20,13 @@ const spellsByTraditionCasterLevelQuery = `
 SELECT Hechizo.id, Hechizo.nombre || '(' || Escuela.nombre || ')' AS nombre, hechizo.nivel
 FROM Hechizo JOIN Tradicion_Hechizo on Hechizo.id = Tradicion_Hechizo.hechizoId
 JOIN Escuela on Hechizo.escuelaId = Escuela.id
-WHERE tradicionId = ? AND Hechizo.nivel <= ??
+WHERE tradicionId = ? AND Hechizo.nivel <= ?
 ORDER BY Hechizo.nivel, Hechizo.escuelaId, Hechizo.nombre;
+`;
+
+const createSpellEntityQuery = `
+INSERT INTO Hechizo_Entidad(entidadId, hechizoId, cantidad, aumento)
+VALUES(?, ?, ?, ?);
 `;
 
 export async function getSpellsByEntity(id) {
@@ -47,5 +52,15 @@ export async function getSpellsByTraditionCasterLevel(tradition, entityLevel) {
     return spells;
   } catch (err) {
     console.error("error on load spells by caster level and tradition:", err);
+  }
+}
+
+export async function createSpellEntity(entity, spell) {
+  try {
+    return await glosaryDatabase.create(createSpellEntityQuery,
+      [entity, spell.hechizoId, spell.cantidad, spell.aumento]
+    );
+  } catch (err) {
+    console.error("error on create spell entity:", err);
   }
 }
