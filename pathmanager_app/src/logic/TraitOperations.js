@@ -33,6 +33,11 @@ const traitEntityCreate = `
 INSERT INTO Razgo_Entidad(razgoId, entidadId) VALUES(?, ?);
 `;
 
+const traitSpellCreate = `
+INSERT INTO Razgo_Hechizo(razgoId, hechizoId) VALUES(?, ?);
+`;
+
+
 export async function getAllTraits() {
   try {
     return await glosaryDatabase.query(allTraitsQuery);
@@ -75,5 +80,13 @@ export async function createTraitEntity(trait, entity) {
     return await glosaryDatabase.create(traitEntityCreate, [trait, entity]);
   } catch (err) {
     console.error("error on create trait entity:", err);
+  }
+}
+
+export async function createTraitSpell(trait, spell) {
+  try {
+    return await glosaryDatabase.create(traitSpellCreate, [trait, spell]);
+  } catch (err) {
+    console.error("error on create trait spell:", err);
   }
 }

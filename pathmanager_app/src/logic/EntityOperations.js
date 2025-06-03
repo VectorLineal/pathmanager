@@ -94,7 +94,6 @@ export async function createEntity(entity) {
   try {
     //se crea la entidad como tal y se retorna el Id
     const entidadId = await glosaryDatabase.create(entityCreate, entity.getCreationVector());
-    console.log("completed entity transaction:", entidadId);
     //se crea cada una de las relaciones muchos a muchos
     for(let i = 0; i < entity.traits.length; i++){
       await createTraitEntity(entity.traits[i], entidadId);

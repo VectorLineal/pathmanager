@@ -14,3 +14,6 @@ export const sensesStorage = reactive( new PersistentFilterData());
 export const weaponTypesStorage = reactive( new PersistentFilterData());
 export const weaponGroupsStorage = reactive( new PersistentFilterData());
 export const weaponCategoriesStorage = reactive( new PersistentFilterData());
+export const spellTraditionsStorage = reactive( new PersistentFilterData());
+export const spellTargetsStorage = reactive( new PersistentFilterData());
+export const spellSchoolsStorage = reactive( new PersistentFilterData());

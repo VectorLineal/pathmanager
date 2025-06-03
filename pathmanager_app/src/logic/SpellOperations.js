@@ -1,6 +1,6 @@
 import glosaryDatabase from "../data/services/DBPool";
-import { getTraitBySpell } from "./TraitOperations";
-import { getTraditionBySpell } from "./TraditionOperations";
+import { getTraitBySpell, createTraitSpell } from "./TraitOperations";
+import { getTraditionBySpell, createTraditionSpell } from "./TraditionOperations";
 
 const spellsEntityQuery = `
 SELECT Hechizo.id, Hechizo.nombre,
@@ -16,6 +16,14 @@ WHERE Hechizo_Entidad.entidadId = ?
 ORDER by nivel_final, Hechizo.nombre, escuela;
 `;
 
+const allSpellsQuery = `
+SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Blanco ON Hechizo.blancoId = Blanco.id
+ORDER by Hechizo.nivel, Hechizo.nombre, escuela;
+`;
+
 const spellsByTraditionCasterLevelQuery = `
 SELECT Hechizo.id, Hechizo.nombre || '(' || Escuela.nombre || ')' AS nombre, hechizo.nivel
 FROM Hechizo JOIN Tradicion_Hechizo on Hechizo.id = Tradicion_Hechizo.hechizoId
@@ -28,6 +36,27 @@ const createSpellEntityQuery = `
 INSERT INTO Hechizo_Entidad(entidadId, hechizoId, cantidad, aumento)
 VALUES(?, ?, ?, ?);
 `;
+
+const createSpellQuery = `
+INSERT INTO Hechizo(nombre, fallo, efecto, critico, demora, nivel, alcance, aumentos, escuelaId, blancoId)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+`;
+
+export async function getAllSpells() {
+  try {
+    const spells = await glosaryDatabase.query(allSpellsQuery);
+    //se cargan también los razgos y tradiciones
+    for(let i = 0; i < spells.length; i++){
+      const traits = await getTraitBySpell(spells[i].id);
+      const traditions = await getTraditionBySpell(spells[i].id);
+      spells[i].razgos = traits;
+      spells[i].tradiciones = traditions;
+    }
+    return spells;
+  } catch (err) {
+    console.error("error on load all spells:", err);
+  }
+}
 
 export async function getSpellsByEntity(id) {
   try {
@@ -62,5 +91,24 @@ export async function createSpellEntity(entity, spell) {
     );
   } catch (err) {
     console.error("error on create spell entity:", err);
+  }
+}
+
+export async function createSpell(spell) {
+  try {
+    //se crea el hechizo como tal y se retorna el Id
+    const hechizoId = await glosaryDatabase.create(createSpellQuery, spell.getCreationVector());
+    console.log("completed spell transaction:", hechizoId);
+    //se crea cada una de las relaciones muchos a muchos
+    for(let i = 0; i < spell.traits.length; i++){
+      await createTraitSpell(spell.traits[i], hechizoId);
+    };
+    for(let i = 0; i < spell.traditions.length; i++){
+      await createTraditionSpell(spell.traditions[i], hechizoId);
+    };
+    return true;
+  } catch (err) {
+    console.error("error on create spell:", err);
+    return false;
   }
 }

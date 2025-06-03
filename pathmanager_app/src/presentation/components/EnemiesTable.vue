@@ -1,10 +1,5 @@
 <template>
   <a-table :data-source="data" :columns="columns">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span style="color: #1890ff">Name</span>
-      </template>
-    </template>
     <template
       #customFilterDropdown="{setSelectedKeys, selectedKeys, confirm, clearFilters, column}"
     >
