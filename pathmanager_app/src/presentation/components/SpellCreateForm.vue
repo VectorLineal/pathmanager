@@ -20,12 +20,12 @@
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="5">
         <a-form-item label="Acciones" name="demora">
-          <a-input-number v-model:value="formState.demora" :min="-1" :max="3" />
+          <a-input-number v-model:value="formState.demora" :min="-1" :max="30" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="5">
         <a-form-item label="Alcance" name="alcance">
-          <a-input-number v-model:value="formState.alcance" :min="0" :max="240" />
+          <a-input-number v-model:value="formState.alcance" :min="0" :max="1000" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="6">
