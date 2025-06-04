@@ -20,7 +20,7 @@
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="5">
         <a-form-item label="Acciones" name="demora">
-          <a-input-number v-model:value="formState.demora" :min="-1" :max="30" />
+          <a-input-number v-model:value="formState.demora" :min="-1" :max="300" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="5">
