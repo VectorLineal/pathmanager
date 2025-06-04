@@ -1,6 +1,6 @@
 <template>
   <a-modal v-model:open="isOpen" :footer="null" title="Agregar Hechizo">
-    <SpellCreateForm @onSubmit="reloadData" @onCancel="closeCreation" />
+    <SpellCreateForm @onSubmit="reloadData" @onCancel="closeCreation" :isFocus="props.isFocus"/>
   </a-modal>
   <CButton color="success" @click="openCreation"
     ><FileAddOutlined />Añadir Hechizo</CButton
@@ -130,12 +130,16 @@ import {
   traitsStorage
 } from "../../logic/Storage";
 
+const props = defineProps({
+  isFocus: Boolean
+});
+
 const data = ref([]);
 const isInfoOpen = ref({});
 const isOpen = ref(false);
 
 try {
-  const response = await getAllSpells();
+  const response = await getAllSpells(props.isFocus);
   data.value = response;
   data.value.forEach((element) => {
     isInfoOpen.value[element.id] = false;
@@ -210,6 +214,25 @@ const columns = [
       record.escuela.toString().toLowerCase().includes(value.toLowerCase()),
   },
   {
+    title: "Razgos",
+    dataIndex: "razgos",
+    key: "traits",
+  },
+  {
+    title: "Operaciones",
+    key: "action",
+  },
+];
+if(props.isFocus) columns.splice(5, 0, {
+    title: "Clase",
+    dataIndex: "clase",
+    key: "class",
+    filters: classesStorage.dataFilter,
+    sorter: (a, b) => a.clase.localeCompare(b.clase),
+    onFilter: (value, record) =>
+      record.clase.toString().toLowerCase().includes(value.toLowerCase()),
+  });
+else columns.splice(5, 0, {
     title: "Tradiciones",
     dataIndex: "tradiciones",
     key: "traditions",
@@ -221,17 +244,7 @@ const columns = [
       }
       return false;
     },
-  },
-  {
-    title: "Razgos",
-    dataIndex: "razgos",
-    key: "traits",
-  },
-  {
-    title: "Operaciones",
-    key: "action",
-  },
-];
+  });
 const handleSearch = (selectedKeys, confirm, dataIndex) => {
   confirm();
   state.searchText = selectedKeys[0];
@@ -254,7 +267,7 @@ const closeCreation = () => {
 };
 const reloadData = async () => {
   try {
-    const response = await getAllSpells();
+    const response = await getAllSpells(props.isFocus);
     data.value = response;
     data.value.forEach((element) => {
       isInfoOpen.value[element.id] = false;

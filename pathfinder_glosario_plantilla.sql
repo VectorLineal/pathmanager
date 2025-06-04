@@ -771,23 +771,6 @@ INSERT INTO Raza_Sentido(razaId, sentidoId, rango) VALUES(18, 9, 30);
 INSERT INTO Raza_Sentido(razaId, sentidoId) VALUES(20, 6);
 INSERT INTO Raza_Sentido(razaId, sentidoId) VALUES(23, 7);
 
-CREATE TABLE HechizoFoco(
- 	id integer PRIMARY KEY NOT NULL,
-	nombre varchar(32) UNIQUE NOT NULL,
-	requisito varchar(64),
-	fallo varchar(1024),
-	efecto varchar(1024) NOT NULL,
-	critico varchar(1024),
-  	demora integer NOT NULL DEFAULT(2),
-	nivel integer NOT NULL DEFAULT(0),
-	alcance integer NOT NULL DEFAULT(0),
-	escuelaId integer NOT NULL,
-	claseId integer NOT NULL,
-	blancoId integer NOT NULL,
-	FOREIGN KEY(escuelaId) REFERENCES Escuela(id),
-	FOREIGN KEY(claseId) REFERENCES Clase(id),
-	FOREIGN KEY(blancoId) REFERENCES Blanco(id)
-);
 CREATE TABLE TipoDeidad(
  	id integer PRIMARY KEY NOT NULL,
 	nombre VARCHAR(32) UNIQUE NOT NULL
@@ -873,7 +856,7 @@ INSERT INTO Dominio_Deidad(dominioId, deidadId) VALUES(9, 2);
 CREATE TABLE Dominio_Hechizo(
  	hechizoId integer NOT NULL,
   	dominioId integer NOT NULL,
-	FOREIGN KEY(hechizoId) REFERENCES HechizoFoco(id),
+	FOREIGN KEY(hechizoId) REFERENCES Hechizo(id),
 	FOREIGN KEY(dominioId) REFERENCES Dominio(id),
 	PRIMARY KEY(hechizoId, dominioId)
 );

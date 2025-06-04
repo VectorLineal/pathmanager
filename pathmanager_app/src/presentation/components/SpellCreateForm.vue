@@ -38,7 +38,12 @@
           <SchoolSelector @onSelect="selectSchool" />
         </a-form-item>
       </a-col>
-      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+      <a-col :sm="7" :md="6" :lg="5" :xl="4" v-if="props.isFocus">
+        <a-form-item label="Clase" name="clase">
+          <ClassSelector @onSelect="selectClass" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="8" :md="7" :lg="7" :xl="5" v-else>
         <a-form-item label="Tradiciones" name="traditions">
           <TraditionsSelector @onSelect="selectTraditions" />
         </a-form-item>
@@ -86,15 +91,21 @@ import { reactive, ref, toRaw } from "vue";
 import { CButton, CButtonGroup, CButtonToolbar } from "@coreui/vue";
 import { message } from "ant-design-vue";
 import Spell from "../../data/models/Spell";
+import FocusSpell from "../../data/models/FocusSpell";
 import { createSpell } from "../../logic/SpellOperations";
 import SchoolSelector from "./SchoolSelector.vue";
 import TargetSelector from "./TargetSelector.vue";
 import TraditionsSelector from "./TraditionsSelector.vue";
 import TraitsSelector from "./TraitsSelector.vue";
+import ClassSelector from "./ClassSelector.vue";
 
 const emit = defineEmits(["onSubmit", "onCancel"]);
 
-const formState = reactive(new Spell());
+const props = defineProps({
+  isFocus: Boolean
+});
+
+const formState = reactive(props.isFocus? new FocusSpell(): new Spell());
 const formRef = ref();
 const labelCol = {
   span: 24,
@@ -148,6 +159,13 @@ const rules = {
       trigger: "change",
     },
   ],
+  claseId: [
+    {
+      required: props.isFocus,
+      message: "Seleccione una alineación",
+      trigger: "change",
+    },
+  ],
   name: [
     {
       whitespace: true,
@@ -186,6 +204,9 @@ const selectTraits = (value) => {
 const selectTraditions = (value) => {
   formState.traditions = value;
 };
+const selectClass = (value) => {
+  formState.claseId = value.id;
+};
 
 const closeModal = () => {
   emit("onCancel");
@@ -194,7 +215,7 @@ const closeModal = () => {
 const onCreation = async () => {
   try {
     await formRef.value.validate();
-    const spellCreated = await createSpell(toRaw(formState));
+    const spellCreated = await createSpell(toRaw(formState), props.isFocus);
     if(spellCreated){
       message.success("Hechizo creado exitosamente");
       emit("onSubmit");

@@ -21,6 +21,16 @@ SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora
 Escuela.nombre AS escuela, Blanco.nombre AS blancos
 FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
 JOIN Blanco ON Hechizo.blancoId = Blanco.id
+WHERE Hechizo.claseId IS NULL
+ORDER by Hechizo.nivel, Hechizo.nombre, escuela;
+`;
+
+const allFocusSpellsQuery = `
+SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Clase.nombre AS clase
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Blanco ON Hechizo.blancoId = Blanco.id
+JOIN Clase ON Hechizo.claseId = Clase.id
 ORDER by Hechizo.nivel, Hechizo.nombre, escuela;
 `;
 
@@ -41,16 +51,22 @@ const createSpellQuery = `
 INSERT INTO Hechizo(nombre, fallo, efecto, critico, demora, nivel, alcance, aumentos, escuelaId, blancoId)
 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
+const createFocusSpellQuery = `
+INSERT INTO Hechizo(nombre, fallo, efecto, critico, demora, nivel, alcance, aumentos, claseId, escuelaId, blancoId)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+`;
 
-export async function getAllSpells() {
+export async function getAllSpells(isFocus) {
   try {
-    const spells = await glosaryDatabase.query(allSpellsQuery);
+    const spells = await glosaryDatabase.query(isFocus? allFocusSpellsQuery:allSpellsQuery);
     //se cargan también los razgos y tradiciones
     for(let i = 0; i < spells.length; i++){
       const traits = await getTraitBySpell(spells[i].id);
-      const traditions = await getTraditionBySpell(spells[i].id);
       spells[i].razgos = traits;
-      spells[i].tradiciones = traditions;
+      if(!isFocus){
+        const traditions = await getTraditionBySpell(spells[i].id);
+        spells[i].tradiciones = traditions;
+      }
     }
     return spells;
   } catch (err) {
@@ -94,18 +110,20 @@ export async function createSpellEntity(entity, spell) {
   }
 }
 
-export async function createSpell(spell) {
+export async function createSpell(spell, isFocus) {
   try {
     //se crea el hechizo como tal y se retorna el Id
-    const hechizoId = await glosaryDatabase.create(createSpellQuery, spell.getCreationVector());
+    const hechizoId = await glosaryDatabase.create(isFocus? createFocusSpellQuery:createSpellQuery, spell.getCreationVector());
     console.log("completed spell transaction:", hechizoId);
     //se crea cada una de las relaciones muchos a muchos
     for(let i = 0; i < spell.traits.length; i++){
       await createTraitSpell(spell.traits[i], hechizoId);
     };
-    for(let i = 0; i < spell.traditions.length; i++){
-      await createTraditionSpell(spell.traditions[i], hechizoId);
-    };
+    if(!isFocus){
+      for(let i = 0; i < spell.traditions.length; i++){
+        await createTraditionSpell(spell.traditions[i], hechizoId);
+      };
+    }
     return true;
   } catch (err) {
     console.error("error on create spell:", err);
