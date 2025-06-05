@@ -60,7 +60,7 @@
               <template #title>
                 <GenericAction :name="record.nombre" :delay="record.demora">
                   <template #content>
-                    <strong>{{ '   ' + record.nivel }}</strong>
+                    <strong>{{ props.isFocus? '   Foco '+ record.nivel: record.nivel == 0? '   Truco':'   Nivel ' + record.nivel }}</strong>
                   </template>
                 </GenericAction>
               </template>
