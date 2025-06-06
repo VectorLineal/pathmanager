@@ -6,8 +6,8 @@ SELECT id, nombre FROM Arma order by nombre;
 
 const weaponAttackQuery = `
 SELECT monto, alcance, efecto, bono, danoId
-FROM Ataque_Estandar
-WHERE armaId = ?;
+FROM Arma
+WHERE id = ?;
 `;
 
 export async function getAllWeapons() {
