@@ -36,6 +36,9 @@ INSERT INTO Razgo_Entidad(razgoId, entidadId) VALUES(?, ?);
 const traitSpellCreate = `
 INSERT INTO Razgo_Hechizo(razgoId, hechizoId) VALUES(?, ?);
 `;
+const traitWeaponCreate = `
+INSERT INTO Razgo_Arma(razgoId, armaId, monto) VALUES(?, ?, ?);
+`;
 
 
 export async function getAllTraits() {
@@ -86,6 +89,14 @@ export async function createTraitEntity(trait, entity) {
 export async function createTraitSpell(trait, spell) {
   try {
     return await glosaryDatabase.create(traitSpellCreate, [trait, spell]);
+  } catch (err) {
+    console.error("error on create trait spell:", err);
+  }
+}
+
+export async function createTraitWeapon(trait, weapon, amount) {
+  try {
+    return await glosaryDatabase.create(traitWeaponCreate, [trait, weapon, amount]);
   } catch (err) {
     console.error("error on create trait spell:", err);
   }

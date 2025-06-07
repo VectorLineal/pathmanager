@@ -59,9 +59,6 @@ import { getAllMovementTypes } from "../../logic/MovementOperations";
 import { getAllTraits } from "../../logic/TraitOperations";
 import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
 import { getAllSenses } from "../../logic/SenseOperations";
-import { getAllWeaponCategories } from "../../logic/WeaponCategoryOptions";
-import { getAllWeaponGroups } from "../../logic/WeaponGroupOperations";
-import { getAllWeaponTypes } from "../../logic/WeaponTypeOperations";
 import { getAllWeapons } from "../../logic/WeaponOperations";
 import { getSpellsByTraditionCasterLevel } from "../../logic/SpellOperations";
 import { getAllAbilities } from "../../logic/AbilityOperations";
@@ -76,10 +73,7 @@ import {
   movementsStorage,
   traitsStorage,
   damageTypesStorage,
-  sensesStorage,
-  weaponCategoriesStorage,
-  weaponGroupsStorage,
-  weaponTypesStorage
+  sensesStorage
 } from "../../logic/Storage";
 import LevelClassRaceForm from "./LevelClassRaceForm.vue";
 import PhysicalTraitsForm from "./PhysicalTraitsForm.vue";
@@ -116,9 +110,6 @@ try {
   if (traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
   if (damageTypesStorage.isEmpty()) damageTypesStorage.fillData(await getAllDamageTypes());
   if (sensesStorage.isEmpty()) sensesStorage.fillData(await getAllSenses());
-  if (weaponCategoriesStorage.isEmpty()) weaponCategoriesStorage.fillData(await getAllWeaponCategories());
-  if (weaponGroupsStorage.isEmpty()) weaponGroupsStorage.fillData(await getAllWeaponGroups());
-  if (weaponTypesStorage.isEmpty()) weaponTypesStorage.fillData(await getAllWeaponTypes());
   //se cargan todas las habilidades especiales
   const abilitiesData = await getAllAbilities();
   abilitiesData.forEach(element => {
