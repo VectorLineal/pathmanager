@@ -39,7 +39,7 @@ const removeElement = (index) => {
 const addElement = () => {
   traits.value.push({
     id: null,
-    monto: 0,
+    monto: null,
   });
   triggerUpdate();
 };

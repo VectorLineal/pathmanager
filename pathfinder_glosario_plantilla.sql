@@ -869,3 +869,34 @@ CREATE TABLE Habilidad_Atributo(
 	FOREIGN KEY(atributoId) REFERENCES Atributo(id),
 	PRIMARY KEY(habilidadId, atributoId)
 );
+CREATE TABLE Armadura (
+  id integer PRIMARY KEY NOT NULL,
+  nombre varchar(32) UNIQUE NOT NULL,
+  precio integer NOT NULL DEFAULT(0),
+  nivel integer NOT NULL DEFAULT(0),
+  ac integer NOT NULL DEFAULT(0),
+  penalizacion integer NOT NULL DEFAULT(0),
+  limite integer NOT NULL DEFAULT(5),
+  requisito integer NOT NULL DEFAULT(0),
+  velocidad integer NOT NULL DEFAULT(0),
+  peso REAL NOT NULL DEFAULT(0.1),
+  efecto varchar(512),
+  grupoId integer NOT NULL,
+  categoriaId integer NOT NULL,
+  FOREIGN KEY (grupoId) REFERENCES Grupo(id),
+  FOREIGN KEY (categoriaId) REFERENCES Categoria(id)
+);
+
+CREATE TABLE Razgo_Armadura(
+ 	armaduraId integer NOT NULL,
+  	razgoId integer NOT NULL,
+	monto integer NULL,
+	FOREIGN KEY(armaduraId) REFERENCES Armadura(id),
+	FOREIGN KEY(razgoId) REFERENCES Razgo(id),
+	PRIMARY KEY(armaduraId, razgoId)
+);
+INSERT INTO Armadura(nombre, precio, categoriaId, grupoId) VALUES('ropa de explorador', 100, 5, 18);
+INSERT INTO Armadura(nombre, precio, categoriaId, grupoId) VALUES('túnica de pergaminos', 10500, 5, 18);
+
+INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(1, 41);
+INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(2, 42);
