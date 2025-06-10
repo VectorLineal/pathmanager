@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Hechizo">
+  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Arma">
     <WeaponCreateForm @onSubmit="reloadData" @onCancel="closeCreation"/>
   </a-modal>
   <CButton color="success" @click="openCreation">

@@ -900,3 +900,6 @@ INSERT INTO Armadura(nombre, precio, categoriaId, grupoId) VALUES('túnica de pe
 
 INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(1, 41);
 INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(2, 42);
+
+
+
