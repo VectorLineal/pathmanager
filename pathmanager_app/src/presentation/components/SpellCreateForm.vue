@@ -13,22 +13,22 @@
           <a-input v-model:value="formState.nombre" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
         <a-form-item label="Nivel" name="nivel">
           <a-input-number v-model:value="formState.nivel" :min="0" :max="10" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
         <a-form-item label="Acciones" name="demora">
           <a-input-number v-model:value="formState.demora" :min="-1" :max="300" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
         <a-form-item label="Alcance" name="alcance">
           <a-input-number v-model:value="formState.alcance" :min="0" :max="1000" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="6">
+      <a-col :sm="9" :md="8" :lg="8" :xl="7">
         <a-form-item label="Blancos" name="blancos">
           <TargetSelector @onSelect="selectTarget" />
         </a-form-item>

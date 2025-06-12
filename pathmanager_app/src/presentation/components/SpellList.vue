@@ -21,10 +21,11 @@ for (let i = 0; i < props.spells.length; i++) {
   const spell = props.spells[i];
   if (spell.nivel_final == level) row.push(spell);
   else {
-    ordered.value.push(row);
+    if(row.length > 0) ordered.value.push(row);
     row = [spell];
     level++;
   }
 }
 ordered.value.push(row);
+console.log("ordered spell", ordered.value);
 </script>

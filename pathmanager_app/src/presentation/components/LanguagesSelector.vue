@@ -1,5 +1,5 @@
 <template>
-  <a-select v-model:value="value" mode="tags" placeholder="Lenguajes" :options="options" :filter-option="filterOption" @change="handleChange"
+  <a-select v-model:value="value" mode="tags" placeholder="Lenguajes" :options="options" show-search :filter-option="filterOption" @change="handleChange"
   ></a-select>
 </template>
 <script setup>

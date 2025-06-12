@@ -5,7 +5,7 @@
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="weapon.armaId" placeholder="Armas" :options="weapons" :filter-option="filterOption" @change="selectWeapon"/>
+    <a-select v-model:value="weapon.armaId" placeholder="Armas" :options="weapons" show-search :filter-option="filterOption" @change="selectWeapon"/>
     <a-input-number v-model:value="weapon.alcance" :min="1" :max="10" @change="triggerUpdate"/>
     <a-input v-model:value="weapon.monto" placeholder="Daño" @change="triggerUpdate"/>
     <a-input-number v-model:value="weapon.bono" :min="0" :max="20" @change="triggerUpdate"/>

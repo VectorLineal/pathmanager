@@ -13,52 +13,52 @@
           <a-input v-model:value="formState.nombre" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Nivel" name="nivel">
           <a-input-number v-model:value="formState.nivel" :min="0" :max="30" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Manos" name="manos">
           <a-input-number v-model:value="formState.manos" :min="1" :max="2"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Alcance" name="alcance">
           <a-input-number v-model:value="formState.alcance" :min="1" :max="500"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Precio" name="precio">
           <a-input-number v-model:value="formState.precio" :min="0"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Peso" name="peso">
           <a-input-number v-model:value="formState.peso" :min="0" :max="20" :step="0.1"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="5">
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
         <a-form-item label="Bono de Ataque" name="bono">
           <a-input-number v-model:value="formState.bono" :min="0" :max="20" />
         </a-form-item>
       </a-col>
-      <a-col :sm="8" :md="7" :lg="6" :xl="5">
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
         <a-form-item label="Cantidad de daño" name="monto">
           <a-input v-model:value="formState.monto" />
         </a-form-item>
       </a-col>
-      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
         <a-form-item label="Tipo de Daño" name="danoId">
           <DamageTypeSelector @onSelect="selectDamageType" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="6">
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
         <a-form-item label="Tipo de Arma" name="tipoId">
           <WeaponTypeSelector @onSelect="selectType" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
         <a-form-item label="Categoría" name="categoriaId">
           <WeaponCategorySelector @onSelect="selectCategory" />
         </a-form-item>
@@ -68,7 +68,7 @@
           <WeaponGroupSelector @onSelect="selectGroup" />
         </a-form-item>
       </a-col>
-      <a-col :sm="8" :md="7" :lg="7" :xl="5">
+      <a-col :sm="12" :md="9" :lg="8" :xl="7">
         <a-form-item label="Razgos" name="traits">
           <TraitAmountSelector @updatedValues="selectTraits" />
         </a-form-item>

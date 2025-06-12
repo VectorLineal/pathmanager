@@ -6,7 +6,8 @@
     :name="razgo.nombre"
     :description="razgo.descripcion"
   />
-  <p><b>Tradiciones: </b><a v-for="tradicion in spell.tradiciones">{{ tradicion.nombre + ' ' }}</a></p>
+  <p v-if="props.spell.clase == null"><b>Tradiciones: </b><a v-for="tradicion in spell.tradiciones">{{ tradicion.nombre + ' ' }}</a></p>
+  <p v-else><b>Clase: </b>{{ props.spell.clase }}</p>
   <p><template v-if="props.spell.alcance > 0"><b>Alcance: </b> {{ range }}, </template><b>Blancos: </b>{{ props.spell.blancos }}</p>
   <p>{{ props.spell.efecto }}</p>
   <p v-if="props.spell.fallo"><b>Salvación: </b>{{ props.spell.fallo }}</p>

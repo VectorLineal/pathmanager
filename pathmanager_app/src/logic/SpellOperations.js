@@ -8,12 +8,21 @@ CASE
   WHEN Hechizo_Entidad.aumento IS NULL THEN Hechizo.nivel
   ELSE Hechizo_Entidad.aumento
 END AS nivel_final, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
-Escuela.nombre AS escuela, Blanco.nombre AS blancos, Hechizo_Entidad.cantidad
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Hechizo_Entidad.cantidad, Clase.nombre AS clase
 FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
 JOIN Blanco ON Hechizo.blancoId = Blanco.id
 JOIN Hechizo_Entidad ON Hechizo_Entidad.hechizoId = Hechizo.id
+LEFT JOIN Clase ON Hechizo.claseId = Clase.id
 WHERE Hechizo_Entidad.entidadId = ?
 ORDER by nivel_final, Hechizo.nombre, escuela;
+`;
+
+const focusSpellsClassQuery = `
+SELECT Hechizo.id, Hechizo.nombre || '(' || Escuela.nombre || ')' AS nombre, Hechizo.nivel
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Clase ON Hechizo.claseId = Clase.id
+WHERE Hechizo.claseId = ? AND Hechizo.nivel <= ?
+ORDER by Hechizo.nivel, Hechizo.nombre, Escuela.id;
 `;
 
 const allSpellsQuery = `
@@ -80,13 +89,27 @@ export async function getSpellsByEntity(id) {
     //se cargan también los razgos y tradiciones
     for(let i = 0; i < spells.length; i++){
       const traits = await getTraitBySpell(spells[i].id);
-      const traditions = await getTraditionBySpell(spells[i].id);
       spells[i].razgos = traits;
-      spells[i].tradiciones = traditions;
+      //solo se cargan las tradiciones cuando no es un hechizo de foco
+      if(spells[i].clase == null){
+        const traditions = await getTraditionBySpell(spells[i].id);
+        spells[i].tradiciones = traditions;
+      }
     }
     return spells;
   } catch (err) {
     console.error("error on load spells by entity:", err);
+  }
+}
+
+export async function getFocusSpellsByClassLevel(id, entityLevel) {
+  const level = Math.ceil(entityLevel / 2);
+  try {
+    const spells = await glosaryDatabase.query(focusSpellsClassQuery, [id, level]);
+    
+    return spells;
+  } catch (err) {
+    console.error("error on load focus spells by class and level:", err);
   }
 }
 

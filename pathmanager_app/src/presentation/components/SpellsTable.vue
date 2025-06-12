@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Hechizo">
+  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Hechizo" style="width: 75%;">
     <SpellCreateForm @onSubmit="reloadData" @onCancel="closeCreation" :isFocus="props.isFocus"/>
   </a-modal>
   <CButton color="success" @click="openCreation"

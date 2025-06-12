@@ -5,7 +5,7 @@
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="resistance.danoId" placeholder="Resistencia" :options="damageTypesStorage.dataSelector" @change="triggerUpdate"/>
+    <a-select v-model:value="resistance.danoId" placeholder="Resistencia" show-search :filter-option="filterOption" :options="damageTypesStorage.dataSelector" @change="triggerUpdate"/>
     <a-input-number v-model:value="resistance.cantidad" :min="-50" :max="50" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />
   </a-space>
@@ -42,6 +42,9 @@ const addElement = () => {
     cantidad: 0,
   });
   triggerUpdate();
+};
+const filterOption = (input, option) => {
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 </script>
 <style scoped>

@@ -5,7 +5,7 @@
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="trait.id" placeholder="Razgo" :options="traitsStorage.dataSelector" @select="triggerUpdate"/>
+    <a-select v-model:value="trait.id" placeholder="Razgo" show-search :filter-option="filterOption" :options="traitsStorage.dataSelector" @select="triggerUpdate"/>
     <a-input-number v-model:value="trait.monto" :min="-50" :max="50" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />
   </a-space>
@@ -42,6 +42,9 @@ const addElement = () => {
     monto: null,
   });
   triggerUpdate();
+};
+const filterOption = (input, option) => {
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 </script>
 <style scoped>

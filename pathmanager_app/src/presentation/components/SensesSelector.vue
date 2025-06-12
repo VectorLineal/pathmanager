@@ -5,7 +5,7 @@
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="sense.sentidoId" placeholder="Sentidos" :options="sensesStorage.dataSelector" @change="triggerUpdate"/>
+    <a-select v-model:value="sense.sentidoId" placeholder="Sentidos" show-search :filter-option="filterOption" :options="sensesStorage.dataSelector" @change="triggerUpdate"/>
     <a-input-number v-model:value="sense.rango" :min="0" :max="100" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />
   </a-space>
@@ -42,6 +42,9 @@ const addElement = () => {
     rango: 0,
   });
   triggerUpdate();
+};
+const filterOption = (input, option) => {
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 </script>
 <style scoped>

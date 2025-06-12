@@ -5,7 +5,7 @@
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="spell.hechizoId" placeholder="Hechizos" :options="availableSpells" :filter-option="filterOption" @change="triggerUpdate"/>
+    <a-select v-model:value="spell.hechizoId" placeholder="Hechizos" :options="availableSpells" show-search :filter-option="filterOption"  @change="triggerUpdate"/>
     <a-input-number v-model:value="spell.cantidad" :min="1" :max="10" @change="triggerUpdate"/>
     <a-input-number v-model:value="spell.aumento" :min="2" :max="10" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />

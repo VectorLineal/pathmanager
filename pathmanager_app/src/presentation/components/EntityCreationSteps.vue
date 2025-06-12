@@ -60,7 +60,7 @@ import { getAllTraits } from "../../logic/TraitOperations";
 import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
 import { getAllSenses } from "../../logic/SenseOperations";
 import { getAllWeapons } from "../../logic/WeaponOperations";
-import { getSpellsByTraditionCasterLevel } from "../../logic/SpellOperations";
+import { getSpellsByTraditionCasterLevel, getFocusSpellsByClassLevel } from "../../logic/SpellOperations";
 import { getAllAbilities } from "../../logic/AbilityOperations";
 import { createEntity } from "../../logic/EntityOperations";
 import {
@@ -85,7 +85,7 @@ const router = useRouter();
 const current = ref(0);
 const requestData = reactive(new Entity());
 const spellTradition = ref();
-const availableSpells = ref({});
+const availableSpells = ref([]);
 const abilities = ref([]);
 const weapons = ref([]);
 
@@ -148,16 +148,35 @@ const loadWeapons = async () => {
   }
 };
 
+const addSpell = (head, option) => {
+  let curIndex = -1;
+      for(let i = 0; i < availableSpells.value.length; i++){
+        if(availableSpells.value[i].label == head){
+          curIndex = i;
+          break;
+        }
+      }
+      if(curIndex == -1) availableSpells.value.push({label: head, options: [option]});
+      else availableSpells.value[curIndex].options.push(option);
+}
+
 const loadSpells = async () => {
   try{
-    const spellsData = await getSpellsByTraditionCasterLevel(spellTradition.value, requestData.level);
-    availableSpells.value = {}; 
+    let spellsData = [];
+    if(spellTradition.value != null) spellsData = await getSpellsByTraditionCasterLevel(spellTradition.value, requestData.level);
+    const focusSpellData = await getFocusSpellsByClassLevel(requestData.classId, requestData.level);
+    availableSpells.value = []; 
     spellsData.forEach(element => {
       const head = element.nivel == 0? 'Trucos':'Nivel ' + element.nivel;
       const option = {label: element.nombre, value: element.id};
-      if(availableSpells.value[head] == null) availableSpells.value[head] = [option];
-      else availableSpells.value[head].push(option);
+      addSpell(head, option);
     });
+    focusSpellData.forEach(element => {
+      const head = 'Foco ' + element.nivel;
+      const option = {label: element.nombre, value: element.id};
+      addSpell(head, option);
+    });
+    console.log("loaded SPELLS:", availableSpells.value);
   }catch(error){
     console.error("error on load available spells", error);
   }
