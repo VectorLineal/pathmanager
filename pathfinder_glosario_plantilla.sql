@@ -901,5 +901,64 @@ INSERT INTO Armadura(nombre, precio, categoriaId, grupoId) VALUES('túnica de pe
 INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(1, 41);
 INSERT INTO Razgo_Armadura(armaduraId, razgoId) VALUES(2, 42);
 
+CREATE TABLE ItemMiscelaneo (
+  id integer PRIMARY KEY NOT NULL,
+  nombre varchar(32) UNIQUE NOT NULL,
+  precio integer NOT NULL DEFAULT(0),
+  nivel integer NOT NULL DEFAULT(0),
+  peso REAL NOT NULL DEFAULT(0.1),
+  efecto varchar(2048) NOT NULL,
+  tipoId integer NOT NULL,
+  FOREIGN KEY (tipoId) REFERENCES TipoItem(id)
+);
+CREATE TABLE Razgo_Item(
+ 	itemId integer NOT NULL,
+  	razgoId integer NOT NULL,
+	FOREIGN KEY(itemId) REFERENCES ItemMiscelaneo(id),
+	FOREIGN KEY(razgoId) REFERENCES Razgo(id),
+	PRIMARY KEY(itemId, razgoId)
+);
 
+CREATE TABLE Item_Atributo(
+ 	itemId integer NOT NULL,
+  	atributoId integer NOT NULL,
+	cantidad integer NOT NULL DEFAULT(1),
+	FOREIGN KEY(itemId) REFERENCES ItemMiscelaneo(id),
+	FOREIGN KEY(atributoId) REFERENCES Atributo(id),
+	PRIMARY KEY(itemId, atributoId)
+);
 
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 1', 'gasta 1 acción: cura 1d8 de salud', 1, 300, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 2', 'gasta 1 acción: cura 2d8 de salud', 3, 1800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 3', 'gasta 1 acción: cura 3d8 de salud', 5, 4800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 4', 'gasta 1 acción: cura 4d8 de salud', 7, 7800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 5', 'gasta 1 acción: cura 5d8 de salud', 9, 10800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 6', 'gasta 1 acción: cura 6d8 de salud', 11, 18300, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 7', 'gasta 1 acción: cura 7d8 de salud', 13, 27300, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 8', 'gasta 1 acción: cura 8d8 de salud', 15, 37800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 9', 'gasta 1 acción: cura 9d8 de salud', 17, 49800, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, precio, tipoId) VALUES('poción de curación 10', 'gasta 1 acción: cura 10d8 de salud', 19, 63300, 9);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('Necronomicón', '+8 de ocultismo y religión, -4 de sigilo, diplomacia, engaño, naturaleza y voluntad. Maldición: Cuando el usuario vaya a dormir: tira 1 dado de voluntad de 25 o el usuario tendrá pesadillas inducidas por el libro y al despertar estará exhausto, en fallo crítico toma 6d6 de daño mental. Para remover la maldición el usuario puede tirar un dado de voluntad igual a 10+2 x nivel del jugador: el jugador tira el libro a 5 metros de distancia librándose de la maldición, en fallo toma 6d6 de daño mental y tiene estupidez 2 por 1 hora, en fallo crítico toma doble daño y el libro se combina con su mano por 1 semana haciendo imposible usar esa mano y remover el libro. Esta maldición no se puede eliminar de ninguna otra forma. 1 vez al día Puede gastar 1 acción: tira 1 dado de ocultismo de 27 para preguntar al libro cualquiera de sus conocimientos', 20, 1, 10000000, 10);
+INSERT INTO Razgo_Item(itemId, razgoId) VALUES(11, 55);
+INSERT INTO Razgo_Item(itemId, razgoId) VALUES(11, 54);
+INSERT INTO Razgo_Item(itemId, razgoId) VALUES(11, 32);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 20, 8);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 21, 8);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 9, -4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 13, -4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 14, -4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 19, -4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(11, 22, -4);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('botas de la muerte horripilante', '+5 de sigilo, el usuario puede usar el hechizo de invisibilidad 1 vez al día', 7, 0.1, 140000, 5);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(12, 22, 5);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('anillo del comandante natural', '+3 de engaño, diplomacia e intimidación', 3, 0, 90000, 7);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(13, 13, 3);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(13, 14, 3);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(13, 16, 3);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('casco de los caballeros infernales', '+5 de voluntad contra criaturas caóticas, +5 de resistencia al daño por vacío, solo puede ser usado por personajes legales', 3, 1, 85000, 4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(14, 36, 5);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('casco de guía', '+5 de de percepción y naturaleza, el usuario puede usar el hechizo golpe seguro 3 veces al día', 8, 1, 400000, 4);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(15, 26, 5);
+INSERT INTO Item_Atributo(itemId, atributoId, cantidad) VALUES(15, 19, 5);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('flechas', 'munición para arcos', 0, 0.01, 10, 12);
+INSERT INTO ItemMiscelaneo(nombre, efecto, nivel, peso, precio, tipoId) VALUES('saetas', 'munición para ballestas', 0, 0.01, 10, 12);
