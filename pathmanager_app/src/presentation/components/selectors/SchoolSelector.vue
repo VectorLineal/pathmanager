@@ -1,15 +1,15 @@
 <template>
-  <a-select v-model:value="value" placeholder="Blancos" :options="options" @change="handleChange"
+  <a-select v-model:value="value" placeholder="Escuela" :options="options" @change="handleChange"
   ></a-select>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { spellTargetsStorage } from '../../logic/Storage';
+import { spellSchoolsStorage } from '../../../logic/Storage';
 
 const emit = defineEmits(["onSelect"]);
 
 const value = ref();
-const options = spellTargetsStorage.dataSelector;
+const options = spellSchoolsStorage.dataSelector;
 
 const handleChange = value => {
   emit("onSelect", value);

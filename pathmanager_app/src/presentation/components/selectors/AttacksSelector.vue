@@ -20,8 +20,8 @@
 <script setup>
 import { ref, inject } from "vue";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { getWeaponBaseAttack } from "../../logic/WeaponOperations";
-import { damageTypesStorage } from "../../logic/Storage";
+import { getWeaponBaseAttack } from "../../../logic/WeaponOperations";
+import { damageTypesStorage } from "../../../logic/Storage";
 
 const emit = defineEmits(['updatedValues']);
 

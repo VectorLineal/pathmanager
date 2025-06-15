@@ -4,7 +4,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { classesStorage } from '../../logic/Storage';
+import { classesStorage } from '../../../logic/Storage';
 
 const emit = defineEmits(["onSelect"]);
 

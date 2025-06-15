@@ -4,7 +4,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { spellTraditionsStorage } from '../../logic/Storage';
+import { spellTraditionsStorage } from '../../../logic/Storage';
 
 const emit = defineEmits(["onSelect"]);
 

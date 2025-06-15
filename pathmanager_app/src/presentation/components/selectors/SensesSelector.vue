@@ -1,22 +1,22 @@
 <template>
   <a-space
-    v-for="(trait, index) in traits"
-    :key="trait.id"
+    v-for="(sense, index) in senses"
+    :key="sense.sentidoId"
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="trait.id" placeholder="Razgo" show-search :filter-option="filterOption" :options="traitsStorage.dataSelector" @select="triggerUpdate"/>
-    <a-input-number v-model:value="trait.monto" :min="-50" :max="50" @change="triggerUpdate"/>
+    <a-select v-model:value="sense.sentidoId" placeholder="Sentidos" show-search :filter-option="filterOption" :options="sensesStorage.dataSelector" @change="triggerUpdate"/>
+    <a-input-number v-model:value="sense.rango" :min="0" :max="100" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />
   </a-space>
   <a-button type="dashed" block @click="addElement">
-    <PlusOutlined /> Añadir Razgo
+    <PlusOutlined /> Añadir Sentido
   </a-button>
 </template>
 <script setup>
 import { ref } from "vue";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { traitsStorage } from "../../logic/Storage";
+import { sensesStorage } from "../../../logic/Storage";
 
 const props = defineProps({
   initialData: Array,
@@ -24,22 +24,22 @@ const props = defineProps({
 
 const emit = defineEmits(['updatedValues']);
 
-const traits = ref(props.initialData != null ? props.initialData : []);
+const senses = ref(props.initialData != null ? props.initialData : []);
 
 const triggerUpdate = () => {
-  emit('updatedValues', traits.value);
+  emit('updatedValues', senses.value);
 }
 
 const removeElement = (index) => {
   if (index >= 0){
-    traits.value.splice(index, 1);
+    senses.value.splice(index, 1);
     triggerUpdate();
   }
 };
 const addElement = () => {
-  traits.value.push({
-    id: null,
-    monto: null,
+  senses.value.push({
+    sentidoId: null,
+    rango: 0,
   });
   triggerUpdate();
 };

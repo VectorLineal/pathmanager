@@ -1,9 +1,9 @@
 <template>
-  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Arma" style="width: 83%;">
-    <WeaponCreateForm @onSubmit="reloadData" @onCancel="closeCreation"/>
+  <a-modal v-model:open="isOpen" :footer="null" title="Agregar Armadura" style="width: 83%;">
+    <ArmorCreateForm @onSubmit="reloadData" @onCancel="closeCreation"/>
   </a-modal>
   <CButton color="success" @click="openCreation">
-    <FileAddOutlined />Añadir Arma
+    <FileAddOutlined />Añadir Armadura
   </CButton>
   <a-table :data-source="data" :columns="columns">
     <template
@@ -58,13 +58,9 @@
             <CButton color="info" size="sm" @click="openInfo(record.id)"><EyeOutlined /></CButton>
             <a-modal v-model:open="isInfoOpen[record.id]" :footer="null">
               <template #title>
-                <GenericAction :name="record.nombre" :delay="1">
-                  <template #content>
-                    <strong>{{ 'Arma Nivel ' + record.nivel }}</strong>
-                  </template>
-                </GenericAction>
+                <strong>{{ record.nombre +': Armadura Nivel ' + record.nivel }}</strong>
               </template>
-              <WeaponDetails :weapon="record"/>
+              <ArmorDetails :armor="record"/>
             </a-modal>
           </a-tooltip>
           <a-tooltip placement="left" title="Borrar">
@@ -73,12 +69,11 @@
         </CButtonGroup>
       </template>
       <template v-else-if="column.key === 'traits'">
-        <TraitAmountTag
+        <TraitTag
             v-for="razgo in record.razgos"
             :id="razgo.id"
-            :nombre="razgo.nombre"
-            :descripcion="razgo.descripcion"
-            :monto="razgo.monto"
+            :name="razgo.nombre"
+            :description="razgo.descripcion"
         />
       </template>
       <template v-else-if="column.key === 'price'">
@@ -99,20 +94,17 @@ import {
   FileAddOutlined,
 } from "@ant-design/icons-vue";
 import { CButton, CButtonGroup } from "@coreui/vue";
-import WeaponDetails from "./WeaponDetails.vue";
-import GenericAction from './generic/GenericAction.vue';
+import ArmorDetails from "./ArmorDetails.vue";
+import ArmorCreateForm from "./ArmorCreateForm.vue";
+import TraitTag from "./generic/TraitTag.vue";
 import SearchDropdown from "./generic/SearchDropdown.vue";
-import TraitAmountTag from "./generic/TraitAmountTag.vue";
-import WeaponCreateForm from "./WeaponCreateForm.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";
 import WeightDisplay from "./generic/WeightDisplay.vue";
 import { getAllWeaponCategories } from "../../logic/WeaponCategoryOptions";
 import { getAllWeaponGroups } from "../../logic/WeaponGroupOperations";
-import { getAllWeaponTypes } from "../../logic/WeaponTypeOperations";
 import { getAllTraits } from "../../logic/TraitOperations";
-import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
-import { getAllWeaponsDisplay } from "../../logic/WeaponOperations";
-import {damageTypesStorage, traitsStorage, weaponCategoriesStorage, weaponGroupsStorage, weaponTypesStorage} from "../../logic/Storage";
+import { getAllArmorsDisplay } from "../../logic/ArmorOperations";
+import { traitsStorage, weaponCategoriesStorage, weaponGroupsStorage} from "../../logic/Storage";
 
 const data = ref([]);
 const isInfoOpen = ref({});
@@ -121,18 +113,16 @@ const isOpen = ref(false);
 try {
   //se cargan al storage varias listas de valores simples {id, nombre}
   if (traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
-  if (damageTypesStorage.isEmpty()) damageTypesStorage.fillData(await getAllDamageTypes());
   if (weaponCategoriesStorage.isEmpty()) weaponCategoriesStorage.fillData(await getAllWeaponCategories());
-  if (weaponGroupsStorage.isEmpty()) weaponGroupsStorage.fillData(await getAllWeaponGroups());
-  if (weaponTypesStorage.isEmpty()) weaponTypesStorage.fillData(await getAllWeaponTypes());
+  if (weaponGroupsStorage.isEmpty()) weaponGroupsStorage.fillData(await getAllWeaponGroups());;
   //se cargan todas las armas
-  data.value = await getAllWeaponsDisplay();
+  data.value = await getAllArmorsDisplay();
   data.value.forEach((element) => {
       isInfoOpen.value[element.id] = false;
     });
-    console.log("fetched weapons:", data.value);
+    console.log("fetched armors:", data.value);
 } catch (error) {
-  console.error("error on weapons table", error);
+  console.error("error on armors table", error);
 }
 
 const state = reactive({
@@ -175,13 +165,10 @@ const columns = [
     sorter: (a, b) => a.peso - b.peso,
   },
   {
-    title: "Tipo",
-    dataIndex: "tipo",
-    key: "type",
-    filters: weaponTypesStorage.dataFilter,
-    sorter: (a, b) => a.tipo.localeCompare(b.tipo),
-    onFilter: (value, record) =>
-      record.type.toString().toLowerCase().includes(value.toLowerCase()),
+    title: "AC",
+    dataIndex: "ac",
+    key: "ac",
+    sorter: (a, b) => a.ac - b.ac,
   },
   {
     title: "Grupo",
@@ -224,13 +211,13 @@ const closeCreation = () => {
 };
 const reloadData = async () => {
   try {
-    const response = await getAllWeaponsDisplay();
+    const response = await getAllArmorsDisplay();
     data.value = response;
     data.value.forEach((element) => {
       isInfoOpen.value[element.id] = false;
     });
   } catch (error) {
-    console.error("error on weapons table", error);
+    console.error("error on armors table", error);
   }
 };
 </script>

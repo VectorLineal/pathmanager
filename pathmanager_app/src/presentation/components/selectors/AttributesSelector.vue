@@ -1,44 +1,40 @@
 <template>
   <a-space
-    v-for="(resistance, index) in resistances"
-    :key="resistance.danoId"
+    v-for="(attribute, index) in attributes"
+    :key="attribute.id"
     class="list-field"
     align="baseline"
   >
-    <a-select v-model:value="resistance.danoId" placeholder="Resistencia" show-search :filter-option="filterOption" :options="damageTypesStorage.dataSelector" @change="triggerUpdate"/>
-    <a-input-number v-model:value="resistance.cantidad" :min="-50" :max="50" @change="triggerUpdate"/>
+    <a-select v-model:value="attribute.id" placeholder="Razgo" show-search :filter-option="filterOption" :options="attributesStorage.dataSelector" @select="triggerUpdate"/>
+    <a-input-number v-model:value="attribute.cantidad" :min="-50" :max="50" @change="triggerUpdate"/>
     <MinusCircleOutlined @click="removeElement(index)" />
   </a-space>
   <a-button type="dashed" block @click="addElement">
-    <PlusOutlined /> Añadir Resistencia
+    <PlusOutlined /> Añadir Atributo
   </a-button>
 </template>
 <script setup>
 import { ref } from "vue";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { damageTypesStorage } from "../../logic/Storage";
-
-const props = defineProps({
-  initialData: Array,
-});
+import { attributesStorage } from "../../../logic/Storage";
 
 const emit = defineEmits(['updatedValues']);
 
-const resistances = ref(props.initialData != null ? props.initialData : []);
+const attributes = ref([]);
 
 const triggerUpdate = () => {
-  emit('updatedValues', resistances.value);
+  emit('updatedValues', attributes.value);
 }
 
 const removeElement = (index) => {
   if (index >= 0){
-    resistances.value.splice(index, 1);
+    attributes.value.splice(index, 1);
     triggerUpdate();
   }
 };
 const addElement = () => {
-  resistances.value.push({
-    danoId: null,
+  attributes.value.push({
+    id: null,
     cantidad: 0,
   });
   triggerUpdate();

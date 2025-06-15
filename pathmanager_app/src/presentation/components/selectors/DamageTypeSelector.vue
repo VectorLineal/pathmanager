@@ -1,14 +1,14 @@
 <template>
-  <a-select v-model:value="value" placeholder="Categoría" show-search :filter-option="filterOption" :options="options" @change="handleChange"/>
+  <a-select v-model:value="value" placeholder="Tipo de Daño" show-search :filter-option="filterOption" :options="options" @change="handleChange"/>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { weaponCategoriesStorage } from '../../logic/Storage';
+import { damageTypesStorage } from '../../../logic/Storage';
 
 const emit = defineEmits(["onSelect"]);
 
 const value = ref();
-const options = weaponCategoriesStorage.dataSelector;
+const options = damageTypesStorage.dataSelector;
 
 const handleChange = value => {
   emit("onSelect", value);

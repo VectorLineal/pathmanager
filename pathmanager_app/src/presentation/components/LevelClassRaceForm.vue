@@ -60,10 +60,10 @@
 </template>
 <script setup>
 import { reactive, ref, toRaw } from "vue";
-import ClassSelector from "./ClassSelector.vue";
-import RaceSelector from "./RaceSelector.vue";
-import TraitsSelector from "./TraitsSelector.vue";
-import AlignmentSelector from "./AlignmentSelector.vue";
+import ClassSelector from "./selectors/ClassSelector.vue";
+import RaceSelector from "./selectors/RaceSelector.vue";
+import TraitsSelector from "./selectors/TraitsSelector.vue";
+import AlignmentSelector from "./selectors/AlignmentSelector.vue";
 
 const emit = defineEmits(["updateData"]);
 

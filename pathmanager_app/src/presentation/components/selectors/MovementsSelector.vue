@@ -16,7 +16,7 @@
 <script setup>
 import { ref } from "vue";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
-import { movementsStorage } from "../../logic/Storage";
+import { movementsStorage } from "../../../logic/Storage";
 
 const props = defineProps({
   initialData: Array,

@@ -93,11 +93,11 @@ import { message } from "ant-design-vue";
 import Spell from "../../data/models/Spell";
 import FocusSpell from "../../data/models/FocusSpell";
 import { createSpell } from "../../logic/SpellOperations";
-import SchoolSelector from "./SchoolSelector.vue";
-import TargetSelector from "./TargetSelector.vue";
-import TraditionsSelector from "./TraditionsSelector.vue";
-import TraitsSelector from "./TraitsSelector.vue";
-import ClassSelector from "./ClassSelector.vue";
+import SchoolSelector from "./selectors/SchoolSelector.vue";
+import TargetSelector from "./selectors/TargetSelector.vue";
+import TraditionsSelector from "./selectors/TraditionsSelector.vue";
+import TraitsSelector from "./selectors/TraitsSelector.vue";
+import ClassSelector from "./selectors/ClassSelector.vue";
 
 const emit = defineEmits(["onSubmit", "onCancel"]);
 

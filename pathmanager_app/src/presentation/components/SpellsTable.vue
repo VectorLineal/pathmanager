@@ -113,7 +113,7 @@ import {
 import { CButton, CButtonGroup } from "@coreui/vue";
 import SpellDetails from './SpellDetails.vue';
 import GenericAction from './generic/GenericAction.vue';
-import SearchDropdown from "./SearchDropdown.vue";
+import SearchDropdown from "./generic/SearchDropdown.vue";
 import TraitTag from "./generic/TraitTag.vue";
 import SpellCreateForm from "./SpellCreateForm.vue";
 import { getAllSpells } from "../../logic/SpellOperations";

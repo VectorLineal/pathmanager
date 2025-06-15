@@ -1,15 +1,14 @@
 <template>
-  <a-select v-model:value="value" mode="tags" placeholder="Los razgos son opcionales" :options="options" :filter-option="filterOption" @change="handleChange"
-  ></a-select>
+  <a-select v-model:value="value" placeholder="Grupos de Arma" show-search :filter-option="filterOption" :options="options" @change="handleChange"/>
 </template>
 <script setup>
 import { ref } from 'vue';
-import { traitsStorage } from '../../logic/Storage';
+import { weaponGroupsStorage } from '../../../logic/Storage';
 
 const emit = defineEmits(["onSelect"]);
 
-const value = ref([]);
-const options = traitsStorage.dataSelector;
+const value = ref();
+const options = weaponGroupsStorage.dataSelector;
 
 const handleChange = value => {
   emit("onSelect", value);

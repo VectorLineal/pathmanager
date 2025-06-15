@@ -28,6 +28,24 @@ FROM Razgo_Arma JOIN Razgo ON Razgo.id = Razgo_Arma.razgoId
 WHERE Razgo_Arma.armaId = ?
 ORDER BY Razgo.nombre;
 `;
+const traitsArmorQuery = `
+SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
+FROM Razgo_Armadura JOIN Razgo ON Razgo.id = Razgo_Armadura.razgoId
+WHERE Razgo_Armadura.armaduraId = ?
+ORDER BY Razgo.nombre;
+`;
+const traitsShieldQuery = `
+SELECT Razgo.id, Razgo.nombre, Razgo.descripcion, Razgo_Escudo.monto
+FROM Razgo_Escudo JOIN Razgo ON Razgo.id = Razgo_Escudo.razgoId
+WHERE Razgo_Escudo.escudoId = ?
+ORDER BY Razgo.nombre;
+`;
+const traitsMiscItemQuery = `
+SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
+FROM Razgo_Item JOIN Razgo ON Razgo.id = Razgo_Item.razgoId
+WHERE Razgo_Item.itemId = ?
+ORDER BY Razgo.nombre;
+`;
 
 const traitEntityCreate = `
 INSERT INTO Razgo_Entidad(razgoId, entidadId) VALUES(?, ?);
@@ -38,6 +56,15 @@ INSERT INTO Razgo_Hechizo(razgoId, hechizoId) VALUES(?, ?);
 `;
 const traitWeaponCreate = `
 INSERT INTO Razgo_Arma(razgoId, armaId, monto) VALUES(?, ?, ?);
+`;
+const traitArmorCreate = `
+INSERT INTO Razgo_Armadura(razgoId, armaduraId) VALUES(?, ?);
+`;
+const traitShieldCreate = `
+INSERT INTO Razgo_Escudo(razgoId, escudoId, monto) VALUES(?, ?, ?);
+`;
+const traitMiscItemCreate = `
+INSERT INTO Razgo_Item(razgoId, itemId) VALUES(?, ?);
 `;
 
 
@@ -77,6 +104,27 @@ export async function getTraitByWeapon(id) {
     console.error("error on load traits by weapon:", err);
   }
 }
+export async function getTraitByArmor(id) {
+  try {
+    return await glosaryDatabase.query(traitsArmorQuery, [id]);
+  } catch (err) {
+    console.error("error on load traits by armor:", err);
+  }
+}
+export async function getTraitByShield(id) {
+  try {
+    return await glosaryDatabase.query(traitsShieldQuery, [id]);
+  } catch (err) {
+    console.error("error on load traits by shield:", err);
+  }
+}
+export async function getTraitByMiscItem(id) {
+  try {
+    return await glosaryDatabase.query(traitsMiscItemQuery, [id]);
+  } catch (err) {
+    console.error("error on load traits by misc item:", err);
+  }
+}
 
 export async function createTraitEntity(trait, entity) {
   try {
@@ -98,6 +146,28 @@ export async function createTraitWeapon(trait, weapon, amount) {
   try {
     return await glosaryDatabase.create(traitWeaponCreate, [trait, weapon, amount]);
   } catch (err) {
-    console.error("error on create trait spell:", err);
+    console.error("error on create trait weapon:", err);
+  }
+}
+
+export async function createTraitArmor(trait, armor) {
+  try {
+    return await glosaryDatabase.create(traitArmorCreate, [trait, armor]);
+  } catch (err) {
+    console.error("error on create trait armor:", err);
+  }
+}
+export async function createTraitShield(trait, shield, amount) {
+  try {
+    return await glosaryDatabase.create(traitShieldCreate, [trait, shield, amount]);
+  } catch (err) {
+    console.error("error on create trait shield:", err);
+  }
+}
+export async function createTraitMiscItem(trait, item) {
+  try {
+    return await glosaryDatabase.create(traitMiscItemCreate, [trait, item]);
+  } catch (err) {
+    console.error("error on create trait misc item:", err);
   }
 }

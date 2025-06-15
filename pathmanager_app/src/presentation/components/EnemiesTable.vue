@@ -50,7 +50,7 @@ import { reactive, ref } from "vue";
 import { SearchOutlined, EyeOutlined, FormOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { CButton, CButtonGroup } from "@coreui/vue";
 import { RouterLink } from "vue-router";
-import SearchDropdown from "./SearchDropdown.vue";
+import SearchDropdown from "./generic/SearchDropdown.vue";
 import TraitTag from "./generic/TraitTag.vue";
 import { getAllEntities } from "../../logic/EntityOperations";
 import { getAllAlignments } from "../../logic/AlignmentOperations";

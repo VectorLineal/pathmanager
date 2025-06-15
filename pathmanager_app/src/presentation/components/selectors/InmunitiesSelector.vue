@@ -4,7 +4,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { statusChangesStorage } from '../../logic/Storage';
+import { statusChangesStorage } from '../../../logic/Storage';
 
 const props = defineProps({
     initialValue: Array
