@@ -10,7 +10,7 @@
       <ArmorTable />
     </a-tab-pane>
     <a-tab-pane key="3" tab="Escudos">
-      <p>Escudos</p>
+      <ShieldTable />
     </a-tab-pane>
     <a-tab-pane key="4" tab="Artefactos">
       <p>Artefactos</p>
@@ -27,5 +27,6 @@
 import { ref } from "vue";
 import WeaponsTable from "./WeaponsTable.vue";
 import ArmorTable from "./ArmorTable.vue";
+import ShieldTable from "./ShieldTable.vue";
 const activeKey = ref("1");
 </script>

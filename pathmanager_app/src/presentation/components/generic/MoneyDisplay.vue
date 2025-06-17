@@ -23,7 +23,7 @@ const money = computed(() => {
     let curMoney = props.money;
     const coopper = curMoney % 100;
     curMoney /= 100;
-    const silver = curMoney % 100;
+    const silver = Math.floor(curMoney % 100);
     curMoney /= 100;
     const gold = Math.floor(curMoney);
 

@@ -1,10 +1,9 @@
 <template>
-  <TraitAmountTag
+  <TraitTag
     v-for="razgo in armor.razgos"
     :id="razgo.id"
-    :nombre="razgo.nombre"
-    :descripcion="razgo.descripcion"
-    :monto="razgo.monto"/>
+    :name="razgo.nombre"
+    :description="razgo.descripcion"/>
   <p>
     <b>Precio: </b><MoneyDisplay :money="props.armor.precio" />, <b>Peso: </b><WeightDisplay :weight="props.armor.peso" />
   </p>
@@ -29,7 +28,7 @@
 </template>
 <script setup>
 import { computed } from "vue";
-import TraitAmountTag from "./generic/TraitAmountTag.vue";
+import TraitTag from "./generic/TraitTag.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";
 import WeightDisplay from "./generic/WeightDisplay.vue";
 
