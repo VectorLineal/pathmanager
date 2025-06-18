@@ -8,7 +8,7 @@ SELECT id, nombre FROM ItemMiscelaneo ¿ order by nombre;
 
 const allMiscItemsQuery = `
 SELECT ItemMiscelaneo.id, ItemMiscelaneo.nombre, nivel, precio, peso, efecto, TipoItem.nombre AS tipo
-FROM ItemMiscelaneo JOIN TipoItem ON ItemMiscelaneo.categoriaId = TipoItem.id
+FROM ItemMiscelaneo JOIN TipoItem ON ItemMiscelaneo.tipoId = TipoItem.id
 ¿
 ORDER BY ItemMiscelaneo.nombre;
 `;
@@ -18,7 +18,7 @@ INSERT INTO ItemMiscelaneo(nombre, nivel, precio, peso, efecto, tipoId)
 VALUES(?, ?, ?, ?, ?, ?);
 `;
 
-const apparealFilter = 'WHERE tipoId >= 4 AND tipoId <= 8';
+const apparealFilter = 'WHERE tipoId IN(4, 5, 6, 7, 8, 14)';
 const consumableFilter = 'WHERE tipoId >= 9 AND tipoId <= 11';
 const artifactFilter = 'WHERE tipoId >= 12 AND tipoId <= 13';
 
