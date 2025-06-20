@@ -1150,3 +1150,13 @@ INSERT INTO ClaseNivel (claseId, nivel, proezaHerencia, incrementoHabilidad) VAL
 INSERT INTO ClaseNivel (claseId, nivel, proezaClase, proezaHabilidad) VALUES (12, 18, 1, 1);
 INSERT INTO ClaseNivel (claseId, nivel, proezaGeneral, incrementoHabilidad) VALUES (12, 19, 1, 1);
 INSERT INTO ClaseNivel (claseId, nivel, proezaClase, proezaHabilidad, incrementoAtributo) VALUES (12, 20, 1, 1, 1);
+CREATE TABLE ClaseNivel_Hechizo(
+ 	hechizoId integer NOT NULL,
+  	claseId integer NOT NULL,
+	nivel integer NOT NULL DEFAULT(1),
+	FOREIGN KEY(hechizoId) REFERENCES Hechizo(id),
+	FOREIGN KEY(claseId) REFERENCES Clase(id),
+	PRIMARY KEY(hechizoId, claseId)
+);
+INSERT INTO ClaseNivel_Hechizo(hechizoId, claseId) VALUES(81, 4);
+INSERT INTO ClaseNivel_Hechizo(hechizoId, claseId) VALUES(82, 4);
