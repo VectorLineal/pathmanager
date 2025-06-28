@@ -1160,3 +1160,35 @@ CREATE TABLE ClaseNivel_Hechizo(
 );
 INSERT INTO ClaseNivel_Hechizo(hechizoId, claseId) VALUES(81, 4);
 INSERT INTO ClaseNivel_Hechizo(hechizoId, claseId) VALUES(82, 4);
+--general 59
+--Habilidad 60
+--Herencia 61
+--clase 62
+--dedicación 63
+insert into Proeza_Clase(proezaId, claseId) VALUES(18, 3);
+insert into Proeza_Clase(proezaId, claseId) VALUES(18, 9);
+insert into Proeza_Clase(proezaId, claseId) VALUES(18, 12);
+insert into Proeza_Clase(proezaId, claseId) VALUES(19, 3);
+insert into Proeza_Clase(proezaId, claseId) VALUES(19, 9);
+insert into Proeza_Clase(proezaId, claseId) VALUES(19, 12);
+
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(1, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(2, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(3, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(4, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(5, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(6, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(7, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(8, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(9, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(10, 59);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(11, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(12, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(13, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(14, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(15, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(16, 59);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(16, 60);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(17, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(18, 62);
+insert into Razgo_Proeza(proezaId, razgoId) VALUES(19, 62);
