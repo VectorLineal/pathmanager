@@ -1230,3 +1230,19 @@ insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 1
 insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 154, 5);
 insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 155, 11);
 insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 156, 13);
+
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(45, 22, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(46, 23, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(47, 24, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(48, 25, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(49, 26, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(50, 27, 1);
+insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(51, 28, 1);
+
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(45, 86);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(46, 87);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(47, 88);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(48, 89);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(49, 90);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(50, 92);
+insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(51, 93);
