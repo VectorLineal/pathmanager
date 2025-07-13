@@ -456,9 +456,9 @@ insert into Reputacion(usuarioId, faccionId, modificador) values(1, 8, -1);
 insert into Reputacion(usuarioId, faccionId, modificador) values(2, 8, -2);
 insert into Reputacion(usuarioId, faccionId, modificador) values(3, 8, 0);
 
-create TABLE Jugador(
+CREATE TABLE Jugador(
  	id integer PRIMARY KEY NOT NULL,
-	nombre varchar(32) UNIQUE NOT NULL,
+	nombre varchar(64) UNIQUE NOT NULL,
 	nivel integer NOT NULL DEFAULT(1),
 	experiencia integer NOT NULL DEFAULT(0),
 	dinero integer NOT NULL DEFAULT(0),
@@ -467,6 +467,8 @@ create TABLE Jugador(
   	armaduraLigera integer NOT NULL DEFAULT(0),
   	armaduraMedia integer NOT NULL DEFAULT(0),
   	armaduraPesada integer NOT NULL DEFAULT(0),
+	claseDC integer NOT NULL DEFAULT(0),
+	hechizoDC integer NOT NULL DEFAULT(0),
 	salud integer NOT NULL DEFAULT(10),
 	fortaleza integer NOT NULL DEFAULT(0),
 	reflejos integer NOT NULL DEFAULT(0),
@@ -496,6 +498,7 @@ create TABLE Jugador(
 	sigilo integer NOT NULL DEFAULT(0),
 	supervivencia integer NOT NULL DEFAULT(0),
 	robo integer NOT NULL DEFAULT(0),
+	retrato VARCHAR(128),
 	claseId integer NOT NULL,
 	subclaseId integer,
 	subclaseId2 integer,
@@ -513,55 +516,7 @@ create TABLE Jugador(
 	FOREIGN KEY(transfondoId) REFERENCES Transfondo(id),
 	FOREIGN KEY(atributoId) REFERENCES Atributo(id)
 );
-
-INSERT INTO Jugador(nombre, nivel, claseId, alineacionId, razaId) values('Carlos', 4, 5, 1, 20);
-INSERT INTO Jugador(nombre, nivel, claseId, alineacionId, razaId) values('Linares', 4, 4, 8, 20);
-INSERT INTO Jugador(nombre, nivel, claseId, alineacionId, razaId, tamanoId) values('Morbo', 4, 2, 6, 23, 2);
-
-CREATE TABLE Lenguaje_Jugador(
- 	jugadorId integer NOT NULL,
-  	lenguajeId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(lenguajeId) REFERENCES Lenguaje(id),
-	PRIMARY KEY(jugadorId, lenguajeId)
-);
-
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(1, 1);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(2, 1);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(3, 1);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(1, 6);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(2, 6);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(3, 6);
-INSERT INTO Lenguaje_Jugador(jugadorId, lenguajeId) values(3, 7);
-
-create TABLE TradicionAdicional(
-	modificador INTEGER NOT NULL DEFAULT(0),
-	jugadorId integer NOT NULL,
-	razgoId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(razgoId) REFERENCES Razgo(id),
-	PRIMARY KEY(jugadorId, razgoId)
-);
-
-CREATE TABLE Proeza_Jugador(
- 	jugadorId integer NOT NULL,
-  	proezaId integer NOT NULL,
-	variables integer NOT NULL DEFAULT(0),
-	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
-	PRIMARY KEY(jugadorId, proezaId, variables)
-);
-
-CREATE TABLE Hechizo_Jugador(
-	cantidad integer NOT NULL DEFAULT(1),
-	metamagia int NULL,
- 	jugadorId integer NOT NULL,
-  	hechizoId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(hechizoId) REFERENCES Hechizo(id),
-	PRIMARY KEY(jugadorId, hechizoId)
-);
-CREATE TABLE Habilidad_Jugador(
+CREATE TABLE Jugador_Habilidad(
  	jugadorId integer NOT NULL,
   	habilidadId integer NOT NULL,
 	variables varchar(128),
@@ -569,21 +524,59 @@ CREATE TABLE Habilidad_Jugador(
 	FOREIGN KEY(habilidadId) REFERENCES HabilidadEspecial(id),
 	PRIMARY KEY(jugadorId, habilidadId)
 );
-CREATE TABLE Sentido_Jugador(
- 	jugadorId integer NOT NULL,
-  	sentidoId integer NOT NULL,
-	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(sentidoId) REFERENCES Sentido(id),
-	PRIMARY KEY(jugadorId, sentidoId)
+CREATE TABLE JugadorTradicion(
+	id INTEGER PRIMARY KEY NOT NULL,
+	nombre VARCHAR(64) NOT NULL,
+	modificador INTEGER NOT NULL DEFAULT(1),
+	jugadorId INTEGER NOT NULL,
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id)
 );
-CREATE TABLE Inmunidad_Jugador(
+CREATE TABLE Jugador_Hechizo(
+	cantidad integer NOT NULL DEFAULT(1),
+	jugadorId integer NOT NULL,
+  	hechizoId integer NOT NULL,
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
+	FOREIGN KEY(hechizoId) REFERENCES Hechizo(id),
+	PRIMARY KEY(jugadorId, hechizoId)
+);
+CREATE TABLE Jugador_Inmunidad(
  	jugadorId integer NOT NULL,
   	estadoId integer NOT NULL,
 	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
 	FOREIGN KEY(estadoId) REFERENCES CambioEstado(id),
 	PRIMARY KEY(jugadorId, estadoId)
 );
-CREATE TABLE Velocidad_Jugador(
+CREATE TABLE Jugador_Lenguaje(
+ 	jugadorId integer NOT NULL,
+  	lenguajeId integer NOT NULL,
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
+	FOREIGN KEY(lenguajeId) REFERENCES Lenguaje(id),
+	PRIMARY KEY(jugadorId, lenguajeId)
+);
+CREATE TABLE Jugador_Proeza(
+ 	jugadorId integer NOT NULL,
+  	proezaId integer NOT NULL, variables varchar(128),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	PRIMARY KEY(jugadorId, proezaId)
+);
+CREATE TABLE Jugador_Resistencia(
+ 	jugadorId integer NOT NULL,
+  	danoId integer NOT NULL,
+	cantidad integer NOT NULL default(0),
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
+	FOREIGN KEY(danoId) REFERENCES TipoDano(id),
+	PRIMARY KEY(jugadorId, danoId)
+);
+CREATE TABLE Jugador_Sentido(
+ 	jugadorId integer NOT NULL,
+  	sentidoId integer NOT NULL,
+	rango integer,
+	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
+	FOREIGN KEY(sentidoId) REFERENCES Sentido(id),
+	PRIMARY KEY(jugadorId, sentidoId)
+);
+CREATE TABLE Jugador_Velocidad(
  	jugadorId integer NOT NULL,
   	movimientoId integer NOT NULL,
 	cantidad integer NOT NULL default(5),
@@ -591,13 +584,30 @@ CREATE TABLE Velocidad_Jugador(
 	FOREIGN KEY(movimientoId) REFERENCES Movimiento(id),
 	PRIMARY KEY(jugadorId, movimientoId)
 );
-CREATE TABLE Resistencia_Jugador(
+
+CREATE TABLE Jugador_Usuario(
  	jugadorId integer NOT NULL,
-  	danoId integer NOT NULL,
-	cantidad integer NOT NULL default(0),
+  	usuarioId integer NOT NULL,
 	FOREIGN KEY(jugadorId) REFERENCES Jugador(id),
-	FOREIGN KEY(danoId) REFERENCES TipoDano(id),
-	PRIMARY KEY(jugadorId, danoId)
+	FOREIGN KEY(usuarioId) REFERENCES Usuario(id),
+	PRIMARY KEY(jugadorId, usuarioId)
+);
+
+CREATE TABLE Transfondo(
+ 	id integer PRIMARY KEY,
+  	nombre varchar(56) UNIQUE NOT NULL,
+	descripcion varchar(256) NOT NULL,
+	tradicion varchar(64),
+	rarezaId INTEGER NOT NULL DEFAULT(1),
+	atributoId INTEGER,
+	atributoId2 INTEGER,
+	habilidadId INTEGER,
+	proezaId INTEGER,
+	FOREIGN KEY(rarezaId) REFERENCES Rareza(id),
+	FOREIGN KEY(atributoId) REFERENCES Atributo(id),
+	FOREIGN KEY(atributoId2) REFERENCES Atributo(id),
+	FOREIGN KEY(habilidadId) REFERENCES Atributo(id),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id)
 );
 
 CREATE TABLE IF NOT EXISTS TipoItem (
@@ -1214,22 +1224,19 @@ insert into Habilidad_Atributo(habilidadId, atributoId, cantidad) VALUES(138, 33
 insert into Habilidad_Atributo(habilidadId, atributoId, cantidad) VALUES(138, 34, 3);
 insert into Habilidad_Atributo(habilidadId, atributoId, cantidad) VALUES(140, 27, 3);
 
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(31, 141, 1);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(31, 142, 5);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(31, 143, 11);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(31, 144, 13);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(32, 145, 1);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(32, 146, 5);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(32, 147, 11);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(32, 148, 13);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(33, 149, 1);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(33, 150, 5);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(33, 151, 11);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(33, 152, 13);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 153, 1);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 154, 5);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 155, 11);
-insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(34, 156, 13);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(52, 235, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(53, 236, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(54, 237, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(55, 238, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(56, 238, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(57, 240, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(58, 240, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(59, 240, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(60, 240, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(61, 241, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(62, 242, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(63, 243, 1);
+insert into SubclaseNivel_Habilidad(subclaseId, habilidadId, nivel) VALUES(64, 244, 1);
 
 insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(45, 22, 1);
 insert into SubclaseNivel_Proeza(subclaseId, proezaId, nivel) VALUES(46, 23, 1);
