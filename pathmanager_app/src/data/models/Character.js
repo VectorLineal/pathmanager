@@ -1,5 +1,5 @@
 export default class Character{
-    constructor(name = '', level = 1, description = '', perception = 0, health = 10, fort = 0, reflex = 0, will = 0, str = 0, dex = 0, con = 0, int = 0, wis = 0, cha = 0, money = 0, acrobatics = 0, arcana = 0, atletism = 0, crafting = 0, deceiving = 0, diplomacy = 0, intimidation = 0, medicine = 0, nature = 0, ocultism = 0, performance = 0, religion = 0, society = 0, stealth = 0, survival = 0, thievery = 0, classId = null, alignmentId = null, sizeId = null){
+    constructor(name = '', level = 1, description = '', perception = 0, health = 10, fort = 0, reflex = 0, will = 0, str = 0, dex = 0, con = 0, int = 0, wis = 0, cha = 0, money = 0, acrobatics = 0, arcana = 0, atletism = 0, crafting = 0, deceiving = 0, diplomacy = 0, intimidation = 0, medicine = 0, nature = 0, ocultism = 0, performance = 0, religion = 0, society = 0, stealth = 0, survival = 0, thievery = 0, classId = null, raceId = null, alignmentId = null, sizeId = null){
         this.name = name;
         this.description = description;
         this.level = level;
@@ -33,6 +33,7 @@ export default class Character{
         this.survival = survival;
         this.thievery = thievery;
         this.classId = classId;
+        this.raceId = raceId;
         this.sizeId = sizeId;
         this.alignmentId = alignmentId;
         this.traits = [];
@@ -77,7 +78,7 @@ export default class Character{
             this.acrobatics, this.arcana, this.atletism, this.crafting, this.deceiving, this.diplomacy,
             this.intimidation, this.medicine, this.nature, this.ocultism, this.performance, this.religion,
             this.society, this.stealth, this.survival, this.thievery, this.money, this.sizeId,
-            this.alignmentId, this.classId
+            this.alignmentId, this.classId, this.raceId
         ];
     }
 };
