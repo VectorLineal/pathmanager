@@ -659,6 +659,94 @@ CREATE TABLE ClaseNivel_Habilidad(
 	PRIMARY KEY(claseId, habilidadId)
 );
 
+CREATE TABLE TipoSubclase(
+ 	id integer PRIMARY KEY,
+  	nombre varchar(56) UNIQUE NOT NULL,
+	claseId INT NOT NULL,
+	FOREIGN KEY(claseId) REFERENCES Clase(id)
+);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('doctrina', 2);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('tesis arcana', 3);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('escuela arcana', 3);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('ventaja de cazador', 11);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('musa', 4);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('instinto', 5);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('campo de investigación', 7);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('fraude', 6);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('causa', 8);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('orden druídica', 9);
+INSERT INTO TipoSubclase (nombre, claseId) VALUES ('linaje', 12);
+CREATE TABLE Subclase(
+ 	id integer PRIMARY KEY,
+  	nombre varchar(56) UNIQUE NOT NULL,
+	tipoSubclaseId integer NOT NULL,
+	descripcion varchar(512) NOT NULL,
+	FOREIGN KEY(tipoSubclaseId) REFERENCES TipoSubclase(id)
+);
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('clérigo de claustro', 1, 'clérigos especializados en magia divina conectados a los dominios de su deidad');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('sacerdote de guerra', 1, 'clérigos entrenados también en proezas militare, se enfocan tanto en batalla como en hechizos divinos');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('modelado de hechizos experimental', 2, 'promueve la práctica del modelado de hehcizos y promueve su práctica basada en el uso que le han dado sus ancestros');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('sintonización con familiar mejorada', 2, 'magos que forman un pacto más fuerte con sus familiares y les permiten ganar mayores beneficios de estos ganando un familiar reemplazando su ítem vinculado por su familiar');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('mezcla de hechizos', 2, 'el usuario ha investigado a profundidad la jerarquía d elos hechizos y ha aprendido a combinarlos en hechizos más poderosos');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('sustitución de hechizos', 2, 'el usuario ha estudiado la forma de sustituir hechizos ya preparados sin necesidad de descanso');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('nexo de bastón', 2, 'el usuario ha entrenado con su bastón desde el principio creando un vínculo con este y brindándole poderosas propiedades');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela mágica de la mantis roja', 3, 'enseñado en la ciudadela roja, los asesinos de la mantis roja aprenden una serie de ehchizos que les ayudan a asesinar con precisión y sutileza');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de Ars Grammatica', 3, 'enseñada por la sociedad Pathfinder, constituye el poder de uso de palabras, letras, números y guardas para desestabilizar al oponente con elegancia');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de magia de batalla', 3, 'enseñada en la amyoría de academias militares, se espcializa en el uso de energías destructivas para erradicar ejércitos completos de forma táctica');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de magia cívica', 3, 'se enseña en el occularium de Manaket o la academia de magia aplicada, se especializa en la construcción y demolición de infraestructuras');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de mentalismo', 3, 'enseñada en la torre del vidente o la piedra de los videntes, enseña la forma de moldear y alterar la mente con magia');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de la forma proteana', 3, 'enseñada en la academia de Kintargo Alabaster o en las forjas de carne de Nex, esta escuela se enfoca en la relación de la magia y el cuerpo y en como esta puede modelar el cuerpo a conveniencia');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de la sabiduría podrida', 3, 'enseñada por profesores nómadas de Magaambya, enseña una de las formas mágicas más antigua de Golarion');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de magia rúnica Thassiloniana', 3, 'enseñada en selectas academias de Nuevo Thassilon, se enfoca en la enseñanza a traves de las 7 runas del pecado usadas por los señores de las runas en el extinto Azlanti');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela del límite', 3, 'enseñada en la escuela de estudios dimensionales de Katapesh o en escuelas clandestinas de Ustalav, se enfoca en manipular fuerzas antiguas y fantasmales a las que los mortales temen');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de la reclamación', 3, 'enseñada por los reclamantes de Sarkoris, se enfoca en el conocimiento perdido y de lugares olvidados');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('escuela de la teoría mágica unificada', 3, 'esta escuela toma un poco de todas las escuelas buscando un conocimiento más universal y continuo. No tienerepertorio de hechizos');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('ráfaga', 4, 'el usuario descarga una furia de golpes sobre el objetivo marcado');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('burlar', 4, 'el usuario es hábil engañando y evadiendo a la criatura marcada');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('precisión', 4, 'el usuario apunta a los puntos débiles de la criatura marcada');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('enigma', 5, 'esta musa se inspira en criaturas desconocidas o extraplanares que buscan inspirar la búsqueda de las verdades ocultas del universo');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('maestro', 5, 'se inspira en un profesor o rival y busca que el usuario mejore constantemente superando sus propios límites');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('erudito', 5, 'se puede inspirar en muchos personajes diferentes o en alguna criatura que viva eternamente e inspira la composición basada en temas diferentes y variados');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('guerrero', 5, 'se inspira en un general o un guerrero excepcional o alguna guerra o arma legendaria, busca transmitir el fragor de la batalla y el verdadero espíritu del guerrero');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('instinto animal', 6, 'manifiesta su rabia a partir de una conexión animal con alguno de los siguientes animales: simio: puño 1d10 contusión (agarre), oso: mandíbula 1d10 penetración y garra 1d6 corte (ágil), toro: cuernos 1d10 penetración (empuje), gato: mandíbula 1d10 penetración, garras 1d6 corte (ágil), siervo: cuernos 1d10 penetración (agarre), sapo: mandíbula 1d10 contución y lengua 1d4 contución(ágil), tiburón mandíbula 1d10 penetración (agarre), serpiente: colmillos 1d10 penetración (agarre), lobo: mandíbula 1d10 penetración (tumbar) ');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('instinto de dragón', 6, 'manifiesta rabia a partir de la fuerza de un tipo de dragón que el usuario haya asesinado y escoge entre adamantino: contundente, conspirador: veneno, diabólico: fuego, empireal: espiritual, de la fortuna: fuerza, con cuernos: veneno, espejismo: mental, del presagio: mental');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('instinto de furia', 6, 'la rabia del usuario proviene del interior solamente');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('instinto de gigante', 6, 'la rabia proporciona al usuario la fuerza de los gigantes');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('instinto espiritual', 6, 'la rabia viene de conexiones espirituales con ancestros o espectros');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('bombardero', 7, 'se especializa en explosiones y reacciones alquímicas violentas');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('cirujano', 7, 'fabricaciones alquímicas enfocadas al uso medicinal');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('mutagenista', 7, 'uso de transformaciones mutagenistas para mejorar ciertos aspectos físicos a costa de otros');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('toxicólogo', 7, 'especialización en la preparación de venenos y toxinas');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('rufian', 8, 'prefiere afrontar enemigos de forma directa o con intimidación tal como un jefe criminal o un noble corrupto');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('canalla', 8, 'usa diplomacia y cumplidos para salirse con la suya tal como un estafador o diplomático');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('ladrón', 8, 'se camufla y toma las pertenencias de los demás tal como un ladrón de calle o alguien que se infiltra a robar por entre las ventanas');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('desecración (impío)', 9, 'sublevar y corromper todo lo que sea puro y sagrado, sembrar duda entre los que guardan ideales de pureza y santidad');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('grandeza (sagrado)', 9, 'proveer ejemplo a los demás, disfrutar y compartir de la belleza del mundo y mantenerse impecable y bien presentado; anatema: arruinarse al asociarse con demonios o fuerzas impías');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('injusticia (impío)', 9, 'destruir cualquier cosa en su camino, tomar ventaja de los demás, robar o hacer trampa; anatema: seguir la ley fuera d ela ley dictada por el dios que siga');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('justicia', 9, 'seguir la ley y respetar las autoridades o liderazgos legítimos; anatema: tomar ventaja de los demás, hacer trampa');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('liberación', 9, 'oponerse a la esclabitud o tiranía, pelear por la libertad de los demás, respetar elecciones de los demás; anatema: amneanzar a alguien o forzarlo a que actúe de cierta manera o impulsar la tiranía y esclavitud');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('obediencia', 9, 'hacer cumplir las jerarquías, eliminar jerarquías ilegítimas, procurar tomar el liderazgo; anatema: permitir que alguien con menos poder imponga orden sobre quienes tiene más');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('redención (sagrado)', 9, 'intentar redimir a quienes cometen actos malvados, mostrar compasión por los demás independientemente de su autoridad; anatema: matar a un enemigo inteligente sin ofrecerle primero un chance de redención');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('animal', 10, 'tiene fuerte conexión con los animales tanto que forjó un vínculo profundo con un compañero animal');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('flama', 10, 'tiene conexión con las llamas y puede manipularlas a su antojo');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('hoja', 10, 'busca las recompensas de la naturaleza y le sirve como jardinero y guardian, además se sirve de un leshy como familiar');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('piedra', 10, 'fuerte como una piedra y siente paz en presencia de las piedras tanto naturales como esculpidas');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('tormenta', 10, 'nacido bajo la tempestad o sobreviviente de un relámpago, ahora porta la furia de la tormanta en su corazón y canaliza su fierza destructiva');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('salvaje', 10, 'la fuerza de la naturaleza corre por su cuerpo, criado por animales, ahora la magia primitiva le brinda la habilidad de transformarse en una criatura');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('ola', 10, 'ha aprendido el flujo y la forma el agua como recurso de vida');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('aberrante', 11, 'alguna entidad más allá de las estrellas proporciona magia de tradición (oculto)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('angelical', 11, 'compare ancestros con el reino celestial o alguno de sus ancestros tenía devoción tal que su linaje fue bendecido haciendo que pudiera usar magia de tradición (divino)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('demónico', 11, 'uno de sus ancestros fue corrompido por demonios trayendo el peso de una maldición y hace que pueda usar magia de tradición (divino)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('diabólico', 11, 'alguno de sus ancestros hizo un pacto con alguna entidad infernal haciendo que pueda usar magia de tradición (divino)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('dracónico', 11, 'comparte sangre con algún tipo de dragón tales como latón, oro o rojo(fuego), bronce o azul(electricidad), cobre o negro(ácido), plata o blanco(frío), verde(veneno) lo que permite usar magia de tradición (arcano)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('elemental (fuego)', 11, 'la influencia elemental imbuye su sangre con la furia del fuego haciendo que pueda usar magia de tradición (primitivo) y que su magia de sangre haga daño por fuego');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('elemental (agua)', 11, 'la influencia elemental imbuye su sangre con la furia de los torrentes y las olas haciendo que pueda usar magia de tradición (primitivo) y que su magia de sangre haga daño por contusión');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('elemental (viento)', 11, 'la influencia elemental imbuye su sangre con la furia de las corrientes y las tormentas haciendo que pueda usar magia de tradición (primitivo) y que su magia de sangre haga daño por corte');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('elemental (tierra)', 11, 'la influencia elemental imbuye su sangre con la furia de las rocas haciendo que pueda usar magia de tradición (primitivo) y que su magia de sangre haga daño por contusión');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('fey', 11, 'su linaje viene de la influencia fey o del Primer mundo lo que hace que pueda usar magia de tradición (primitivo)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('bruja', 11, 'una bruja maldijo a su familia o es decendiente de una bruja lo que hace que pueda usar magia de tradición (oculto)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('imperial', 11, 'es decendiente de un maestro de la magia lo que hace que pueda usar magia de tradición (arcano)');
+INSERT INTO Subclase (nombre, tipoSubclaseId, descripcion) VALUES ('no-muerto', 11, 'es decendiente de algún no-muerto poderoso einteligente tal como un vampiro lo que hace que pueda usar magia de tradición (divino)');
 CREATE TABLE SubclaseNivel_Habilidad(
  	subclaseId integer NOT NULL,
   	habilidadId integer NOT NULL,
@@ -666,6 +754,21 @@ CREATE TABLE SubclaseNivel_Habilidad(
 	FOREIGN KEY(subclaseId) REFERENCES Subclase(id),
 	FOREIGN KEY(habilidadId) REFERENCES HabilidadEspecial(id),
 	PRIMARY KEY(subclaseId, habilidadId)
+);
+CREATE TABLE SubclaseNivel_Proeza(
+ 	subclaseId integer NOT NULL,
+  	proezaId integer NOT NULL,
+	nivel integer NOT NULL,
+	FOREIGN KEY(subclaseId) REFERENCES Subclase(id),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	PRIMARY KEY(subclaseId, proezaId)
+);
+CREATE TABLE Subclase_Hechizo(
+ 	hechizoId integer NOT NULL,
+  	subclaseId integer NOT NULL,
+	FOREIGN KEY(hechizoId) REFERENCES Hechizo(id),
+	FOREIGN KEY(subclaseId) REFERENCES Subclase(id),
+	PRIMARY KEY(hechizoId, subclaseId)
 );
 
 CREATE TABLE ClaseNivel_Proeza(

@@ -45,12 +45,12 @@
 </template>
 <script setup>
 import { reactive, ref, toRaw } from "vue";
-import SizeSelector from "./selectors/SizeSelector.vue";
-import InmunitiesSelector from "./selectors/InmunitiesSelector.vue";
-import LanguagesSelector from "./selectors/LanguagesSelector.vue";
-import MovementsSelector from "./selectors/MovementsSelector.vue";
-import ResistancesSelector from "./selectors/ResistancesSelector.vue";
-import SensesSelector from "./selectors/SensesSelector.vue";
+import SizeSelector from "../selectors/SizeSelector.vue";
+import InmunitiesSelector from "../selectors/InmunitiesSelector.vue";
+import LanguagesSelector from "../selectors/LanguagesSelector.vue";
+import MovementsSelector from "../selectors/MovementsSelector.vue";
+import ResistancesSelector from "../selectors/ResistancesSelector.vue";
+import SensesSelector from "../selectors/SensesSelector.vue";
 
 const props = defineProps({
   intialData: Object

@@ -13,13 +13,8 @@
           <a-input v-model:value="formState.name" />
         </a-form-item>
       </a-col>
-      <a-col :sm="4" :md="3" :lg="3" :xl="3">
-        <a-form-item label="Nivel" name="level">
-          <a-input-number v-model:value="formState.level" :min="0" :max="25" />
-        </a-form-item>
-      </a-col>
       <a-col :sm="7" :md="6" :lg="6" :xl="6">
-        <a-form-item label="Raza" name="race">
+        <a-form-item label="Raza" name="raza">
           <RaceSelector @onSelect="selectRace" />
         </a-form-item>
       </a-col>
@@ -33,16 +28,6 @@
           <AlignmentSelector @onSelect="selectAlignment" />
         </a-form-item>
       </a-col>
-      <a-col :sm="4" :md="3" :lg="3" :xl="3">
-        <a-form-item label="Dinero" name="dinero">
-          <a-input-number v-model:value="formState.dinero" :min="0" />
-        </a-form-item>
-      </a-col>
-      <a-col :sm="8" :md="7" :lg="7" :xl="5">
-        <a-form-item label="Razgos" name="traits">
-          <TraitsSelector @onSelect="selectTraits" />
-        </a-form-item>
-      </a-col>
     </a-row>
     <a-row justify="center">
       <a-col :xs="25" :sm="24" :lg="12">
@@ -50,34 +35,28 @@
           <a-textarea v-model:value="formState.description" />
         </a-form-item>
       </a-col>
-      <a-col :xs="25" :sm="24" :lg="12">
-        <a-form-item label="Tesoro" name="tesoro">
-          <a-textarea v-model:value="formState.tesoro" />
-        </a-form-item>
-      </a-col>
     </a-row>
   </a-form>
 </template>
 <script setup>
 import { reactive, ref, toRaw } from "vue";
-import ClassSelector from "./selectors/ClassSelector.vue";
-import RaceSelector from "./selectors/RaceSelector.vue";
-import TraitsSelector from "./selectors/TraitsSelector.vue";
-import AlignmentSelector from "./selectors/AlignmentSelector.vue";
+import ClassSelector from "../selectors/ClassSelector.vue";
+import RaceSelector from "../selectors/RaceSelector.vue";
+import AlignmentSelector from "../selectors/AlignmentSelector.vue";
 
 const emit = defineEmits(["updateData"]);
 
 const formState = reactive({
-  level: 0,
   name: "",
   description: "",
   clase: null,
+  subclase: null,
+  subclase2: null,
   alineacion: null,
   tradicionHechizo: null,
-  tesoro: '',
-  dinero: 0,
-  race: null,
-  traits: [],
+  raza: null,
+  herencia: null,
+  transfondo: null
 });
 const formRef = ref();
 const labelCol = {
@@ -87,27 +66,11 @@ const wrapperCol = {
   span: 24,
 };
 
-const checkLevel = async (_rule, value) => {
-  if (value == null) {
-    return Promise.reject("Escriba un nivel");
-  }
-  if (!Number.isInteger(value)) {
-    return Promise.reject("EL nivel debe ser un número entero");
-  } else {
-    if (value < 0) {
-      return Promise.reject("El nivel mínimo es 0");
-    } else if (value > 25) {
-      return Promise.reject("El máximo es 25");
-    } else {
-      return Promise.resolve();
-    }
-  }
-};
-
 const rules = {
-  level: [
+  deidad: [
     {
-      validator: checkLevel,
+      required: true,
+      message: "Seleccione una deidad",
       trigger: "change",
     },
   ],
@@ -118,10 +81,24 @@ const rules = {
       trigger: "change",
     },
   ],
-  race: [
+  herencia: [
+    {
+      required: true,
+      message: "Seleccione una herencia",
+      trigger: "change",
+    },
+  ],
+  raza: [
     {
       required: true,
       message: "Seleccione una raza",
+      trigger: "change",
+    },
+  ],
+  transfondo: [
+    {
+      required: true,
+      message: "Seleccione un transfondo",
       trigger: "change",
     },
   ],
@@ -150,10 +127,7 @@ const selectAlignment = (value) => {
   formState.alineacion = value;
 };
 const selectRace = (value) => {
-  formState.race = value.id;
-};
-const selectTraits = (value) => {
-  formState.traits = value;
+  formState.raza = value.id;
 };
 
 const validateAndUpdate = async () => {

@@ -115,7 +115,7 @@ import SpellDetails from './SpellDetails.vue';
 import GenericAction from './generic/GenericAction.vue';
 import SearchDropdown from "./generic/SearchDropdown.vue";
 import TraitTag from "./generic/TraitTag.vue";
-import SpellCreateForm from "./SpellCreateForm.vue";
+import SpellCreateForm from "./forms/SpellCreateForm.vue";
 import { getAllSpells } from "../../logic/SpellOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
 import { getAllTraditions } from "../../logic/TraditionOperations";

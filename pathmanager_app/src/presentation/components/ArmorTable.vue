@@ -95,7 +95,7 @@ import {
 } from "@ant-design/icons-vue";
 import { CButton, CButtonGroup } from "@coreui/vue";
 import ArmorDetails from "./ArmorDetails.vue";
-import ArmorCreateForm from "./ArmorCreateForm.vue";
+import ArmorCreateForm from "./forms/ArmorCreateForm.vue";
 import TraitTag from "./generic/TraitTag.vue";
 import SearchDropdown from "./generic/SearchDropdown.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";

@@ -19,6 +19,16 @@
         </a-form-item>
       </a-col>
       <a-col :sm="5" :md="4" :lg="3" :xl="2">
+        <a-form-item label="Armadura" name="ac">
+          <a-input-number v-model:value="formState.ac" :min="0" :max="20"/>
+        </a-form-item>
+      </a-col>
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
+        <a-form-item label="Límite de Destreza" name="limite">
+          <a-input-number v-model:value="formState.limite" :min="0" :max="6"/>
+        </a-form-item>
+      </a-col>
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
         <a-form-item label="Precio" name="precio">
           <a-input-number v-model:value="formState.precio" :min="0"/>
         </a-form-item>
@@ -28,19 +38,49 @@
           <a-input-number v-model:value="formState.peso" :min="0" :max="20" :step="0.1"/>
         </a-form-item>
       </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Penalización de dados" name="penalizacion">
+          <a-input-number v-model:value="formState.penalizacion" :min="-3" :max="0" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Penalización de Velocidad" name="velocidad">
+          <a-input-number v-model:value="formState.velocidad" :min="-10" :max="0" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Requisito de Fuerza" name="requisito">
+          <a-input-number v-model:value="formState.requisito" :min="0" :max="5" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Fortaleza" name="fortaleza">
+          <a-input-number v-model:value="formState.fortaleza" :min="0" :max="5" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Reflejos" name="reflejos">
+          <a-input-number v-model:value="formState.reflejos" :min="0" :max="5" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Voluntad" name="voluntad">
+          <a-input-number v-model:value="formState.voluntad" :min="0" :max="5" />
+        </a-form-item>
+      </a-col>
       <a-col :sm="6" :md="5" :lg="4" :xl="3">
-        <a-form-item label="Tipo de Item" name="tipoId">
-          <ItemTypeSelector @onSelect="selectType" />
+        <a-form-item label="Categoría" name="categoriaId">
+          <WeaponCategorySelector @onSelect="selectCategory" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Grupo" name="grupoId">
+          <WeaponGroupSelector @onSelect="selectGroup" />
         </a-form-item>
       </a-col>
       <a-col :sm="12" :md="9" :lg="8" :xl="7">
         <a-form-item label="Razgos" name="traits">
           <TraitsSelector @onSelect="selectTraits" />
-        </a-form-item>
-      </a-col>
-      <a-col :sm="12" :md="9" :lg="8" :xl="7" v-if="maySelectAttributes">
-        <a-form-item label="Atributos" name="attributes">
-          <AttributesSelector @updatedValues="selectAttributes" />
         </a-form-item>
       </a-col>
       <a-col :xs="24" :sm="24" :lg="12">
@@ -60,18 +100,18 @@
   </CButtonToolbar>
 </template>
 <script setup>
-import { reactive, ref, toRaw, computed } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import { CButton, CButtonGroup, CButtonToolbar } from "@coreui/vue";
 import { message } from "ant-design-vue";
-import MiscItem from "../../data/models/MiscItem";
-import { createMiscItem } from "../../logic/MiscItemOperations";
-import ItemTypeSelector from "./selectors/ItemTypeSelector.vue";
-import TraitsSelector from "./selectors/TraitsSelector.vue";
-import AttributesSelector from "./selectors/AttributesSelector.vue";
+import Armor from "../../../data/models/Armor";
+import { createArmor } from "../../../logic/ArmorOperations";
+import WeaponCategorySelector from "../selectors/WeaponCategorySelector.vue";
+import WeaponGroupSelector from "../selectors/WeaponGroupSelector.vue";
+import TraitsSelector from "../selectors/TraitsSelector.vue";
 
 const emit = defineEmits(["onSubmit", "onCancel"]);
 
-const formState = reactive(new MiscItem());
+const formState = reactive(new Armor());
 const formRef = ref();
 const labelCol = {
   span: 24,
@@ -79,10 +119,6 @@ const labelCol = {
 const wrapperCol = {
   span: 24,
 };
-
-const maySelectAttributes = computed(() => {
-    return (formState.tipoId >= 4 && formState.tipoId <= 9) || (formState.tipoId >= 12 && formState.tipoId <= 14);
-});
 
 const checkLevel = async (_rule, value) => {
   if (value == null) {
@@ -108,10 +144,17 @@ const rules = {
       trigger: "change",
     },
   ],
-  tipoId: [
+  grupoId: [
     {
       required: true,
-      message: "Seleccione un tipo de ítem",
+      message: "Seleccione un grupo de arma",
+      trigger: "change",
+    },
+  ],
+  categoriaId: [
+    {
+      required: true,
+      message: "Seleccione una categoría de arma",
       trigger: "change",
     },
   ],
@@ -122,17 +165,24 @@ const rules = {
       message: "Escriba un nombre",
       trigger: "change",
     },
+  ],
+  ac: [
+    {
+      required: true,
+      message: "Escriba un monto de armadura",
+      trigger: "change",
+    },
   ]
 };
 
-const selectType = (value) => {
-  formState.tipoId = value;
+const selectCategory = (value) => {
+  formState.categoriaId = value;
 };
 const selectTraits = (value) => {
   formState.traits = value;
 };
-const selectAttributes = (value) => {
-  formState.attributes = value;
+const selectGroup = (value) => {
+  formState.grupoId = value;
 };
 
 const closeModal = () => {
@@ -142,15 +192,15 @@ const closeModal = () => {
 const onCreation = async () => {
   try {
     await formRef.value.validate();
-    const createdWeapon = await createMiscItem(toRaw(formState));
+    const createdWeapon = await createArmor(toRaw(formState));
     if(createdWeapon){
-      message.success("Item Miscelaneo creada exitosamente");
+      message.success("Arma creada exitosamente");
       emit("onSubmit");
       closeModal();
     }
     else message.error("Fallo en Inserción de datos");
   } catch (error) {
-    console.error("error on miscItem creation form:", error);
+    console.error("error on weapon creation form:", error);
     return;
   }
 };

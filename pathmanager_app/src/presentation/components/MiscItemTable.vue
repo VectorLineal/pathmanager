@@ -95,7 +95,7 @@ import {
 } from "@ant-design/icons-vue";
 import { CButton, CButtonGroup } from "@coreui/vue";
 import MiscItemDetails from "./MiscItemDetails.vue";
-import MiscItemCreateForm from "./MiscItemCreateForm.vue";
+import MiscItemCreateForm from "./forms/MiscItemCreateForm.vue";
 import TraitTag from "./generic/TraitTag.vue";
 import SearchDropdown from "./generic/SearchDropdown.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";

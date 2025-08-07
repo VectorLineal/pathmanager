@@ -19,18 +19,13 @@
         </a-form-item>
       </a-col>
       <a-col :sm="5" :md="4" :lg="3" :xl="2">
-        <a-form-item label="Armadura" name="ac">
-          <a-input-number v-model:value="formState.ac" :min="0" :max="20"/>
+        <a-form-item label="Manos" name="manos">
+          <a-input-number v-model:value="formState.manos" :min="1" :max="2"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="6" :md="5" :lg="4" :xl="3">
-        <a-form-item label="Salud" name="salud">
-          <a-input-number v-model:value="formState.salud" :min="1" :max="100"/>
-        </a-form-item>
-      </a-col>
-      <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Dureza" name="dureza">
-          <a-input-number v-model:value="formState.dureza" :min="1" :max="50" />
+      <a-col :sm="5" :md="4" :lg="3" :xl="2">
+        <a-form-item label="Alcance" name="alcance">
+          <a-input-number v-model:value="formState.alcance" :min="1" :max="500"/>
         </a-form-item>
       </a-col>
       <a-col :sm="5" :md="4" :lg="3" :xl="2">
@@ -43,24 +38,34 @@
           <a-input-number v-model:value="formState.peso" :min="0" :max="20" :step="0.1"/>
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Penalización de Velocidad" name="velocidad">
-          <a-input-number v-model:value="formState.velocidad" :min="-10" :max="0" />
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
+        <a-form-item label="Bono de Ataque" name="bono">
+          <a-input-number v-model:value="formState.bono" :min="0" :max="20" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Fortaleza" name="fortaleza">
-          <a-input-number v-model:value="formState.fortaleza" :min="0" :max="5" />
+        <a-form-item label="Cantidad de daño" name="monto">
+          <a-input v-model:value="formState.monto" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Reflejos" name="reflejos">
-          <a-input-number v-model:value="formState.reflejos" :min="0" :max="5" />
+        <a-form-item label="Tipo de Daño" name="danoId">
+          <DamageTypeSelector @onSelect="selectDamageType" />
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Voluntad" name="voluntad">
-          <a-input-number v-model:value="formState.voluntad" :min="0" :max="5" />
+        <a-form-item label="Tipo de Arma" name="tipoId">
+          <WeaponTypeSelector @onSelect="selectType" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="6" :md="5" :lg="4" :xl="3">
+        <a-form-item label="Categoría" name="categoriaId">
+          <WeaponCategorySelector @onSelect="selectCategory" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Grupo" name="grupoId">
+          <WeaponGroupSelector @onSelect="selectGroup" />
         </a-form-item>
       </a-col>
       <a-col :sm="12" :md="9" :lg="8" :xl="7">
@@ -88,13 +93,17 @@
 import { reactive, ref, toRaw } from "vue";
 import { CButton, CButtonGroup, CButtonToolbar } from "@coreui/vue";
 import { message } from "ant-design-vue";
-import Shield from "../../data/models/Shield";
-import { createShield } from "../../logic/ShieldOperations";
-import TraitAmountSelector from "./selectors/TraitAmountSelector.vue";
+import Weapon from "../../../data/models/Weapon";
+import { createWeapon } from "../../../logic/WeaponOperations";
+import WeaponCategorySelector from "../selectors/WeaponCategorySelector.vue";
+import WeaponGroupSelector from "../selectors/WeaponGroupSelector.vue";
+import WeaponTypeSelector from "../selectors/WeaponTypeSelector.vue";
+import DamageTypeSelector from "../selectors/DamageTypeSelector.vue";
+import TraitAmountSelector from "../selectors/TraitAmountSelector.vue";
 
 const emit = defineEmits(["onSubmit", "onCancel"]);
 
-const formState = reactive(new Shield());
+const formState = reactive(new Weapon());
 const formRef = ref();
 const labelCol = {
   span: 24,
@@ -127,6 +136,34 @@ const rules = {
       trigger: "change",
     },
   ],
+  tipoId: [
+    {
+      required: true,
+      message: "Seleccione un tipo de arma",
+      trigger: "change",
+    },
+  ],
+  grupoId: [
+    {
+      required: true,
+      message: "Seleccione un grupo de arma",
+      trigger: "change",
+    },
+  ],
+  categoriaId: [
+    {
+      required: true,
+      message: "Seleccione una categoría de arma",
+      trigger: "change",
+    },
+  ],
+  danoId: [
+    {
+      required: true,
+      message: "Seleccione un tipo de daño",
+      trigger: "change",
+    },
+  ],
   nombre: [
     {
       whitespace: true,
@@ -135,16 +172,30 @@ const rules = {
       trigger: "change",
     },
   ],
-  ac: [
+  monto: [
     {
+      whitespace: true,
       required: true,
-      message: "Escriba un monto de armadura",
+      message: "Escriba un monto de daño",
       trigger: "change",
     },
   ]
 };
+
+const selectCategory = (value) => {
+  formState.categoriaId = value;
+};
+const selectType = (value) => {
+  formState.tipoId = value;
+};
 const selectTraits = (value) => {
   formState.traits = value;
+};
+const selectDamageType = (value) => {
+  formState.danoId = value;
+};
+const selectGroup = (value) => {
+  formState.grupoId = value;
 };
 
 const closeModal = () => {
@@ -154,15 +205,15 @@ const closeModal = () => {
 const onCreation = async () => {
   try {
     await formRef.value.validate();
-    const createdWeapon = await createShield(toRaw(formState));
+    const createdWeapon = await createWeapon(toRaw(formState));
     if(createdWeapon){
-      message.success("Escudo creada exitosamente");
+      message.success("Arma creada exitosamente");
       emit("onSubmit");
       closeModal();
     }
     else message.error("Fallo en Inserción de datos");
   } catch (error) {
-    console.error("error on shield creation form:", error);
+    console.error("error on weapon creation form:", error);
     return;
   }
 };

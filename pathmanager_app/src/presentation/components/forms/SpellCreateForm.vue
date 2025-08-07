@@ -90,14 +90,14 @@
 import { reactive, ref, toRaw } from "vue";
 import { CButton, CButtonGroup, CButtonToolbar } from "@coreui/vue";
 import { message } from "ant-design-vue";
-import Spell from "../../data/models/Spell";
-import FocusSpell from "../../data/models/FocusSpell";
-import { createSpell } from "../../logic/SpellOperations";
-import SchoolSelector from "./selectors/SchoolSelector.vue";
-import TargetSelector from "./selectors/TargetSelector.vue";
-import TraditionsSelector from "./selectors/TraditionsSelector.vue";
-import TraitsSelector from "./selectors/TraitsSelector.vue";
-import ClassSelector from "./selectors/ClassSelector.vue";
+import Spell from "../../../data/models/Spell";
+import FocusSpell from "../../../data/models/FocusSpell";
+import { createSpell } from "../../../logic/SpellOperations";
+import SchoolSelector from "../selectors/SchoolSelector.vue";
+import TargetSelector from "../selectors/TargetSelector.vue";
+import TraditionsSelector from "../selectors/TraditionsSelector.vue";
+import TraitsSelector from "../selectors/TraitsSelector.vue";
+import ClassSelector from "../selectors/ClassSelector.vue";
 
 const emit = defineEmits(["onSubmit", "onCancel"]);
 

@@ -335,21 +335,21 @@ const onAttackSpellsUpdate = async (data, valid) => {
 
 const steps = [
   {
-    title: "Raza y Clase",
+    title: "Raza, Clase y transfondo",
     content: "Elegir nombre, Raza junto con clase y nivel",
   },
   {
-    title: "Razgos Físicos",
+    title: "Atributos y habilidades",
     content:
       "Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias",
   },
   {
-    title: "Atributos y Defensas",
+    title: "Dotes y habilidades especiales",
     content:
       "Elegir atributos y habilididades base, Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad",
   },
   {
-    title: "Ataques, Habilidades y Hechizos",
+    title: "Inventario y Hechizos",
     content: "Ataques, habilidades especiales y opcionalmente hechizos",
   },
 ];

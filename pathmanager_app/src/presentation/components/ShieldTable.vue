@@ -95,7 +95,7 @@ import {
 } from "@ant-design/icons-vue";
 import { CButton, CButtonGroup } from "@coreui/vue";
 import ShieldDetails from "./ShieldDetails.vue";
-import ShieldCreateForm from "./ShieldCreateForm.vue";
+import ShieldCreateForm from "./forms/ShieldCreateForm.vue";
 import TraitAmountTag from "./generic/TraitAmountTag.vue";
 import SearchDropdown from "./generic/SearchDropdown.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";

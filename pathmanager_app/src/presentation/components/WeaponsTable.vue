@@ -103,7 +103,7 @@ import WeaponDetails from "./WeaponDetails.vue";
 import GenericAction from './generic/GenericAction.vue';
 import SearchDropdown from "./generic/SearchDropdown.vue";
 import TraitAmountTag from "./generic/TraitAmountTag.vue";
-import WeaponCreateForm from "./WeaponCreateForm.vue";
+import WeaponCreateForm from "./forms/WeaponCreateForm.vue";
 import MoneyDisplay from "./generic/MoneyDisplay.vue";
 import WeightDisplay from "./generic/WeightDisplay.vue";
 import { getAllWeaponCategories } from "../../logic/WeaponCategoryOptions";

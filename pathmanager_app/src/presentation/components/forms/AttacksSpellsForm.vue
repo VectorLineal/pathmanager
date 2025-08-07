@@ -28,9 +28,9 @@
 </template>
 <script setup>
 import { reactive, ref, toRaw, inject, computed } from "vue";
-import AttacksSelector from "./selectors/AttacksSelector.vue";
-import SpellsSelector from "./selectors/SpellsSelector.vue";
-import SpecialAbilitySelector from "./selectors/SpecialAbilitySelector.vue";
+import AttacksSelector from "../selectors/AttacksSelector.vue";
+import SpellsSelector from "../selectors/SpellsSelector.vue";
+import SpecialAbilitySelector from "../selectors/SpecialAbilitySelector.vue";
 
 const emit = defineEmits(["updateData"]);
 

@@ -1,13 +1,21 @@
 import { h } from "vue";
-import { UserOutlined, BookOutlined, CrownOutlined } from "@ant-design/icons-vue";
+import { UserOutlined, BookOutlined, CrownOutlined, BugOutlined } from "@ant-design/icons-vue";
 
 const enemiesKey = "enemies";
 const spellsKey = "spells";
 const itemsKey = "items";
+const charactersKey = "characters";
+
+const charactersOption = {
+  key: charactersKey,
+  icon: () => h(UserOutlined),
+  label: "Personajes",
+  title: "Personajes",
+};
 
 const enemiesOption = {
   key: enemiesKey,
-  icon: () => h(UserOutlined),
+  icon: () => h(BugOutlined),
   label: "Enemigos",
   title: "Enemigos",
 };
@@ -26,15 +34,16 @@ const itemsOption = {
 };
 
 export const getBaseMenu = (rank, router) => {
+  charactersOption.onclick = () => router.push('/personajes');
   enemiesOption.onclick = () => router.push('/');
   spellsOption.onclick = () => router.push('/hechizos');
   itemsOption.onclick = () => router.push('/items');
   if(rank == 1) return {
-    menu:[enemiesOption, spellsOption, itemsOption],
+    menu:[enemiesOption, charactersOption, spellsOption, itemsOption],
     selection: enemiesKey
   };
   else return {
-    menu:[spellsOption, itemsOption],
+    menu:[charactersOption, spellsOption, itemsOption],
     selection: spellsKey
   };
 }
