@@ -1356,3 +1356,77 @@ insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(48, 89);
 insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(49, 90);
 insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(50, 92);
 insert into Subclase_Hechizo(subclaseId, hechizoId) VALUES(51, 93);
+CREATE TABLE Herencia(
+ 	id integer PRIMARY KEY,
+  	nombre varchar(56) UNIQUE NOT NULL,
+	descripcion varchar(256) NOT NULL,
+  	razaId integer,
+	rarezaId integer NOT NULL DEFAULT(1),
+	habilidadId integer,
+	proezaId integer,
+	proezaId2 integer,
+	sentidoId integer,
+	FOREIGN KEY(rarezaId) REFERENCES Rareza(id),
+	FOREIGN KEY(habilidadId) REFERENCES HabilidadEspecial(id),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	FOREIGN KEY(proezaId2) REFERENCES Proeza(id),
+	FOREIGN KEY(razaId) REFERENCES Raza(id),
+	FOREIGN KEY(sentidoId) REFERENCES Sentido(id)
+);
+
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('aasimar', 'descendiente de seres celestiales, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de aasimar', 7, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId)
+VALUES ('aiuvarin', 'cruce de sangre con la sangre de elfo, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de elfo o aiuvarin', 7);
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('cambiante', 'hijo de una bruja, posee heterocromía además de piel más pálida y cabello más oscuro; gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de cambiante', 7, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('dhampir', 'descendiente de un vampiro y un mortal dotado de piel pálida además de gracia y elegancia, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de dhampir', 7, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId)
+VALUES ('dromaar', 'cruce de sangre con la sangre de orco, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de orco o dromaar', 7);
+INSERT INTO Herencia (nombre, descripcion, habilidadId, rarezaId)
+VALUES ('sangre de dragón', 'descendiente de algún dragón puede tener rasgos físicos como cuernos, piel escamosa o cola, gana acceso al lenguaje dracónico además de los dotes de sangre de dragón', 251, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('caminante del crepúsculo', 'descendiente renacido de los psychopomps que nunca puede volverse un no-muerto, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de caminante del crepúsculo', 7, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('nephilim', 'influenciado por celestiales, demonios o monitore spuede tener rasgos como una aureola, cuernos, cola u ojos dorados, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de nephilim', 7, 2);
+INSERT INTO Herencia (nombre, descripcion, sentidoId, rarezaId)
+VALUES ('tiefling', 'descendiente de demonios o poseedor de su marca puede tener rasgos como cuernos o cola, gana visión en poca luz o visión en oscuridad si ya tiene visión en poca luz, además puede elegir dotes de tiefling', 7, 2);
+
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('enano de sangre antigua', 'descendiente de antiguos héroes enanos que eran capaces de reducir la maia de sus enemigos', 14, 246);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('enano guardián de la muerte', 'descendiente de guardianes de tumbas expertos en protegerse de los muertos', 14, 247);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('enano de forja', 'criado en forjas ha ganado adaptaciones y resistencias especiales al calor', 14, 248);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('enano de roca', 'descendiente de enanos que vivían dentro de montañas dedicándose a la excavación o labrado de rocas ganando así equilibrio firme', 14, 249);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('enano de sangre fuerte', 'posee sangre abundante y fuerte que puede remover toxinas', 14, 250);
+
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('orco de las tierras yermas', 'originarios de tierras quemadas por el sol, deben viajar continuamente bajo condiciones climáticas extremas', 20, 245);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId, proezaId)
+VALUES ('orco listo para la batalla', 'descendiente de una línea de aterradores comandantes de guerra', 20, 212, 33);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 34);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 34);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 35);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 35);
+INSERT INTO Proeza_RequisitoAtributo(proezaId, atributoId) VALUES(34, 24);
+INSERT INTO Proeza_RequisitoAtributo(proezaId, atributoId) VALUES(35, 12);
+INSERT INTO Herencia (nombre, descripcion, razaId, proezaId, proezaId2)
+VALUES ('orco profundo', 'criado en la profunda oscuridad de cavernas subterraneas aprendió a sobrevivir con mínimos recursos y a luchar en riscos pedregosos', 20, 34, 35);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('orco de la tumba', 'expuesto a energías necróticas que debieron matarle, pero sobrevivió ganando resitencia a estas presentando una piel gris y fría', 20, 252);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 36);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId, proezaId)
+VALUES ('orco marcado con cicatrices', 'perteneciente a una tribu que hacía rituales de sacrificio o de tatuajes que muestran su gran dureza y vitalidad', 20, 253, 36);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('orco de la lluvia', 'nacido en la selva húmeda protegido de la humedad solo por hojas y lianas, adaptado ala humedad selvática y sus enfermedades', 20, 254);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('orco de invierno', 'criado en climas fríos y adaptado para sobrevivir a estos', 20, 255);
+
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('humano habilidoso', 'su ingenuidad le permite entrenarse mejor en más habilidades', 19, 256);
+INSERT INTO Herencia (nombre, descripcion, razaId)
+VALUES ('humano versátil', 'la gran ambición y adaptabilidad de la humanidad le ha permitido extenderse por todo Golarion haciendo que pueda escoger 1 dote general adicional a nivel 1', 19);
