@@ -14,6 +14,20 @@ WHERE Habilidad_Entidad.entidadId = ?
 order by HabilidadEspecial.nombre;
 `;
 
+const abilitySubclassLevelQuery = `
+select HabilidadEspecial.id, nombre, efecto, requisito, critico, demora, alcance
+FROM SubclaseNivel_Habilidad JOIN HabilidadEspecial ON SubclaseNivel_Habilidad.habilidadId = HabilidadEspecial.id
+WHERE subclaseId = ? and nivel = ?
+order by HabilidadEspecial.nombre;
+`;
+
+const abilityClassLevelQuery = `
+select HabilidadEspecial.id, nombre, efecto, requisito, critico, demora, alcance
+FROM ClaseNivel_Habilidad JOIN HabilidadEspecial ON ClaseNivel_Habilidad.habilidadId = HabilidadEspecial.id
+WHERE claseId = ? and nivel = ?
+order by HabilidadEspecial.nombre;
+`;
+
 const abilityRaceQuery = `
 SELECT Raza_Habilidad.habilidadId
 FROM Raza_Habilidad
@@ -32,8 +46,8 @@ export async function getAllAbilities() {
   }
 }
 
-const getTraitsByReference = async (id, query) => {
-  const abilities = await glosaryDatabase.query(query, [id]);
+const getTraitsByReference = async (params, query) => {
+  const abilities = await glosaryDatabase.query(query, params);
   //se cargan también los razgos
   for (let i = 0; i < abilities.length; i++) {
     const traits = await getTraitByAbility(abilities[i].id);
@@ -44,15 +58,31 @@ const getTraitsByReference = async (id, query) => {
 
 export async function getAbilitiesByEntity(id) {
   try {
-    return await getTraitsByReference(id, abilityEntityQuery);
+    return await getTraitsByReference([id], abilityEntityQuery);
   } catch (err) {
     console.error("error on load abilities by entity:", err);
   }
 }
 
+export async function getAbilitiesBySubclassLevel(id, level) {
+  try {
+    return await getTraitsByReference([id, level], abilitySubclassLevelQuery);
+  } catch (err) {
+    console.error("error on load abilities by subclass and level:", err);
+  }
+}
+
+export async function getAbilitiesByClassLevel(id, level) {
+  try {
+    return await getTraitsByReference([id, level], abilityClassLevelQuery);
+  } catch (err) {
+    console.error("error on load abilities by class and level:", err);
+  }
+}
+
 export async function getAbilitiesByRace(id) {
   try {
-    return await getTraitsByReference(id, abilityRaceQuery);
+    return await getTraitsByReference([id], abilityRaceQuery);
   } catch (err) {
     console.error("error on load abilities by race:", err);
   }

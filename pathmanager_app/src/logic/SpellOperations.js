@@ -17,6 +17,27 @@ WHERE Hechizo_Entidad.entidadId = ?
 ORDER by nivel_final, Hechizo.nombre, escuela;
 `;
 
+const spellsSubclassLevelQuery = `
+SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Clase.nombre AS clase
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Blanco ON Hechizo.blancoId = Blanco.id
+JOIN Subclase_Hechizo ON Subclase_Hechizo.hechizoId = Hechizo.id
+LEFT JOIN Clase ON Hechizo.claseId = Clase.id
+WHERE Subclase_Hechizo.subclaseId = ? and Hechizo.nivel = ?
+ORDER by Hechizo.nombre, escuela;
+`;
+const spellsClassLevelQuery = `
+SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Clase.nombre AS clase
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Blanco ON Hechizo.blancoId = Blanco.id
+JOIN ClaseNivel_Hechizo ON ClaseNivel_Hechizo.hechizoId = Hechizo.id
+LEFT JOIN Clase ON Hechizo.claseId = Clase.id
+WHERE ClaseNivel_Hechizo.subclaseId = ? and ClaseNivel_Hechizo.nivel = ?
+ORDER by Hechizo.nombre, escuela;
+`;
+
 const focusSpellsClassQuery = `
 SELECT Hechizo.id, Hechizo.nombre || '(' || Escuela.nombre || ')' AS nombre, Hechizo.nivel
 FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
@@ -83,9 +104,8 @@ export async function getAllSpells(isFocus) {
   }
 }
 
-export async function getSpellsByEntity(id) {
-  try {
-    const spells = await glosaryDatabase.query(spellsEntityQuery, [id]);
+async function getSpellsWIthTraitsTraditions(query, params) {
+  const spells = await glosaryDatabase.query(query, params);
     //se cargan también los razgos y tradiciones
     for(let i = 0; i < spells.length; i++){
       const traits = await getTraitBySpell(spells[i].id);
@@ -97,8 +117,30 @@ export async function getSpellsByEntity(id) {
       }
     }
     return spells;
+}
+
+export async function getSpellsByEntity(id) {
+  try {
+    return await getSpellsWIthTraitsTraditions(spellsEntityQuery, [id]);
   } catch (err) {
     console.error("error on load spells by entity:", err);
+  }
+}
+
+export async function getSpellsByClassLevel(id, level) {
+  try {
+    return await getSpellsWIthTraitsTraditions(spellsClassLevelQuery, [id, level]);
+  } catch (err) {
+    console.error("error on load spells by class and level:", err);
+  }
+}
+
+export async function getSpellsBySubclassLevel(id, entityLevel) {
+  const level = Math.ceil(entityLevel / 2);
+  try {
+    return await getSpellsWIthTraitsTraditions(spellsSubclassLevelQuery, [id, level]);
+  } catch (err) {
+    console.error("error on load spells by subclass and level:", err);
   }
 }
 

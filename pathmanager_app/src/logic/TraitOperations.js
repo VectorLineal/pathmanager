@@ -16,6 +16,12 @@ FROM Razgo_Hechizo JOIN Razgo ON Razgo.id = Razgo_Hechizo.razgoId
 WHERE Razgo_Hechizo.hechizoId = ?
 ORDER BY Razgo.nombre;
 `;
+const traitsFeatQuery = `
+SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
+FROM Razgo_Proeza JOIN Razgo ON Razgo.id = Razgo_Proeza.razgoId
+WHERE Razgo_Proeza.razgoId = ?
+ORDER BY Razgo.nombre;
+`;
 const traitsAbilityQuery = `
 SELECT Razgo.id, Razgo.nombre, Razgo.descripcion
 FROM Razgo_Habilidad JOIN Razgo ON Razgo.id = Razgo_Habilidad.razgoId
@@ -88,6 +94,13 @@ export async function getTraitBySpell(id) {
     return await glosaryDatabase.query(traitsSpellQuery, [id]);
   } catch (err) {
     console.error("error on load traits by spell:", err);
+  }
+}
+export async function getTraitByFeat(id) {
+  try {
+    return await glosaryDatabase.query(traitsFeatQuery, [id]);
+  } catch (err) {
+    console.error("error on load traits by feat:", err);
   }
 }
 export async function getTraitByAbility(id) {
