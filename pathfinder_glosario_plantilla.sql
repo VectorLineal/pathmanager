@@ -1430,3 +1430,27 @@ INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
 VALUES ('humano habilidoso', 'su ingenuidad le permite entrenarse mejor en más habilidades', 19, 256);
 INSERT INTO Herencia (nombre, descripcion, razaId)
 VALUES ('humano versátil', 'la gran ambición y adaptabilidad de la humanidad le ha permitido extenderse por todo Golarion haciendo que pueda escoger 1 dote general adicional a nivel 1', 19);
+
+INSERT INTO Herencia (nombre, descripcion, razaId)
+VALUES ('elfo antiguo', 'elfos que han vivido al menos 100 años y poseen gran experiencia', 15);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('elfo ártico', 'proveniente del norte helado que garantiza reistencia a los climas fríos', 15, 257);
+INSERT INTO Herencia (nombre, descripcion, razaId, sentidoId)
+VALUES ('elfo de la caverna', 'habitantes de cavernas profundas que adaptaron su visión a la oscuridad', 15, 6);
+INSERT INTO Herencia (nombre, descripcion, razaId, hechizoId)
+VALUES ('elfo vidente', 'nacido con una habilidad innata de entender la magia, es capaz de usar detectar magia como un hechizo arano innato', 15, 3);
+INSERT INTO Herencia (nombre, descripcion, razaId, sentidoId)
+VALUES ('elfo de los susurros', 'posee oídos altamente desarrollados que le permiten detectar cualquier susurro o ruido', 15, 10);
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('elfo del bosque', 'proveniente de un bosque o una selva profunda, especializado en escalar árboles y usar la vegetación como ventaja', 15, 258);
+
+INSERT INTO Herencia (nombre, descripcion, razaId, habilidadId)
+VALUES ('gnomo camaleón', 'por la influencia dle primer mundo puede cambiar su cabello de color y el todo de su piel a todo tipo de colores, se puede hacer a voluntad con 1 acción para 1 cambio pequeño o 1 hora para 1 cambio total, al dormir cambia de color dependiendo de sus sueños dando un color aleatorio cada mañana', 16, 259);
+INSERT INTO Herencia (nombre, descripcion, razaId)
+VALUES ('gnomo tocado por los fey', 'descendiente de los fey lo cual provee capacidades mágicas haciendo que pueda elegir un truco primitivo como hechizo innato', 16);
+INSERT INTO Herencia (nombre, descripcion, razaId, sentidoId)
+VALUES ('gnomo sensato', 've los colores más brillantes, escucha mejor los sonidos y detalla mejor los olores ganando así olfato impreciso', 16, 11);
+INSERT INTO Herencia (nombre, descripcion, razaId, sentidoId)
+VALUES ('gnomo del umbral', 'descendiente de los fey sombríos dde las profundidades otorgandole visión en la oscuridad', 16, 6);
+INSERT INTO Herencia (nombre, descripcion, razaId)
+VALUES ('gnomo del manantial', 'posee una conexión con algún otro plano de la existencia o algún poder aculto tales como deidades, seres celestiales o demonios ganando así un truco arcano, divino u oculto que puede usar como un hechizo innato', 16);
