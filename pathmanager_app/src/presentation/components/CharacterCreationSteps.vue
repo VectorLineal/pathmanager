@@ -336,12 +336,12 @@ const onAttackSpellsUpdate = async (data, valid) => {
 const steps = [
   {
     title: "Raza, Clase y transfondo",
-    content: "Elegir nombre, Raza junto con clase y nivel",
+    content: "Elegir nombre, Raza junto con clase, subclases, herencia y transfondo",
   },
   {
     title: "Atributos y habilidades",
     content:
-      "Elegir tamaño, lenguajes, inmunidades, movimientos, sentidos y resistencias",
+      "Elegir lenguajes, movimientos, sentidos y resistencias",
   },
   {
     title: "Dotes y habilidades especiales",

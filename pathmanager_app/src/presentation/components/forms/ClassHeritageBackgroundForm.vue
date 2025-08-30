@@ -19,13 +19,18 @@
         </a-form-item>
       </a-col>
       <a-col :sm="7" :md="6" :lg="5" :xl="4">
+        <a-form-item label="Alineación" name="alineacion">
+          <AlignmentSelector @onSelect="selectAlignment" />
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="5" :xl="4">
         <a-form-item label="Clase" name="clase">
           <ClassSelector @onSelect="selectClass" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="5" :xl="4">
-        <a-form-item label="Alineación" name="alineacion">
-          <AlignmentSelector @onSelect="selectAlignment" />
+      <a-col :sm="7" :md="6" :lg="5" :xl="4" v-for="(value, index) in selectedSubclasses">
+        <a-form-item :label="value.name" :name="'subclase' + (index == 0? '':'2')">
+          <SubclassSelector :index="index" :type="value.name" :data="value.data" @onSelect="selectSubClass" />
         </a-form-item>
       </a-col>
     </a-row>
@@ -43,6 +48,9 @@ import { reactive, ref, toRaw } from "vue";
 import ClassSelector from "../selectors/ClassSelector.vue";
 import RaceSelector from "../selectors/RaceSelector.vue";
 import AlignmentSelector from "../selectors/AlignmentSelector.vue";
+import SubclassSelector from "../selectors/SubclassSelector.vue";
+import { getSubclassesByClass } from "../../../logic/SubclassOperations";
+import SubclassSelector from "../selectors/SubclassSelector.vue";
 
 const emit = defineEmits(["updateData"]);
 
@@ -65,6 +73,7 @@ const labelCol = {
 const wrapperCol = {
   span: 24,
 };
+const selectedSubclasses = ref([]);
 
 const rules = {
   deidad: [
@@ -119,9 +128,14 @@ const rules = {
   ],
 };
 
-const selectClass = (value) => {
+const selectClass = async (value) => {
   formState.clase = value.id;
   formState.tradicionHechizo = value.tradicionId;
+  selectedSubclasses.value = await getSubclassesByClass(value);
+};
+const selectSubClass = (value, index) => {
+  if(index == 0) formState.subclase = value;
+  else formState.subclase2 = value;
 };
 const selectAlignment = (value) => {
   formState.alineacion = value;
