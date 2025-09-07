@@ -1,4 +1,5 @@
 import glosaryDatabase from "../data/services/DBPool";
+import { getFeatById } from "./FeatOperations";
 
 const backgroundQuery = `
 SELECT id, Transfondo.nombre, rarezaId, Rareza.nombre as rareza
@@ -27,9 +28,32 @@ export async function getBackgroundData(id) {
   try {
     const backgrounds = await glosaryDatabase.query(singleBackgroundQuery, [id]);
     if(backgrounds.length <= 0) return null;
-    return backgrounds[0];
+    else {
+      //se obtienen los datos de la dote que puede o no estar asociada
+      const backData = backgrounds[0];
+      const feats = [];
+      if(backData.proezaId != null){
+        const featData = await getFeatById(backData.proezaId);
+        if(featData != null) feats.push(featData);
+      }
+      backData.proezas = feats;
+
+      return backData;
+    }
   } catch (err) {
     console.error("error on load single background:", err);
     return null;
   }
+}
+export function getBackgroundDataVector(data) {
+  const descriptions =  [
+    {value: data.descripcion, label: 'descripción'},
+  ];
+  //Se agregan descripciones d elos valores que pueden ser nulos
+  if(data.tradicion != null) descriptions.push({value: `Tradición: (${data.tradicion})`, label: 'Entrenado en'});
+  if(data.atributo1 != null) descriptions.push({value: data.atributo1, label: 'Entrenado en'});
+  if(data.atributo2 != null) descriptions.push({value: data.atributo2, label: 'Entrenado en'});
+  if(data.habilidad != null) descriptions.push({value: '+1', label: data.habilidad});
+
+  return descriptions;
 }

@@ -1,4 +1,9 @@
 import glosaryDatabase from "../data/services/DBPool";
+import { getFeatById } from "./FeatOperations";
+import { getSenseById } from "./SenseOperations";
+import { getAbilityById } from "./AbilityOperations";
+import { getSpellById } from "./SpellOperations";
+
 
 const heritageQuery = `
 WITH heritage AS (SELECT id, nombre, rarezaId from Herencia WHERE razaId = 15
@@ -10,10 +15,8 @@ ORDER BY heritage.nombre, Rareza.nombre;
 `;
 
 const singleHeritageQuery = `
-SELECT Herencia.descripcion, habilidadId, HabilidadEspecial.efecto, proezaId, proezaId2, sentidoId,
-Sentido.nombre AS sentido, Sentido.descripcion as sDescripcion, hechizoId
-FROM Herencia LEFT JOIN HabilidadEspecial ON habilidadId = HabilidadEspecial.id
-LEFT JOIN Sentido ON sentidoId = Sentido.id
+SELECT Herencia.descripcion, habilidadId, proezaId, proezaId2, sentidoId, hechizoId
+FROM Herencia
 WHERE Herencia.id = ?;
 `;
 
@@ -29,7 +32,39 @@ export async function getHeritageData(id) {
   try {
     const heritages = await glosaryDatabase.query(singleHeritageQuery, [id]);
     if(heritages.length <= 0) return null;
-    return heritages[0];
+    else{
+      const heritage = heritages[0];
+      //se extrae cada propiedad de cada una de las diferentes tablas
+      const feats = [];
+      if(backData.proezaId != null){
+        const featData = await getFeatById(backData.proezaId);
+        if(featData != null) feats.push(featData);
+      }
+      if(backData.proezaId2 != null){
+        const featData = await getFeatById(backData.proezaId2);
+        if(featData != null) feats.push(featData);
+      }
+      heritage.proezas = feats;
+      const senses = [];
+      if(backData.sentidoId != null){
+        const senseData = await getSenseById(backData.sentidoId);
+        if(senseData != null) senses.push(senseData);
+      }
+      heritage.sentidos = senses;
+      const abilities = [];
+      if(backData.habilidadId != null){
+        const abilityData = await getAbilityById(backData.habilidadId);
+        if(abilityData != null) abilities.push(abilityData);
+      }
+      heritage.habilidades = abilities;
+      const spells = [];
+      if(backData.hechizoId != null){
+        const spellData = await getAbilityById(backData.hechizoId);
+        if(spellData != null) spells.push(spellData);
+      }
+      heritage.hechizos = spells;
+      return heritage;
+    }
   } catch (err) {
     console.error("error on load single heritage:", err);
     return null;

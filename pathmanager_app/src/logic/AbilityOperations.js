@@ -34,6 +34,12 @@ FROM Raza_Habilidad
 WHERE Raza_Habilidad.razaId = ?;
 `;
 
+const singleAbilityQuery = `
+SELECT nombre, efecto, requisito, critico, demora, alcance
+FROM HabilidadEspecial
+WHERE id = ?;
+`;
+
 const abilityEntityCreate = `
 INSERT INTO Habilidad_Entidad(habilidadId, entidadId) VALUES(?, ?);
 `;
@@ -55,6 +61,22 @@ const getTraitsByReference = async (params, query) => {
   }
   return abilities;
 };
+
+export async function getAbilityById(id) {
+  try {
+    const abilities = await glosaryDatabase.query(singleAbilityQuery, [id]);
+    if(abilities.length > 0){
+      const traits = await getTraitByAbility(id);
+      const ability = abilities[0];
+      ability.razgos = traits;
+      return ability;
+    }
+    else return null;
+  } catch (err) {
+    console.error("error on load single ability by id:", err);
+    return null;
+  }
+}
 
 export async function getAbilitiesByEntity(id) {
   try {

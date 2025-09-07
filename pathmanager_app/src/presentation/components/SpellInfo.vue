@@ -19,7 +19,6 @@ import GenericAction from './generic/GenericAction.vue';
 const props = defineProps({
   spell: Object
 });
-console.log("input spell", props.spell);
 
 const spellLevel = computed(() => {
   return props.spell.nivel == 0? 'Truco':('Hechizo ' + props.spell.nivel);

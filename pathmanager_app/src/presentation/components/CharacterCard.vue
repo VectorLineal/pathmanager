@@ -27,24 +27,16 @@
       </template>
       <template #description>
         <p>
-          <b>Percepción: </b><Modifier :amount="entity.percepcion"/>, <b>Sentidos: </b
-          ><template v-for="sentido in entity.sentidos"
-            ><UExtraInfo
-              :name="sentido.nombre"
-              :description="sentido.descripcion"
-            /><span v-if="sentido.rango != null">{{
-              " " + sentido.rango
-            }}</span></template
-          >
+          <b>Percepción: </b><Modifier :amount="entity.percepcion"/>, <MappedSenses :senses="entity.sentidos"/>
         </p>
         <p>
-          <b>lenguages: </b
-          ><LangTag
+          <b>Lenguajes: </b>
+          <LangTag
             v-for="lenguage in entity.lenguages"
             :name="lenguage.nombre"
             :rarity="lenguage.rarezaId"
-          />, <b>movilidad: </b
-          ><MovInfo
+          />, <b>Movilidad: </b>
+          <MovInfo
             v-for="velocidad in entity.velocidades"
             :name="velocidad.nombre"
             :amount="velocidad.cantidad"
@@ -91,9 +83,9 @@ import { computed } from "vue";
 import TraitTag from "./generic/TraitTag.vue";
 import LangTag from "./generic/LangTag.vue";
 import MovInfo from "./generic/MovInfo.vue";
-import UExtraInfo from "./generic/UExtraInfo.vue";
 import Modifier from "./generic/Modifier.vue";
 import ConditionalModifier from "./generic/ConditionalModifier.vue";
+import MappedSenses from "./MappedSenses.vue";
 
 const props = defineProps({
   entity: Object,

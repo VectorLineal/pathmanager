@@ -6,16 +6,6 @@ import { getSpellsBySubclassLevel } from "./SpellOperations";
 const SubclassTypeClassQuery = `select id, nombre from TipoSubclase where claseId = ?;`;
 const SubclassByTypeQuery = `select id, nombre, descripcion from Subclase where tipoSubclaseId = ?;`;
 
-const SubclassQuery = `
-SELECT Tradicion.nombre
-FROM Tradicion_Hechizo JOIN Tradicion ON Tradicion_Hechizo.tradicionId = Tradicion.id
-WHERE Tradicion_Hechizo.hechizoId = ?;
-`;
-
-const traditionSpellCreate = `
-INSERT INTO Tradicion_Hechizo(tradicionId, hechizoId) VALUES(?, ?);
-`;
-
 export async function getSubclassDataByIdLevel(id, level) {
   try {
     const abilities = await getAbilitiesBySubclassLevel(id, level);
@@ -41,13 +31,5 @@ export async function getSubclassesByClass(classId) {
     }else return [];
   } catch (err) {
     console.error("error on load all traditions:", err);
-  }
-}
-
-export async function createTraditionSpell(tradition, spell) {
-  try {
-    return await glosaryDatabase.create(traditionSpellCreate, [tradition, spell]);
-  } catch (err) {
-    console.error("error on create tradition spell:", err);
   }
 }

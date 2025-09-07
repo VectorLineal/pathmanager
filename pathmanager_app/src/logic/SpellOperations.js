@@ -17,6 +17,15 @@ WHERE Hechizo_Entidad.entidadId = ?
 ORDER by nivel_final, Hechizo.nombre, escuela;
 `;
 
+const singleSpellQuery = `
+SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
+Escuela.nombre AS escuela, Blanco.nombre AS blancos, Clase.nombre AS clase
+FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
+JOIN Blanco ON Hechizo.blancoId = Blanco.id
+LEFT JOIN Clase ON Hechizo.claseId = Clase.id
+WHERE Hechizo.id = ?;
+`;
+
 const spellsSubclassLevelQuery = `
 SELECT Hechizo.id, Hechizo.nombre, Hechizo.nivel, efecto, critico, fallo, demora, alcance, aumentos,
 Escuela.nombre AS escuela, Blanco.nombre AS blancos, Clase.nombre AS clase
@@ -34,7 +43,7 @@ FROM Hechizo JOIN Escuela ON Hechizo.escuelaId = Escuela.id
 JOIN Blanco ON Hechizo.blancoId = Blanco.id
 JOIN ClaseNivel_Hechizo ON ClaseNivel_Hechizo.hechizoId = Hechizo.id
 LEFT JOIN Clase ON Hechizo.claseId = Clase.id
-WHERE ClaseNivel_Hechizo.subclaseId = ? and ClaseNivel_Hechizo.nivel = ?
+WHERE ClaseNivel_Hechizo.claseId = ? and ClaseNivel_Hechizo.nivel = ?
 ORDER by Hechizo.nombre, escuela;
 `;
 
@@ -117,6 +126,16 @@ async function getSpellsWIthTraitsTraditions(query, params) {
       }
     }
     return spells;
+}
+
+export async function getSpellById(id) {
+  try {
+    const orderedData =  await getSpellsWIthTraitsTraditions([id], singleSpellQuery);
+    return orderedData.length > 0? orderedData[0]: null;
+  } catch (err) {
+    console.error("error on load single spell by id:", err);
+    return null;
+  }
 }
 
 export async function getSpellsByEntity(id) {
