@@ -64,7 +64,8 @@ const formState = reactive({
   tradicionHechizo: null,
   raza: null,
   herencia: null,
-  transfondo: null
+  transfondo: null,
+  deidad: null
 });
 const formRef = ref();
 const labelCol = {

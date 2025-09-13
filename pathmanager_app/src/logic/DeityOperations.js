@@ -1,8 +1,17 @@
 import glosaryDatabase from "../data/services/DBPool";
+import {GOOD_ALIGNMENTS, EVIL_ALIGNMENTS} from "./AlignmentOperations";
+import {getDomainsByDeity} from "./DomainOperations";
 
 const dietiesQuery = `
 select id, nombre
 FROM Deidad
+ORDER BY nombre;
+`;
+
+const alignedDietiesQuery = `
+select id, nombre
+FROM Deidad
+WHERE alineacionId in (?, ?, ?)
 ORDER BY nombre;
 `;
 
@@ -18,22 +27,61 @@ left join Atributo as atAt2 on Deidad.atributoId2 = atAt2.id
 where Deidad.id = ?;
 `;
 
-export async function getAllDeities() {
+export async function getAllAlignedDeities(alignment = 0) {
   try {
-    return await glosaryDatabase.query(dietiesQuery);
+    switch(alignment){
+      case -1:
+        return await glosaryDatabase.query(alignedDietiesQuery, EVIL_ALIGNMENTS);
+      case 0:
+      default:
+        return await glosaryDatabase.query(dietiesQuery);
+      case 1:
+        return await glosaryDatabase.query(alignedDietiesQuery, GOOD_ALIGNMENTS);
+    }
   } catch (err) {
     console.error("error on load all deities:", err);
   }
 }
 
-export async function getRaceById(id) {
+export async function getDeityById(id) {
   try {
     const dQuery = await glosaryDatabase.query(singleDeityQuery, [id]);
     const deity = dQuery[0];
+    const domains = await getDomainsByDeity(id);
+    deity.dominios = domains;
 
     return deity;
   } catch (err) {
     console.error("error on load single deity:", err);
     return null;
   }
+}
+
+function mapFontType(font){
+  return font === -1? 'Impía' : (font === 0? 'Cualquiera' : 'Sagrada');
+}
+function mapDomains(domains){
+  const dText = "";
+  for(let i = 0; i < domains.length; i++){
+    const domain = domains[i].nombre;
+    dText += domain + (i < domains.length - 1? ', ' : '');
+  }
+  return dText;
+}
+
+export function getDeityDataVector(data) {
+  const attributeText = (data.atributo1 == null && data.atributo2 == null)? 'cualquiera': (data.atributo1 + (data.atributo2 != null? ' o ' + data.atributo2:''));
+  const descriptions =  [
+    {value: data.edicto, label: 'Edicto'},
+    {value: data.anatema == null? '': data.anatema, label: 'Anatema'},
+    {value: data.alineaicon, label: 'Alineación'},
+    {value: mapFontType(data.categoria), label: 'Tipo de deidad'},
+    {value: mapFontType(data.fuente), label: 'Fuente'},
+    {value: data.arma, label: 'Arma Favorecida'},
+    {value: data.habilidad, label: 'Habilidad Divina'},
+    {value: attributeText, label: 'Atributo Divino'},
+    {value: mapDomains(data.dominios), label: 'Dominios'}
+  ];
+
+  return descriptions;
 }
