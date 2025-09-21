@@ -1,6 +1,7 @@
 import glosaryDatabase from "../data/services/DBPool";
-import {GOOD_ALIGNMENTS, EVIL_ALIGNMENTS} from "./AlignmentOperations";
-import {getDomainsByDeity} from "./DomainOperations";
+import {getGood, getEvil} from "./AlignmentOperations";
+import { getDomainsByDeity } from "./DomainOperaions";
+import { makeOptions } from "./utilities/StructureUtils";
 
 const dietiesQuery = `
 select id, nombre
@@ -16,8 +17,9 @@ ORDER BY nombre;
 `;
 
 const singleDeityQuery = `
-select Deidad.nombre, edicto, anatema, simbolo, fuente, TipoDeidad.nombre AS categoria, atributoId, atAt.nombre AS atributo1,
-atributoId2, atAt2.nombre AS atributo2, habilidadId, hab.nombre AS habilidad, armaId, Arma.nombre as arma, alineacionId, Alineacion.nombre as alineaicon
+select Deidad.nombre, edicto, anatema, simbolo, fuente, TipoDeidad.nombre AS categoria, atributoId,
+atAt.nombre AS atributo1, atributoId2, atAt2.nombre AS atributo2, habilidadId, hab.nombre AS habilidad,
+armaId, Arma.nombre as arma, alineacionId, Alineacion.nombre as alineaicon
 from Deidad join TipoDeidad on Deidad.tipoId = TipoDeidad.id
 join Arma on Deidad.armaId = Arma.id
 join Alineacion on Deidad.alineacionId = Alineacion.id
@@ -31,16 +33,20 @@ export async function getAllAlignedDeities(alignment = 0) {
   try {
     switch(alignment){
       case -1:
-        return await glosaryDatabase.query(alignedDietiesQuery, EVIL_ALIGNMENTS);
+        return await glosaryDatabase.query(alignedDietiesQuery, getEvil());
       case 0:
       default:
         return await glosaryDatabase.query(dietiesQuery);
       case 1:
-        return await glosaryDatabase.query(alignedDietiesQuery, GOOD_ALIGNMENTS);
+        return await glosaryDatabase.query(alignedDietiesQuery, getGood());
     }
   } catch (err) {
     console.error("error on load all deities:", err);
   }
+}
+export async function getDeityOptions(alignment = 0) {
+  const results = await getAllAlignedDeities(alignment);
+  return makeOptions(results);
 }
 
 export async function getDeityById(id) {

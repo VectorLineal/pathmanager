@@ -1,4 +1,5 @@
 import glosaryDatabase from "../data/services/DBPool";
+import { makeLabeledOptions } from "./utilities/StructureUtils";
 import { getFeatById } from "./FeatOperations";
 import { getSenseById } from "./SenseOperations";
 import { getAbilityById } from "./AbilityOperations";
@@ -6,12 +7,12 @@ import { getSpellById } from "./SpellOperations";
 
 
 const heritageQuery = `
-WITH heritage AS (SELECT id, nombre, rarezaId from Herencia WHERE razaId = 15
+WITH heritage AS (SELECT id, nombre, rarezaId from Herencia WHERE razaId = ?
 UNION SELECT id, nombre, rarezaId  from Herencia WHERE razaId IS NULL)
 
-SELECT heritage.id, heritage.nombre, rarezaId, Rareza.nombre AS rareza
+SELECT heritage.id, heritage.nombre, Rareza.nombre AS rareza
 FROM heritage JOIN Rareza ON rarezaId = Rareza.id
-ORDER BY heritage.nombre, Rareza.nombre;
+ORDER BY Rareza.nombre, heritage.nombre;
 `;
 
 const singleHeritageQuery = `
@@ -26,6 +27,10 @@ export async function getHeritageByRace(id) {
   } catch (err) {
     console.error("error on load all heritages:", err);
   }
+}
+export async function getHeritageOptionsByRace(id) {
+  const results = await getHeritageByRace(id);
+  return makeLabeledOptions(results);
 }
 
 export async function getHeritageData(id) {
@@ -59,7 +64,7 @@ export async function getHeritageData(id) {
       heritage.habilidades = abilities;
       const spells = [];
       if(backData.hechizoId != null){
-        const spellData = await getAbilityById(backData.hechizoId);
+        const spellData = await getSpellById(backData.hechizoId);
         if(spellData != null) spells.push(spellData);
       }
       heritage.hechizos = spells;

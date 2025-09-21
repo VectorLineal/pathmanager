@@ -2,35 +2,13 @@
   <div>
     <a-steps :current="current" :items="items"></a-steps>
     <KeepAlive>
-      <LevelClassRaceForm
+      <ClassHeritageBackgroundForm
         ref="lcrRef"
         v-if="current == 0"
         @updateData="onClassRaceUpdate"
       />
     </KeepAlive>
-    <KeepAlive>
-      <PhysicalTraitsForm
-        ref="ptRef"
-        v-if="current == 1"
-        :intialData="requestData"
-        @updateData="onPhysicalTraitsUpdate"
-      />
-    </KeepAlive>
-    <KeepAlive>
-      <AtributesDeffensesForm
-        ref="atRef"
-        v-if="current == 2"
-        :intialData="requestData"
-        @updateData="onAtributessUpdate"
-      />
-    </KeepAlive>
-    <KeepAlive>
-      <AttacksSpellsForm
-        ref="saRef"
-        v-if="current == 3"
-        @updateData="onAttackSpellsUpdate"
-      />
-    </KeepAlive>
+    <p v-if="current > 0"> {{ steps[current].content }}</p>
     <div class="steps-action">
       <a-button v-if="current > 0" style="margin-left: 8px" @click="prev"
         >Anterior</a-button
@@ -48,7 +26,7 @@
 import { ref, provide, reactive, useTemplateRef, toRaw, computed } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter } from "vue-router";
-import Entity from "../../data/models/Entity";
+import Player from "../../data/models/Player";
 import { getAllAlignments } from "../../logic/AlignmentOperations";
 import { getAllClasses } from "../../logic/ClassOperations";
 import { getAllRaces, getRaceById } from "../../logic/RaceOperations";
@@ -61,7 +39,6 @@ import { getAllDamageTypes } from "../../logic/DamageTypeOperations";
 import { getAllSenses } from "../../logic/SenseOperations";
 import { getAllWeapons } from "../../logic/WeaponOperations";
 import { getSpellsByTraditionCasterLevel, getFocusSpellsByClassLevel } from "../../logic/SpellOperations";
-import { getAllAbilities } from "../../logic/AbilityOperations";
 import { createEntity } from "../../logic/EntityOperations";
 import {
   alignmentsStorage,
@@ -75,25 +52,19 @@ import {
   damageTypesStorage,
   sensesStorage
 } from "../../logic/Storage";
-import LevelClassRaceForm from "./forms/LevelClassRaceForm.vue";
-import PhysicalTraitsForm from "./forms/PhysicalTraitsForm.vue";
-import AtributesDeffensesForm from "./forms/AtributesDeffensesForm.vue";
-import AttacksSpellsForm from "./forms/AttacksSpellsForm.vue";
+import ClassHeritageBackgroundForm from "./forms/ClassHeritageBackgroundForm.vue";
 
 const router = useRouter();
 
 const current = ref(0);
-const requestData = reactive(new Entity());
+const requestData = reactive(new Player());
 const spellTradition = ref();
 const availableSpells = ref([]);
-const abilities = ref([]);
 const weapons = ref([]);
 
+const font = ref();
 
 const classRaceRef = useTemplateRef("lcrRef");
-const physicalTraitsRef = useTemplateRef("ptRef");
-const atributesRef = useTemplateRef("atRef");
-const attackSpellsRef = useTemplateRef("saRef");
 const nextText = computed(() => {
   return current.value == steps.length - 1 ? "Crear" : "Siguiente";
 });
@@ -110,11 +81,6 @@ try {
   if (traitsStorage.isEmpty()) traitsStorage.fillData(await getAllTraits());
   if (damageTypesStorage.isEmpty()) damageTypesStorage.fillData(await getAllDamageTypes());
   if (sensesStorage.isEmpty()) sensesStorage.fillData(await getAllSenses());
-  //se cargan todas las habilidades especiales
-  const abilitiesData = await getAllAbilities();
-  abilitiesData.forEach(element => {
-    abilities.value.push({label: element.nombre, value: element.id});
-  });
   //se cargan todas las armas
   const weaponsData = await getAllWeapons();
   weaponsData.forEach(element => {
@@ -123,19 +89,6 @@ try {
 } catch (error) {
   console.error("error on enemies table", error);
 }
-
-const loadAbilities = async () => {
-  try{
-    const abilitiesData = await getAllAbilities();
-    abilities.value = [];
-    abilitiesData.forEach(element => {
-      abilities.value.push({label: element.nombre, value: element.id});
-    });
-  }catch(error){
-    console.error("error on load special abilites", error);
-  }
-};
-
 const loadWeapons = async () => {
   try{
     const weaponsData = await getAllWeapons();
@@ -183,7 +136,6 @@ const loadSpells = async () => {
 };
 
 provide('weapons', {weapons, loadWeapons});
-provide('abilities', {abilities, loadAbilities});
 provide('spells', {availableSpells, loadSpells});
 
 const validateClassRace = async () => {
@@ -243,11 +195,14 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.name = data.name;
     requestData.description = data.description;
     requestData.classId = data.clase;
-    requestData.raceId = data.race;
-    requestData.traits = data.traits;
-    requestData.loot = data.tesoro;
-    requestData.money = data.dinero;
-    requestData.alignmentId = data.alineacion
+    requestData.raceId = data.raza;
+    requestData.subclassId = data.subclase;
+    requestData.subclassId2 = data.subclase2;
+    requestData.heritageId = data.herencia;
+    requestData.alignmentId = data.alineacion;
+    requestData.backgroundId = data.transfondo;
+    requestData.deityId = data.deidad;
+    font.value = data.fuente;
     spellTradition.value = data.tradicionHechizo;
     await loadSpells();
     console.log("can cast spells:", availableSpells.value);
@@ -266,7 +221,7 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.setAbilities(raceData.habilidades);
     requestData.setInmunities(raceData.inmunidades);
     requestData.setLanguages(raceData.lenguages);
-    //console.log("acumulated data: ", toRaw(requestData));
+    console.log("acumulated data: ", toRaw(requestData));
     current.value++;
   }
 };

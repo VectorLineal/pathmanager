@@ -1,10 +1,11 @@
 import glosaryDatabase from "../data/services/DBPool";
 import { getFeatById } from "./FeatOperations";
+import { makeLabeledOptions } from "./utilities/StructureUtils";
 
 const backgroundQuery = `
-SELECT id, Transfondo.nombre, rarezaId, Rareza.nombre as rareza
+SELECT Transfondo.id, Transfondo.nombre, Rareza.nombre as rareza
 FROM Transfondo JOIN Rareza ON rarezaId = Rareza.id
-ORDER BY nombre;
+ORDER BY Rareza.nombre, Transfondo.nombre;
 `;
 
 const singleBackgroundQuery = `
@@ -22,6 +23,10 @@ export async function getAllBackgrounds() {
   } catch (err) {
     console.error("error on load all backgrounds:", err);
   }
+}
+export async function getBackgroundOptions() {
+  const results = await getAllBackgrounds();
+  return makeLabeledOptions(results);
 }
 
 export async function getBackgroundData(id) {

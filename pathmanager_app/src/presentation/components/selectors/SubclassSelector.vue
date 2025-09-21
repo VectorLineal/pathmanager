@@ -26,6 +26,7 @@ watch(
   () => props.data,
   (newValue, oldValue) => {
     options.value = [];
+    value.value = null;
     newValue.forEach((element) => {
       options.value.push({
         value: element.id,
