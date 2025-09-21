@@ -37,4 +37,4 @@ export const spellTargetsStorage = reactive( new PersistentFilterData());
 export const spellSchoolsStorage = reactive( new PersistentFilterData());
 export const attributesStorage = reactive( new PersistentFilterData());
 export const itemTypesStorage = reactive( new PersistentFilterData());
-export const deitiesStorage = reactive( new PersistentFilterData());
+export const dragonsStorage = reactive( new PersistentFilterData());

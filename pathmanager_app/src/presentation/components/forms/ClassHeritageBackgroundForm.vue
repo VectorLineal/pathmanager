@@ -53,9 +53,14 @@
           <AlignmentSelector :constraints="contraintAlignment" @onSelect="selectAlignment" />
         </a-form-item>
       </a-col>
-      <a-col :sm="7" :md="6" :lg="6" :xl="6">
+      <a-col :sm="7" :md="6" :lg="6" :xl="6" v-if="hasDeityRestrictions">
         <a-form-item label="Fuente" name="fuente">
           <a-select v-model:value="formState.fuente" placeholder="Fuente" :options="fontOptions"/>
+        </a-form-item>
+      </a-col>
+      <a-col :sm="7" :md="6" :lg="6" :xl="6" v-if="requiresDragon">
+        <a-form-item label="Sangre de Dragón" name="dragon">
+          <DragonSelector @onSelect="selectDragon"/>
         </a-form-item>
       </a-col>
     </a-row>
@@ -74,12 +79,14 @@ import ClassSelector from "../selectors/ClassSelector.vue";
 import RaceSelector from "../selectors/RaceSelector.vue";
 import AlignmentSelector from "../selectors/AlignmentSelector.vue";
 import SubclassSelector from "../selectors/SubclassSelector.vue";
+import DragonSelector from "../selectors/DragonSelector.vue";
 import { getSubclassesByClass, getSubclassDataByIdLevel, getSanctificationBySubclass } from "../../../logic/SubclassOperations";
 import { getHeritageOptionsByRace } from "../../../logic/HeritageOperations";
 import { getBackgroundOptions } from "../../../logic/BackgroundOperations";
 import { getDeityOptions, getDeityById } from "../../../logic/DeityOperations";
 import { getAdyacentAlignments } from "../../../logic/AlignmentOperations";
 import { hasValueOption } from "../../../logic/utilities/StructureUtils";
+import { getDragonTraditionById } from "../../../logic/DragonTypeOperations";
 
 const emit = defineEmits(["updateData"]);
 
@@ -95,7 +102,8 @@ const formState = reactive({
   herencia: null,
   transfondo: null,
   deidad: null,
-  fuente: null
+  fuente: null,
+  dragon: null
 });
 const formRef = ref();
 const labelCol = { span: 24 };
@@ -124,6 +132,9 @@ const fontOptions = computed(() => {
 const hasDeityRestrictions = computed(() => {
   return formState.clase === 2 || formState.clase === 8;
 });
+const requiresDragon = computed(() => {
+  return formState.subclase === 27 || formState.subclase === 56 || formState.herencia === 6;
+});
 
 const rules = computed(() => {
   return {
@@ -131,6 +142,20 @@ const rules = computed(() => {
       {
         required: hasDeityRestrictions.value,
         message: "Los clérigos y campeones deben elegir deidad",
+        trigger: "change",
+      },
+    ],
+    fuente: [
+      {
+        required: hasDeityRestrictions.value,
+        message: "Los clérigos y campeones deben elegir un tipo de fuente",
+        trigger: "change",
+      },
+    ],
+    dragon: [
+      {
+        required: requiresDragon.value,
+        message: "Los personajes con sangre de dragón y los bárbaros con instinto dracónico deben elegir un tipo de dragón",
         trigger: "change",
       },
     ],
@@ -196,7 +221,13 @@ const selectSubClass = async (value, index) => {
     deitiesContraint.value = deityConstarint;
   }
   //los hechiceros tienen diferentes escuelas de hechizo dependiendo de su línea de sangre
-  if(subData.spellTradition > 0) formState.tradicionHechizo = subData.spellTradition;
+  if(subData.spellTradition > 0){
+    //si tienen sangre de dragón y ya hay alguna elegida, se conserva la tradición de hechizo del dragón
+    if(value == 56 && formState.dragon != null && formState.dragon > 0){
+      const tradition = await getDragonTraditionById(formState.dragon);
+      formState.tradicionHechizo = tradition;
+    }else formState.tradicionHechizo = subData.spellTradition;
+  }
 
   if (index == 0){
     formState.subclase = value;
@@ -209,6 +240,11 @@ const selectSubClass = async (value, index) => {
 };
 const selectAlignment = (value) => {
   formState.alineacion = value;
+};
+const selectDragon = async (value) => {
+  formState.dragon = value;
+  const tradition = await getDragonTraditionById(value);
+  formState.tradicionHechizo = tradition;
 };
 const selectRace = async (value) => {
   formState.raza = value.id;

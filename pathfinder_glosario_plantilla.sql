@@ -456,6 +456,45 @@ insert into Reputacion(usuarioId, faccionId, modificador) values(1, 8, -1);
 insert into Reputacion(usuarioId, faccionId, modificador) values(2, 8, -2);
 insert into Reputacion(usuarioId, faccionId, modificador) values(3, 8, 0);
 
+CREATE TABLE TipoDragon(
+	id INTEGER NOT NULL PRIMARY KEY,
+	nombre VARCHAR(32) NOT NULL UNIQUE,
+	tradicionId INTEGER NOT NULL,
+	danoId INTEGER NOT NULL,
+	salvacion INTEGER NOT NULL,
+	FOREIGN KEY(tradicionId) REFERENCES Tradicion(id),
+	FOREIGN KEY(danoId) REFERENCES TipoDano(id),
+	FOREIGN KEY(salvacion) REFERENCES Atributo(id)
+);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('adamantino', 4, 2, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('marino', 4, 2, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('negro', 4, 6, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de salmuera', 1, 6, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de cobre', 4, 6, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('azul', 3, 8, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de bronce', 3, 8, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de las nubes', 4, 8, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('celestiales', 2, 8, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('diabólico', 2, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de latón', 1, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de oro', 1, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('magmático', 4, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('rojo', 4, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('del inframundo', 2, 7, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de crital', 1, 3, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('selvátivo', 4, 3, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('conspirador', 3, 13, 7);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('cornudo', 4, 13, 7);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('verde', 4, 13, 7);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de plata', 1, 5, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('blanc', 4, 5, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('espejismo', 1, 18, 9);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('del presagio', 3, 18, 9);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('soverano', 3, 18, 9);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('del umbral', 2, 11, 7);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('empireal', 2, 19, 8);
+INSERT INTO TipoDragon(nombre, tradicionId, danoId, salvacion) VALUES('de la fortuna', 1, 12, 8);
+
 CREATE TABLE Jugador(
  	id integer PRIMARY KEY NOT NULL,
 	nombre varchar(64) UNIQUE NOT NULL,
@@ -503,18 +542,24 @@ CREATE TABLE Jugador(
 	subclaseId integer,
 	subclaseId2 integer,
 	alineacionId integer NOT NULL,
+	razaId integer NOT NULL,
 	herenciaId integer NOT NULL,
 	atributoId integer NOT NULL default(1),
 	tamanoId integer not null default(3),
 	transfondoId integer NOT NULL,
+	deidadId INTEGER,
+	dragonId INTEGER,
 	FOREIGN KEY(alineacionId) REFERENCES Alineacion(id),
 	FOREIGN KEY(claseId) REFERENCES Clase(id),
 	FOREIGN KEY(subclaseId) REFERENCES Subclase(id),
 	FOREIGN KEY(subclaseId2) REFERENCES Subclase(id),
+	FOREIGN KEY(razaId) REFERENCES Raza(id),
 	FOREIGN KEY(herenciaId) REFERENCES Herencia(id),
 	FOREIGN KEY(tamanoId) REFERENCES Tamano(id),
 	FOREIGN KEY(transfondoId) REFERENCES Transfondo(id),
-	FOREIGN KEY(atributoId) REFERENCES Atributo(id)
+	FOREIGN KEY(atributoId) REFERENCES Atributo(id),
+	FOREIGN KEY(deidadId) REFERENCES Deidad(id),
+	FOREIGN KEY(dragonId) REFERENCES TipoDragon(id)
 );
 CREATE TABLE Jugador_Habilidad(
  	jugadorId integer NOT NULL,

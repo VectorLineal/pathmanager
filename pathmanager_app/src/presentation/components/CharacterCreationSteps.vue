@@ -40,6 +40,7 @@ import { getAllSenses } from "../../logic/SenseOperations";
 import { getAllWeapons } from "../../logic/WeaponOperations";
 import { getSpellsByTraditionCasterLevel, getFocusSpellsByClassLevel } from "../../logic/SpellOperations";
 import { createEntity } from "../../logic/EntityOperations";
+import { getAllDragonTypes } from "../../logic/DragonTypeOperations";
 import {
   alignmentsStorage,
   sizesStorage,
@@ -50,7 +51,8 @@ import {
   movementsStorage,
   traitsStorage,
   damageTypesStorage,
-  sensesStorage
+  sensesStorage,
+  dragonsStorage
 } from "../../logic/Storage";
 import ClassHeritageBackgroundForm from "./forms/ClassHeritageBackgroundForm.vue";
 
@@ -72,6 +74,7 @@ const nextText = computed(() => {
 try {
   //se cargan al storage varias listas de valores simples {id, nombre}
   if (alignmentsStorage.isEmpty()) alignmentsStorage.fillData(await getAllAlignments());
+  if (dragonsStorage.isEmpty()) dragonsStorage.fillData(await getAllDragonTypes());
   if (sizesStorage.isEmpty()) sizesStorage.fillData(await getAllSizes());
   if (racesStorage.isEmpty()) racesStorage.fillData(await getAllRaces());
   if (classesStorage.isEmpty()) classesStorage.fillData(await getAllClasses());
@@ -191,7 +194,6 @@ const onSubmit = async () => {
 
 const onClassRaceUpdate = async (data, valid) => {
   if (valid) {
-    requestData.setLevel(data.level);
     requestData.name = data.name;
     requestData.description = data.description;
     requestData.classId = data.clase;
@@ -202,10 +204,11 @@ const onClassRaceUpdate = async (data, valid) => {
     requestData.alignmentId = data.alineacion;
     requestData.backgroundId = data.transfondo;
     requestData.deityId = data.deidad;
+    requestData.dragonId = data.dragon;
     font.value = data.fuente;
     spellTradition.value = data.tradicionHechizo;
     await loadSpells();
-    console.log("can cast spells:", availableSpells.value);
+    console.log("can cast " + spellTradition.value + " spells:", availableSpells.value);
     const raceData = await getRaceById(requestData.raceId);
     requestData.sizeId = raceData.tamanoId;
     requestData.health = raceData.salud;
@@ -296,16 +299,16 @@ const steps = [
   {
     title: "Atributos y habilidades",
     content:
-      "Elegir lenguajes, movimientos, sentidos y resistencias",
+      "Elegir mejoras de atributos y habilidades básicas",
   },
   {
-    title: "Dotes y habilidades especiales",
+    title: "Dotes y hechizos",
     content:
-      "Elegir atributos y habilididades base, Modificar AC, salud, ataqueBase, percepción, fortaleza, reflejos, voluntad",
+      "Elegir dotes, lenguajes",
   },
   {
-    title: "Inventario y Hechizos",
-    content: "Ataques, habilidades especiales y opcionalmente hechizos",
+    title: "Inventario",
+    content: "Armadura, armas y demás items del inventario",
   },
 ];
 const items = steps.map((item) => ({
