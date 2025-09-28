@@ -1499,3 +1499,27 @@ INSERT INTO Herencia (nombre, descripcion, razaId, sentidoId)
 VALUES ('gnomo del umbral', 'descendiente de los fey sombríos dde las profundidades otorgandole visión en la oscuridad', 16, 6);
 INSERT INTO Herencia (nombre, descripcion, razaId)
 VALUES ('gnomo del manantial', 'posee una conexión con algún otro plano de la existencia o algún poder aculto tales como deidades, seres celestiales o demonios ganando así un truco arcano, divino u oculto que puede usar como un hechizo innato', 16);
+
+CREATE TABLE Proeza_Sentido(
+ 	proezaId integer NOT NULL,
+  	sentidoId integer NOT NULL,
+	tipo integer NOT NULL DEFAULT(0),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	FOREIGN KEY(sentidoId) REFERENCES Sentido(id),
+	PRIMARY KEY(proezaId, sentidoId)
+);
+
+INSERT INTO Proeza(nombre, descripcion, nivel)
+VALUES('tenacidad','el usuario gana salud igual a su nivel, también reduce su DC de salvación cuando está muriendo de 10+valor de muriendo a 9+valor de muriendo',1);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 53);
+INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(53, 41, 1, 6);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 46);
+
+INSERT INTO Proeza(nombre, descripcion, nivel, habilidadId)
+VALUES('huesos de piedra','el usuario gana la posibilidad de resistir golpes críticos',9, 273);
+INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(55, 14);
+INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(61, 55);
+INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(54, 41, 1, 6);
+INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(49, 45, 0);
+INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 6, 0);
+INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 12, 1);
