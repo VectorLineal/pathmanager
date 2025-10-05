@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import PersistentFilterData from "../data/models/PersistentFilterData";
+import PersistentFilterData from "./utilities/PersistentFilterData";
 
 export const loginStorage = reactive({
     userId: 4,

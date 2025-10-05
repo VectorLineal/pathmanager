@@ -1515,11 +1515,13 @@ INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 53);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(53, 41, 1, 6);
 INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 46);
 
-INSERT INTO Proeza(nombre, descripcion, nivel, habilidadId)
-VALUES('huesos de piedra','el usuario gana la posibilidad de resistir golpes críticos',9, 273);
-INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(55, 14);
-INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(61, 55);
-INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(54, 41, 1, 6);
-INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(49, 45, 0);
+INSERT INTO Proeza(nombre, descripcion, nivel)
+VALUES('experiencia marcial','el usuario toma su nivel actual como su bono de proeficiencia con armas para las que no esté entrenado, además en nivel 11 está entrenado con toda slas armas',5);
+INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(73, 15);
+INSERT INTO Razgo_Proeza(proezaId, razgoId) VALUES(73, 61);
+INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 34, 1, -11);
+INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 35, 1, -11);
+INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 43, 1, -11);
+INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(65, 41, 1);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 6, 0);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 12, 1);
