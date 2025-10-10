@@ -180,8 +180,10 @@ const columns = [
     key: "type",
     filters: weaponTypesStorage.dataFilter,
     sorter: (a, b) => a.tipo.localeCompare(b.tipo),
-    onFilter: (value, record) =>
-      record.type.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilter: (value, record) => {
+      if(record.type == null) return false;
+      return record.type.toString().toLowerCase().includes(value.toLowerCase())
+    }
   },
   {
     title: "Grupo",

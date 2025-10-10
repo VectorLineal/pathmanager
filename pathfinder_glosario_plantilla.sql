@@ -1509,15 +1509,24 @@ CREATE TABLE Proeza_Sentido(
 	PRIMARY KEY(proezaId, sentidoId)
 );
 
+CREATE TABLE Proeza_Velocidad(
+ 	proezaId integer NOT NULL,
+  	movimientoId integer NOT NULL,
+	cantidad integer NOT NULL DEFAULT(5),
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	FOREIGN KEY(movimientoId) REFERENCES Movimiento(id),
+	PRIMARY KEY(proezaId, movimientoId)
+);
+
 INSERT INTO Proeza(nombre, descripcion, nivel)
 VALUES('tenacidad','el usuario gana salud igual a su nivel, también reduce su DC de salvación cuando está muriendo de 10+valor de muriendo a 9+valor de muriendo',1);
 INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 53);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(53, 41, 1, 6);
 INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 46);
 
-INSERT INTO Proeza(nombre, descripcion, nivel)
-VALUES('experiencia marcial','el usuario toma su nivel actual como su bono de proeficiencia con armas para las que no esté entrenado, además en nivel 11 está entrenado con toda slas armas',5);
-INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(73, 15);
+INSERT INTO Proeza(nombre, descripcion, nivel, habilidadId)
+VALUES('plegaria empática','el usuario puede mostrarse vulnerable ante su atacante para provocar empatía',1, 294);
+INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(81, 16);
 INSERT INTO Razgo_Proeza(proezaId, razgoId) VALUES(73, 61);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 34, 1, -11);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 35, 1, -11);
@@ -1525,3 +1534,4 @@ INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 43,
 INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(65, 41, 1);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 6, 0);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 12, 1);
+INSERT INTO Proeza_Velocidad(proezaId, movimientoId, cantidad) VALUES(78, 4, 10);
