@@ -1527,7 +1527,9 @@ INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(60, 46);
 INSERT INTO Proeza(nombre, descripcion, nivel, habilidadId)
 VALUES('plegaria empática','el usuario puede mostrarse vulnerable ante su atacante para provocar empatía',1, 294);
 INSERT INTO Proeza_Raza(proezaId, razaId) VALUES(81, 16);
+INSERT INTO Proeza_Herencia(proezaId, herenciaId) VALUES(162, 5);
 INSERT INTO Razgo_Proeza(proezaId, razgoId) VALUES(73, 61);
+INSERT INTO Razgo_Proeza(proezaId, razgoId) VALUES(161, 82);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 34, 1, -11);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 35, 1, -11);
 INSERT INTO Proeza_Atributo(proezaId, atributoId, cantidad, tipo) VALUES(73, 43, 1, -11);
@@ -1535,3 +1537,4 @@ INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(65, 41, 1)
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 6, 0);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 12, 1);
 INSERT INTO Proeza_Velocidad(proezaId, movimientoId, cantidad) VALUES(78, 4, 10);
+INSERT INTO Proeza_Herencia(proezaId, herenciaId) VALUES(61, 2);
