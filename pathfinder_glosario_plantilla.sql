@@ -1518,6 +1518,14 @@ CREATE TABLE Proeza_Velocidad(
 	PRIMARY KEY(proezaId, movimientoId)
 );
 
+CREATE TABLE Proeza_Subclase(
+ 	proezaId integer NOT NULL,
+  	subclaseId integer NOT NULL,
+	FOREIGN KEY(proezaId) REFERENCES Proeza(id),
+	FOREIGN KEY(subclaseId) REFERENCES Subclase(id),
+	PRIMARY KEY(proezaId, subclaseId)
+);
+
 INSERT INTO Proeza(nombre, descripcion, nivel)
 VALUES('tenacidad','el usuario gana salud igual a su nivel, también reduce su DC de salvación cuando está muriendo de 10+valor de muriendo a 9+valor de muriendo',1);
 INSERT INTO Razgo_Proeza(razgoId, proezaId) VALUES(59, 53);
@@ -1537,4 +1545,5 @@ INSERT INTO Proeza_Proeza(proezaId, requisitoId, tipoRelacion) VALUES(65, 41, 1)
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 6, 0);
 INSERT INTO Proeza_Sentido(proezaId, sentidoId, tipo) VALUES(50, 12, 1);
 INSERT INTO Proeza_Velocidad(proezaId, movimientoId, cantidad) VALUES(78, 4, 10);
-INSERT INTO Proeza_Herencia(proezaId, herenciaId) VALUES(61, 2);
+INSERT INTO Proeza_Hechizo(proezaId, hechizoId) VALUES(169, 122);
+INSERT INTO Proeza_Subclase(proezaId, subclaseId) VALUES(22, 45);
